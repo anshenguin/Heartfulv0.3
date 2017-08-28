@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true">
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+
+        tools:context="com.example.hp.heartful.NewsPost">
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:id="@+id/user_image"
+            android:layout_margin="16dp"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/add_btn"/>
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:hint="Title..."
+            android:inputType="textMultiLine"
+            android:paddingLeft="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/text_field_design"
+            android:id="@+id/title"
+            android:layout_marginBottom="16dp"
+            android:layout_below="@+id/user_image"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="16dp" />
+        <EditText
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="8dp"
+            android:hint="Descriptions..."
+            android:inputType="textMultiLine"
+            android:layout_marginRight="16dp"
+            android:layout_marginLeft="16dp"
+            android:paddingLeft="16dp"
+            android:background="@drawable/text_field_design"
+            android:id="@+id/user_des"
+            android:layout_below="@+id/editText"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="match_parent"
+            android:text="Submit"
+            android:textColor="#FFF"
+            android:textSize="24dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/custom_button1"
+            android:id="@+id/submit_button"
+            android:layout_marginTop="16dp"
+            android:layout_centerHorizontal="true" />
+    </LinearLayout>
+
+    </ScrollView>

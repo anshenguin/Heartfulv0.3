@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<items version="2" >
+
+    <item
+        is-multidex="true"
+        jar="C:\Users\HP\Desktop\HeartFulv0.3\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="3be78ebc2706b2e1fe2f12d5726887a92d6c183b">
+        <dex dex="C:\Users\HP\Desktop\HeartFulv0.3\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_bde15aa716f80eafc629be58f715d5e0191a8b96\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\HP\Desktop\HeartFulv0.3\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="f3581d2ec095507b833a6a8b28b3e583651b0a84">
+        <dex dex="C:\Users\HP\Desktop\HeartFulv0.3\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_7805aec284661f3b0cfc9a9ff4f5736351ecf1a8\classes.dex" />
+    </item>
+
+</items>
