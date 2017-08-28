@@ -1,6 +1,7 @@
 package com.example.hp.heartful;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -59,13 +60,26 @@ public  class FragmentOne extends Fragment  {
         ) {
             @Override
             protected void populateViewHolder(OrgInfoViewHolder viewHolder, OrgInfo model, int position) {
+                final String post_key=getRef(position).getKey();
                 viewHolder.setmOrginfo(model.getmOrginfo());
                 viewHolder.setmOrgname(model.getmOrgname());
                 viewHolder.setmCategory(model.getmCategory());
                 viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
-
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent=new Intent(getActivity(),orgInsideActivity.class);
+                        intent.putExtra("news_id",post_key);
+                        startActivity(intent);
+                    }
+                });
             }
+
         };
+        View tv = rootView.findViewById(R.id.search_item);
+        tv.setFocusable(false);                                         //EDIT TEXT WALE KO HIGHLIGHT NA KRANE KE LIYE CODE
+        tv.setFocusableInTouchMode(true);
+        tv.requestFocus();
 //        orgInfoArrayList= new ArrayList<>();
 ////        mDatabase= FirebaseDatabase.getInstance().getReference().child("Info");
 ////        mDatabase.keepSynced(true);
