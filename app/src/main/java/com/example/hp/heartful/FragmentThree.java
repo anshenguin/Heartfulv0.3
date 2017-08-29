@@ -58,7 +58,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener {
         private ProgressDialog progress;
         private static String TAG="FragmentThree";
         private LoginButton mFbLogin;
-        CallbackManager callbackManager;
+        private CallbackManager callbackManager;
         Intent intent;
         private ProgressDialog progressDialog;
 
@@ -82,42 +82,50 @@ public class FragmentThree extends Fragment implements View.OnClickListener {
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(R.id.fb_login);
         mAuth=FirebaseAuth.getInstance();
-        if(mAuth.getCurrentUser()!=null){
-            userProfile();
-        }
-  else {}
+//        if(mAuth.getCurrentUser()!=null){
+//            userProfile();
+//        }
+        Log.v("FragmentThree","Dekhte ki nhi");
 
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-//                if(mAuth.getCurrentUser()!=null){
-//
-//                    userProfile();
-//                }
+                if(mAuth.getCurrentUser()!=null){
+
+                    userProfile();
+                }
 
             }
         };
 //        mFbLogin.setFragment(this);
         mFbLogin.setReadPermissions("public_profile", "email", "user_friends");
-        mFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-            @Override
-             public void onSuccess(LoginResult loginResult) {
-                // App code
-                 userProfile();
+        try {
+            mFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Log.v("FragmentThree", "Dekhte hai chal rha hai ki nhi");
+                    // App code
+                    userProfile();
 
-            }
+                }
 
-            @Override
-            public void onCancel() {
-                // App code
-                Toast.makeText(getApplicationContext(),"error",Toast.LENGTH_SHORT).show();
-            }
+                @Override
+                public void onCancel() {
+                    // App code
+                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                }
 
-            @Override
-            public void onError(FacebookException exception) {
-                // App code
-            }
-        });
+                @Override
+                public void onError(FacebookException exception) {
+                    Log.v("Exception", String.valueOf(exception));
+                    // App code
+                }
+            });
+        }
+        catch (Exception e){
+            Log.v("FACEBOOK", "Error in the loginButton facebook");
+            e.printStackTrace();
+        }
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
@@ -182,6 +190,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener {
             }
 
         }
+
         }
 
     @Override
