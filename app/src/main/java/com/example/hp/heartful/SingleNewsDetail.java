@@ -14,7 +14,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class SingleNewsDetail extends AppCompatActivity {
-   private String post_key;
+    private String post_key;
     private ImageView mNewsImage;
     private TextView mNewsTitle,mNewsDesc;
     DatabaseReference mDatabase;
@@ -25,7 +25,7 @@ public class SingleNewsDetail extends AppCompatActivity {
         mNewsImage=(ImageView)findViewById(R.id.news_images);
         mNewsDesc=(TextView)findViewById(R.id.news_description);
         mNewsTitle=(TextView)findViewById(R.id.news_title);
-         post_key=getIntent().getExtras().getString("news_id");
+        post_key=getIntent().getExtras().getString("news_id");
        mDatabase= FirebaseDatabase.getInstance().getReference().child("News");
         mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
             @Override
