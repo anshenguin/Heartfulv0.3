@@ -72,7 +72,6 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
                             // start user profile activity
                             progressDialog.dismiss();
                             finish();
-                            startActivity(new Intent(getApplicationContext(),userProfileActivity.class));
                         }
                         else {
                             Toast.makeText(loginActivity.this,"could not register, pls try again Error is"+ task.getException(),Toast.LENGTH_SHORT).show();
