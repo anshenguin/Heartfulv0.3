@@ -19,10 +19,12 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
+import com.facebook.appevents.AppEventsLogger;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -36,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.GoogleAuthProvider;
 
@@ -58,20 +61,27 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private TextView login_Text;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ProgressDialog progress;
+    private ProgressDialog fbProgress;
     private static String TAG="FragmentThree";
     private LoginButton mFbLogin;
     private CallbackManager callbackManager;
     boolean choice;
+    View view;
+    View view_pro;
         private ProgressDialog progressDialog;
 
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
+
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.sign_up_page,container, false);
-        View view_pro = inflater.inflate(R.layout.profile_layout,container, false);
+        view = inflater.inflate(R.layout.sign_up_page,container, false);
+        view_pro = inflater.inflate(R.layout.profile_layout,container, false);
+        fbProgress= new ProgressDialog(getActivity());
+        fbProgress.setMessage("Connecting to Facebook Account, Please wait...");
         mAuth=FirebaseAuth.getInstance();
-        FacebookSdk.sdkInitialize(getActivity().getApplicationContext());
+        FacebookSdk.sdkInitialize(getApplicationContext());
+        AppEventsLogger.activateApp(getActivity());
         callbackManager= CallbackManager.Factory.create();
         progressDialog=new ProgressDialog(getActivity());
         progress=new ProgressDialog(getActivity());
@@ -90,93 +100,101 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                if(mAuth.getCurrentUser()!=null){
-
-                    Log.v("1 PROFILE VIEW HOga","choice is true");
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
+                Log.v("auth state change hoga", String.valueOf(mAuth.getCurrentUser()));
+                if(mAuth.getCurrentUser()!=null) {
                     choice = true;
+
                 }
+
+
 
                 else{
                     Log.v("1 sign UP PAGE HOGA","choice is false");
                     choice = false;
                 }
 
-//        mFbLogin.setFragment(this);
-                mFbLogin.setReadPermissions("public_profile", "email", "user_friends");
-                try {
-                    mFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                        @Override
-                        public void onSuccess(LoginResult loginResult) {
-                            Log.v("FragmentThree", "Dekhte hai chal rha hai ki nhi");
-                            // App code
-                            //userProfile();
 
-                        }
 
-                        @Override
-                        public void onCancel() {
-                            // App code
-                            Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-                        }
-
-                        @Override
-                        public void onError(FacebookException exception) {
-                            Log.v("Exception", String.valueOf(exception));
-                            // App code
-                        }
-                    });
-                }
-                catch (Exception e){
-                    Log.v("FACEBOOK", "Error in the loginButton facebook");
-                    e.printStackTrace();
-                }
-                GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                        .build();
-                if(mGoogleApiClient == null || !mGoogleApiClient.isConnected()){
-                    try {
-                        mGoogleApiClient=new GoogleApiClient.Builder(getApplicationContext())
-                                .enableAutoManage(getActivity(), new GoogleApiClient.OnConnectionFailedListener() {
-                                    @Override
-                                    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
-                                        Toast.makeText(getActivity(),"You get an error", Toast.LENGTH_SHORT).show();
-                                    }
-                                })
-                                .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
-                                .build();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                mgoogleSign.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        progress.show();
-                        signIn();
-                    }
-                });
         }
 
         };
 
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        if(mGoogleApiClient == null || !mGoogleApiClient.isConnected()){
+            try {
+                mGoogleApiClient=new GoogleApiClient.Builder(getApplicationContext())
+                        .enableAutoManage(getActivity(),new GoogleApiClient.OnConnectionFailedListener() {
+                            @Override
+                            public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+                                Toast.makeText(getActivity(),"You get an error", Toast.LENGTH_SHORT).show();
+                            }
+                        })
+                        .addApi(Auth.GOOGLE_SIGN_IN_API,gso)
+                        .build();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        mgoogleSign.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                progress.show();
+                signIn();
+            }
+        });
 
-//        view = inflater.inflate(R.layout.tab_three, container, false);
-//        super.onCreate(savedInstanceState);
+
+        mFbLogin.setFragment(FragmentThree.this);
+        mFbLogin.setReadPermissions("public_profile", "email", "user_friends");
+        try {
+            mFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+                @Override
+                public void onSuccess(LoginResult loginResult) {
+                    Log.v(" FragmentFacebook", "Dekhte hai chal rha hai ki nhi");
+                    fbProgress.show();
+                    handleFacebookAccessToken(loginResult.getAccessToken());
+
+                    // App code
+                    //userProfile();
+
+                }
+
+                @Override
+                public void onCancel() {
+                    Log.v("FragmentThree 2", "Dekhte hai chal rha hai ki nhi");
+                    // App code
+                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+                }
+
+                @Override
+                public void onError(FacebookException exception) {
+                    Log.v("FragmentThree 3", "Dekhte hai chal rha hai ki nhi");
+                    Log.v("Exception", String.valueOf(exception));
+                    // App code
+                }
+            });
+        }
+        catch (Exception e){
+            Log.v("FACEBOOK", "Error in the loginButton facebook");
+            e.printStackTrace();
+        }
+        //                }
 
         if(mAuth.getCurrentUser()==null) {
             Log.v("Sign up run hoga", String.valueOf(mAuth.getCurrentUser()));
-//            FragmentManager fm = getFragmentManager();
-//            login_dialogbox dialogFragment = new login_dialogbox ();
-//            dialogFragment.show(fm,"LoginPopup");
             return view;
         }
         else {
-            Log.v("profile run hoga",String.valueOf(mAuth));
+            Log.v("profile run hoga",String.valueOf(mAuth.getCurrentUser()));
             return view_pro;
         }
     }
+
+
 
 
     @Override
@@ -184,18 +202,18 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         super.onStart();
         mAuth.addAuthStateListener(mAuthStateListener);
     }
-//
+//    @Override
+//    public void onDestroy() {
+//        super.onDestroy();
+//        mGoogleApiClient.stopAutoManage(getActivity());
+//        mGoogleApiClient.disconnect();
+//    }
+
     private void signIn() {
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
-//
-//    private void userProfile() {
-//        Intent intent=new Intent(getActivity(),userProfileActivity.class);
-//        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//        startActivity(intent);
-//    }
-//
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -213,7 +231,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
     }
 
-//
     @Override
     public void setMenuVisibility(final boolean visible) {
         if(!choice) {
@@ -230,12 +247,11 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         }
     }
 
-
-
     @Override
     public void onClick(View view) {
         if (view==log_out){
             mAuth.signOut();
+            reLoad();
             Toast.makeText(getActivity(),"user has been sign out",Toast.LENGTH_LONG).show();
         }
         if(view==Sign_Up){
@@ -258,8 +274,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         }
 
     }
-
-
 
     private  void registerUser(){
         String email=email_Id.getText().toString().trim();
@@ -293,13 +307,14 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()){
                             //show user profile
                             Toast.makeText(getActivity(),"Registerd successfully",Toast.LENGTH_SHORT).show();
+                            reLoad();
                             progressDialog.dismiss();
                             //  startActivity(new Intent(getActivity(),userProfileActivity.class));
 //                            intent = new Intent(getApplicationContext(),userProfileActivity.class);
 //                            intent.putExtra("EdiTtEXTvALUE", User_Name.getText().toString());
 //                            startActivity(intent);
                         }else {
-                            Toast.makeText(getActivity(),"could not register, pls try again Error is"+ task.getException(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(),"could not register, pls try again Error is"+ task.getException(),Toast.LENGTH_LONG).show();
                             progressDialog.dismiss();
                         }
                     }
@@ -307,17 +322,51 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
 
     }
-    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
-        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+
+    private void handleFacebookAccessToken(AccessToken token) {
+        AuthCredential credential = FacebookAuthProvider.getCredential(token.getToken());
+        Log.v("Facebook","Calling");
         mAuth.signInWithCredential(credential)
                 .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                         //   userProfile();
+                            //   userProfile();
+
                             Log.v(TAG, "signInWithCredential:success");
+                            reLoad();
+                            fbProgress.dismiss();
+
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            fbProgress.dismiss();
+
+                        }
+
+                        // ...
+                    }
+                });
+
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(getActivity(), new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                         //      userProfile();
+                            Log.v(TAG, "signInWithCredential:success");
+                            reLoad();
+
                             progress.dismiss();
+
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -331,8 +380,13 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                     }
                 });
     }
+    public void reLoad(){
+        FragmentThree fragment = (FragmentThree)
+                getFragmentManager().getFragments().get(2);
+        getFragmentManager().beginTransaction()
+                .detach(fragment)
+                .attach(fragment)
+                .commit();
+    }
 
-//    void setXML(int value){
-//        XML = value;
-//    }
 }
