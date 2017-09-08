@@ -25,6 +25,7 @@ import com.facebook.FacebookCallback;
 import com.facebook.FacebookException;
 import com.facebook.FacebookSdk;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.Auth;
@@ -65,7 +66,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private static String TAG="FragmentThree";
     private LoginButton mFbLogin;
     private CallbackManager callbackManager;
-    boolean choice;
     View view;
     View view_pro;
         private ProgressDialog progressDialog;
@@ -98,23 +98,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(R.id.fb_login);
 
+
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
-                Log.v("auth state change hoga", String.valueOf(mAuth.getCurrentUser()));
-                if(mAuth.getCurrentUser()!=null) {
-                    choice = true;
-
-                }
-
-
-
-                else{
-                    Log.v("1 sign UP PAGE HOGA","choice is false");
-                    choice = false;
-                }
-
-
 
         }
 
@@ -186,20 +173,22 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
         if(mAuth.getCurrentUser()==null) {
             Log.v("Sign up run hoga", String.valueOf(mAuth.getCurrentUser()));
+            Log.v("main hu","sign up view");
             return view;
         }
         else {
             Log.v("profile run hoga",String.valueOf(mAuth.getCurrentUser()));
+            Log.v("main hu","profile view");
             return view_pro;
         }
     }
 
 
 
-
     @Override
     public void onStart() {
         super.onStart();
+
         mAuth.addAuthStateListener(mAuthStateListener);
     }
 //    @Override
@@ -233,23 +222,25 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
     @Override
     public void setMenuVisibility(final boolean visible) {
-        if(!choice) {
-        if (visible) {
+        mAuth = FirebaseAuth.getInstance();
+            if (mAuth.getCurrentUser()==null) {
+                if (visible) {
 
-                FragmentManager fm = getFragmentManager();
-                login_dialogbox dialogFragment = new login_dialogbox();
-                dialogFragment.show(fm, "LoginPopup");
+                    FragmentManager fm = getFragmentManager();
+                    login_dialogbox dialogFragment = new login_dialogbox();
+                    dialogFragment.show(fm, "LoginPopup");
 
+                }
+
+                super.setMenuVisibility(visible);
+            }
         }
 
-            Log.v("Choice is: ", String.valueOf(choice));
-            super.setMenuVisibility(visible);
-        }
-    }
 
     @Override
     public void onClick(View view) {
         if (view==log_out){
+            LoginManager.getInstance().logOut();
             mAuth.signOut();
             reLoad();
             Toast.makeText(getActivity(),"user has been sign out",Toast.LENGTH_LONG).show();
