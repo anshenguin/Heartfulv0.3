@@ -68,7 +68,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private CallbackManager callbackManager;
     View view;
     View view_pro;
-        private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
 
     @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
@@ -103,7 +103,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
 
-        }
+            }
 
         };
 
@@ -223,18 +223,18 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     @Override
     public void setMenuVisibility(final boolean visible) {
         mAuth = FirebaseAuth.getInstance();
-            if (mAuth.getCurrentUser()==null) {
-                if (visible) {
+        if (mAuth.getCurrentUser()==null) {
+            if (visible) {
 
-                    FragmentManager fm = getFragmentManager();
-                    login_dialogbox dialogFragment = new login_dialogbox();
-                    dialogFragment.show(fm, "LoginPopup");
+                FragmentManager fm = getFragmentManager();
+                login_dialogbox dialogFragment = new login_dialogbox();
+                dialogFragment.show(fm, "LoginPopup");
 
-                }
-
-                super.setMenuVisibility(visible);
             }
+
+            super.setMenuVisibility(visible);
         }
+    }
 
 
     @Override
@@ -255,7 +255,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
         }
     }
-//
+    //
     private void login(){
 
         try{
@@ -352,7 +352,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                         //      userProfile();
+                            //      userProfile();
                             Log.v(TAG, "signInWithCredential:success");
                             reLoad();
 
