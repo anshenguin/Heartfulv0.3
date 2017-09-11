@@ -1,10 +1,9 @@
 package com.example.hp.heartful;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
@@ -29,25 +28,16 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth=FirebaseAuth.getInstance();
-     //   if(firebaseAuth.getCurrentUser()!=null){
-            // directly start user profile activity
-       //     finish();
-         //   startActivity(new Intent(this,userProfileActivity.class));
-       //}
         progressDialog=new ProgressDialog(this);
         email_Id=(EditText)findViewById(R.id.email_id);
         password=(EditText)findViewById(R.id.password);
         sign_In=(Button)findViewById(R.id.sign_In);
-        sign_Up=(TextView)findViewById(R.id.sign_up);
+        sign_Up=(TextView)findViewById(R.id.new_user);
         sign_In.setOnClickListener(this);
-      //  sign_Up.setOnClickListener(this);
+        sign_Up.setOnClickListener(this);
 
     }
-    public void sign_up(){
-        // go to registeration page
-        finish();
-        startActivity(new Intent(loginActivity.this,FragmentThree.class));
-    }
+
     private void user_Login(){
         String email=email_Id.getText().toString().trim();
         String pass_word=password.getText().toString().trim();
@@ -85,6 +75,9 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         if (view==sign_In){
             // start user profile activity
             user_Login();
+        }
+        if (view==sign_Up){
+            finish();
         }
 
 

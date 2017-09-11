@@ -21,7 +21,9 @@
         android:divider="@android:color/transparent"
         android:id="@+id/new_lists"
             android:paddingBottom="80dp"
-            android:layout_margin="16dp"
+            android:paddingTop="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
         tools:layout_editor_absoluteY="8dp"
         tools:layout_editor_absoluteX="8dp">
         </android.support.v7.widget.RecyclerView>
