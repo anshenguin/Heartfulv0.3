@@ -3,6 +3,7 @@ package com.example.hp.heartful;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -39,7 +40,7 @@ public class FragmentTwo extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final   View view =inflater.inflate(R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
-        button=(ImageButton) view.findViewById(R.id.button);
+        button=(FloatingActionButton) view.findViewById(R.id.button);
         firebaseAuth=FirebaseAuth.getInstance();
         button.setOnClickListener(new View.OnClickListener() {
             @Override
