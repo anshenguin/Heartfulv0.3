@@ -76,10 +76,10 @@ public  class FragmentOne extends Fragment  {
             }
 
         };
-        View tv = rootView.findViewById(R.id.search_item);
-        tv.setFocusable(false);                                         //EDIT TEXT WALE KO HIGHLIGHT NA KRANE KE LIYE CODE
-        tv.setFocusableInTouchMode(true);
-        tv.requestFocus();
+//        View tv = rootView.findViewById(R.id.search_item);
+//        tv.setFocusable(false);                                         //EDIT TEXT WALE KO HIGHLIGHT NA KRANE KE LIYE CODE
+//        tv.setFocusableInTouchMode(true);
+//        tv.requestFocus();
 //        orgInfoArrayList= new ArrayList<>();
 ////        mDatabase= FirebaseDatabase.getInstance().getReference().child("Info");
 ////        mDatabase.keepSynced(true);
@@ -91,19 +91,19 @@ public  class FragmentOne extends Fragment  {
 //        orgInfoArrayList.add(new OrgInfo("chhota naam", "but info itni bdi ki chhote devices mein info view ke baahar chle jaae and last mein teen chhote dots dikhein haha", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Jaago Graahak Jaago", "Apne Adhikaar ko Jaano, Apne Hakk ko Pehchano. Jaago, Graahak Jaago!", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Satyamev Jayate", "Saccha hai pyaar tera!", R.drawable.heart));
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
+//        Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
+////
+////      adapter= new OrgInfoAdapter(getActivity(),orgInfoArrayList);
+//// Create an ArrayAdapter using the string array and a default spinner layout
 //
-//      adapter= new OrgInfoAdapter(getActivity(),orgInfoArrayList);
-// Create an ArrayAdapter using the string array and a default spinner layout
-
-        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.category_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(spinadapter);
-
-       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
+//        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
+//                R.array.category_array, android.R.layout.simple_spinner_item);
+//// Specify the layout to use when the list of choices appears
+//        spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//// Apply the adapter to the spinner
+//        spinner.setAdapter(spinadapter);
+//
+//       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
 //        final ListView listView = (ListView) rootView.findViewById(R.id.ngo_list);
 
         // Make the {@link ListView} use the {@link WordAdapter} we created above, so that the

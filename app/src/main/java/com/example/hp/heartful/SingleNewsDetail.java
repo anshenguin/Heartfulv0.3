@@ -30,7 +30,7 @@ public class SingleNewsDetail extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        mNewsImage=(ImageView)findViewById(R.id.backdrop);
+        mNewsImage=(ImageView)findViewById(R.id.news_images);
         mNewsDesc=(TextView)findViewById(R.id.news_description);
         mNewsTitle=(TextView)findViewById(R.id.news_title);
         post_key=getIntent().getExtras().getString("news_id");
