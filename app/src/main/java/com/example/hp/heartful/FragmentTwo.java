@@ -11,6 +11,8 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,6 +42,7 @@ public class FragmentTwo extends Fragment {
     private DatabaseReference mDatabase;
 //    private ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,6 +86,7 @@ public class FragmentTwo extends Fragment {
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDescription());
                 viewHolder.setImage(getActivity().getApplicationContext(),model.getImage());
+
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -90,6 +94,8 @@ public class FragmentTwo extends Fragment {
                 Intent intent=new Intent(getActivity(),SingleNewsDetail.class);
                         intent.putExtra("news_id",post_key);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Transition transition_two = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                            getActivity().getWindow().setSharedElementEnterTransition(transition_two);
                             ImageView transitionView = (ImageView) v.findViewById(R.id.news_images);
                             ActivityOptionsCompat options = ActivityOptionsCompat.
                                     makeSceneTransitionAnimation(getActivity(), transitionView, getString(R.string.fragmenttwo_image_trans));

@@ -27,6 +27,7 @@
 
         <ImageView
             android:id="@+id/org_logo"
+            android:transitionName="orgimg"
             android:layout_width="100dp"
             android:layout_gravity="center_vertical"
             android:layout_height="100dp"

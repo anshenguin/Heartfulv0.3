@@ -1,14 +1,22 @@
 package com.example.hp.heartful;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,10 +75,19 @@ public  class FragmentOne extends Fragment  {
                 viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v1) {
                         Intent intent=new Intent(getActivity(),orgInsideActivity.class);
                         intent.putExtra("news_id",post_key);
-                        startActivity(intent);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Transition transition_two = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                            getActivity().getWindow().setSharedElementEnterTransition(transition_two);
+                            ImageView transitionView = (ImageView) v1.findViewById(R.id.org_logo);
+                            Bundle b = ActivityOptionsCompat
+                                    .makeSceneTransitionAnimation(getActivity(), transitionView, "orgimg").toBundle();
+                            startActivity(intent, b);
+                        }
+                        else
+                            startActivity(intent);
                     }
                 });
             }
