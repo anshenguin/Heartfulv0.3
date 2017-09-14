@@ -1,14 +1,22 @@
 package com.example.hp.heartful;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Slide;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -67,19 +75,28 @@ public  class FragmentOne extends Fragment  {
                 viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onClick(View v1) {
                         Intent intent=new Intent(getActivity(),orgInsideActivity.class);
                         intent.putExtra("news_id",post_key);
-                        startActivity(intent);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Transition transition_two = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                            getActivity().getWindow().setSharedElementEnterTransition(transition_two);
+                            ImageView transitionView = (ImageView) v1.findViewById(R.id.org_logo);
+                            Bundle b = ActivityOptionsCompat
+                                    .makeSceneTransitionAnimation(getActivity(), transitionView, "orgimg").toBundle();
+                            startActivity(intent, b);
+                        }
+                        else
+                            startActivity(intent);
                     }
                 });
             }
 
         };
-        View tv = rootView.findViewById(R.id.search_item);
-        tv.setFocusable(false);                                         //EDIT TEXT WALE KO HIGHLIGHT NA KRANE KE LIYE CODE
-        tv.setFocusableInTouchMode(true);
-        tv.requestFocus();
+//        View tv = rootView.findViewById(R.id.search_item);
+//        tv.setFocusable(false);                                         //EDIT TEXT WALE KO HIGHLIGHT NA KRANE KE LIYE CODE
+//        tv.setFocusableInTouchMode(true);
+//        tv.requestFocus();
 //        orgInfoArrayList= new ArrayList<>();
 ////        mDatabase= FirebaseDatabase.getInstance().getReference().child("Info");
 ////        mDatabase.keepSynced(true);
@@ -91,19 +108,19 @@ public  class FragmentOne extends Fragment  {
 //        orgInfoArrayList.add(new OrgInfo("chhota naam", "but info itni bdi ki chhote devices mein info view ke baahar chle jaae and last mein teen chhote dots dikhein haha", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Jaago Graahak Jaago", "Apne Adhikaar ko Jaano, Apne Hakk ko Pehchano. Jaago, Graahak Jaago!", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Satyamev Jayate", "Saccha hai pyaar tera!", R.drawable.heart));
-        Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
+//        Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
+////
+////      adapter= new OrgInfoAdapter(getActivity(),orgInfoArrayList);
+//// Create an ArrayAdapter using the string array and a default spinner layout
 //
-//      adapter= new OrgInfoAdapter(getActivity(),orgInfoArrayList);
-// Create an ArrayAdapter using the string array and a default spinner layout
-
-        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.category_array, android.R.layout.simple_spinner_item);
-// Specify the layout to use when the list of choices appears
-        spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-// Apply the adapter to the spinner
-        spinner.setAdapter(spinadapter);
-
-       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
+//        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
+//                R.array.category_array, android.R.layout.simple_spinner_item);
+//// Specify the layout to use when the list of choices appears
+//        spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//// Apply the adapter to the spinner
+//        spinner.setAdapter(spinadapter);
+//
+//       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
 //        final ListView listView = (ListView) rootView.findViewById(R.id.ngo_list);
 
         // Make the {@link ListView} use the {@link WordAdapter} we created above, so that the

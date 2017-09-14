@@ -3,21 +3,21 @@
 
     <item
         is-multidex="true"
-        jar="C:\Users\HP\Documents\GitHub\HeartFulv0.3\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
+        jar="C:\Users\HP INDIA\Desktop\Heartful Resources\Heartfulv0.3\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
+        jumboMode="true"
+        optimize="true"
+        revision="25.0.1"
+        sha1="6276cac050ebbb0cc0a092ef19198b15c1ce9233">
+        <dex dex="C:\Users\HP INDIA\Desktop\Heartful Resources\Heartfulv0.3\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_e982e0f7604ecef79dbcd87be5421311c06d2d04\classes.dex" />
+    </item>
+    <item
+        is-multidex="true"
+        jar="C:\Users\HP INDIA\Desktop\Heartful Resources\Heartfulv0.3\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         optimize="true"
         revision="25.0.1"
         sha1="c82741bc129dd5f99f11a4ab8666ae24262053b6">
-        <dex dex="C:\Users\HP\Documents\GitHub\HeartFulv0.3\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_7fcab2c6d38472dd1dc811d442155291c9e6dec6\classes.dex" />
-    </item>
-    <item
-        is-multidex="true"
-        jar="C:\Users\HP\Documents\GitHub\HeartFulv0.3\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
-        jumboMode="true"
-        optimize="true"
-        revision="25.0.1"
-        sha1="39144b2daa3752dfc63f09fda135a4f380858795">
-        <dex dex="C:\Users\HP\Documents\GitHub\HeartFulv0.3\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run-bootstrap_3d3f82d97dca2e8215c7357780fbacc6cb8e7326\classes.dex" />
+        <dex dex="C:\Users\HP INDIA\Desktop\Heartful Resources\Heartfulv0.3\app\build\intermediates\transforms\dex\debug\folders\1000\10000\instant-run_50f146c8caa0c3648e727a619b79babd2aa9ed4d\classes.dex" />
     </item>
 
 </items>

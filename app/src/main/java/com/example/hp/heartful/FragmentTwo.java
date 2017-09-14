@@ -1,12 +1,18 @@
 package com.example.hp.heartful;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.transition.Transition;
+import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,15 +37,18 @@ import com.google.firebase.database.FirebaseDatabase;
 public class FragmentTwo extends Fragment {
     public FragmentTwo(){}
   ImageButton button;
+    ImageView imageView;
     private RecyclerView mNewsLists;
     private DatabaseReference mDatabase;
 //    private ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final   View view =inflater.inflate(R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
+        imageView = (ImageView) view.findViewById(R.id.news_images);
         button=(FloatingActionButton) view.findViewById(R.id.button);
         firebaseAuth=FirebaseAuth.getInstance();
         button.setOnClickListener(new View.OnClickListener() {
@@ -77,11 +86,22 @@ public class FragmentTwo extends Fragment {
                 viewHolder.setTitle(model.getTitle());
                 viewHolder.setDesc(model.getDescription());
                 viewHolder.setImage(getActivity().getApplicationContext(),model.getImage());
+
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+
                 Intent intent=new Intent(getActivity(),SingleNewsDetail.class);
                         intent.putExtra("news_id",post_key);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            Transition transition_two = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                            getActivity().getWindow().setSharedElementEnterTransition(transition_two);
+                            ImageView transitionView = (ImageView) v.findViewById(R.id.news_images);
+                            ActivityOptionsCompat options = ActivityOptionsCompat.
+                                    makeSceneTransitionAnimation(getActivity(), transitionView, getString(R.string.fragmenttwo_image_trans));
+                            startActivity(intent, options.toBundle());
+                        }
+                        else
                         startActivity(intent);
                     }
                 });
@@ -125,7 +145,6 @@ public class FragmentTwo extends Fragment {
         }
     }
 }
-
 
 
 

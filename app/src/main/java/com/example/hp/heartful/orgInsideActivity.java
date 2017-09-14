@@ -38,9 +38,8 @@ public class orgInsideActivity extends AppCompatActivity{
         mNgoLogo=(ImageView)findViewById(R.id.backdrop);
         mNgoInfo=(TextView)findViewById(R.id.orgInfo);
         mNgoName=(TextView)findViewById(R.id.orgName);
-        initCollapsingToolbar();
-        mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
 
+            mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
         mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
