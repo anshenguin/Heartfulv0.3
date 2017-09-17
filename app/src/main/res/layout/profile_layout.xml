@@ -1,101 +1,147 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
+
+
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:orientation="vertical"
-        android:layout_height="wrap_content">
-        <LinearLayout
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+        <FrameLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:id="@+id/linearone"
-            android:background="@color/colorPrimary"
-            >
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:id="@+id/linearone"
+                android:background="@color/colorPrimary"
+                >
+
+
+                <de.hdodenhof.circleimageview.CircleImageView
+
+                    android:id="@+id/imageView1"
+                    android:src="@drawable/heart"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_width="120dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_height="120dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_centerVertical="true">
+                </de.hdodenhof.circleimageview.CircleImageView>
+
+                <TextView
+                    android:id="@+id/User_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:text="Loading Name"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:textSize="24sp" />
+                <TextView
+                    android:layout_width="320dp"
+                    android:gravity="center_horizontal"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="16dp"
+                    android:text="Loading Info"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="16dp"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="32dp"
-                android:layout_gravity="center_horizontal"
-                android:src="@drawable/heart" />
-            <TextView
-                android:id="@+id/User_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:textSize="24sp" />
-            <TextView
-                android:layout_width="320dp"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="16dp"
-                android:text="I love nature and dogs and trees and rainbows and the people who made this app are amazing."
-                android:textSize="14sp"
-                android:layout_marginBottom="16dp"
-                android:textStyle="italic" />
-
-            <ImageButton
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="end"
-                android:layout_marginBottom="16dp"
-                android:layout_marginLeft="8dp"
-                android:layout_marginRight="8dp"
-                android:elevation="4dp"
-                android:id="@+id/log_out"
-                android:background="@drawable/orangecustombuttom"
-                 />
-        </LinearLayout>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:textSize="24sp"
-            android:textColor="#79319e"
-            android:text="Recent Activity"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="32dp"
-            android:layout_marginBottom="8dp"
-            android:text="-Started Following AASRA"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="32dp"
-            android:text="-Commented on CHARITY LIVESTREAM UPDATE"/>
+                android:layout_margin="16dp"
+                android:id="@+id/edit"
+                android:padding="8dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginRight="4dp"
+                android:layout_marginTop="22dp"
+                android:layout_weight="0.3"
+                app:srcCompat="@drawable/ic_edit_black_24dp"
+                />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginLeft="32dp"
-            android:text="-Became the owner of 'Test NGO' "/>
+        </FrameLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="32dp"
-            android:textSize="24sp"
-            android:textColor="#79319e"
-            android:text="Organisations Followed"/>
-
-        <ListView
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
+            android:layout_height="wrap_content">
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="vertical"
+                    android:id="@+id/lineartwo"
+                    android:layout_height="wrap_content">
 
-        </ListView>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="32dp"
+                        android:textSize="24sp"
+                        android:textColor="#79319e"
+                        android:text="Recent Activity"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="32dp"
+                        android:layout_marginBottom="8dp"
+                        android:text="-Started Following AASRA"/>
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="32dp"
+                        android:text="-Commented on CHARITY LIVESTREAM UPDATE"/>
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="32dp"
+                        android:text="-Became the owner of 'Test NGO' "/>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="32dp"
+                        android:textSize="24sp"
+                        android:textColor="#79319e"
+                        android:text="Organisations Followed"/>
+
+                    <ListView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        >
+
+                    </ListView>
+
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+        </LinearLayout>
     </LinearLayout>
 
-
-
-</ScrollView>
-
-
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:id="@+id/log_out"
+        android:elevation="4dp"
+        android:clickable="true"
+        app:layout_anchor="@id/lineartwo"
+        app:layout_anchorGravity="top|right" />
+</android.support.design.widget.CoordinatorLayout>
