@@ -1,6 +1,5 @@
 package com.example.hp.heartful;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -8,7 +7,6 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Transition;
@@ -27,7 +25,7 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
+import com.google.firebase.messaging.FirebaseMessaging;
 
 
 /**
@@ -46,6 +44,7 @@ public class FragmentTwo extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
         final   View view =inflater.inflate(R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
         imageView = (ImageView) view.findViewById(R.id.news_images);

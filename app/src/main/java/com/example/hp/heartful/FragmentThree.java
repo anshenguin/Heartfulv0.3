@@ -6,6 +6,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -15,7 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,7 +52,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class FragmentThree extends Fragment implements View.OnClickListener{
 
     private EditText email_Id;
-    private ImageButton log_out;
+    private FloatingActionButton log_out;
     private EditText password;
     private SignInButton mgoogleSign;
     private FirebaseAuth mAuth;
@@ -65,6 +66,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private ProgressDialog fbProgress;
     private static String TAG="FragmentThree";
     private LoginButton mFbLogin;
+    private ImageView edit;
     private CallbackManager callbackManager;
     View view;
     View view_pro;
@@ -78,6 +80,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         view = inflater.inflate(R.layout.sign_up_page,container, false);
         view_pro = inflater.inflate(R.layout.profile_layout,container, false);
         fbProgress= new ProgressDialog(getActivity());
+        edit=(ImageView)view_pro.findViewById(R.id.edit);
         fbProgress.setMessage("Connecting to Facebook Account, Please wait...");
         mAuth=FirebaseAuth.getInstance();
         FacebookSdk.sdkInitialize(getApplicationContext());
@@ -92,8 +95,9 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         Sign_Up=(Button)view.findViewById(R.id.sign_up);
         login_Text=(TextView)view.findViewById(R.id.login_text);
         Sign_Up.setOnClickListener(this);
-        log_out=(ImageButton)view_pro.findViewById(R.id.log_out);
+        log_out=(FloatingActionButton) view_pro.findViewById(R.id.log_out);
         log_out.setOnClickListener(this);
+        edit.setOnClickListener(this);
         mgoogleSign=(SignInButton)view.findViewById(R.id.google_login);
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(R.id.fb_login);
@@ -254,6 +258,9 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
             login();
 
         }
+        if (view==edit){
+            startActivity(new Intent(getActivity(),Preferences.class));
+        }
     }
     //
     private void login(){
@@ -363,6 +370,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
                             progress.dismiss();
 
                         }
