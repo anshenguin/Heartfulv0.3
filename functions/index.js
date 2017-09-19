@@ -10,13 +10,16 @@ const functions = require('firebase-functions');
 const admin = require('firebase-admin');
 admin.initializeApp(functions.config().firebase);
 // Listens for new messages added to messages/:pushId
-exports.pushNotification = functions.database.ref('/News/{pushId}').onWrite( event => {
+exports.pushNotification = functions.database.ref('/News/{pushId}').onCreate( event => {
 
     console.log('Push notification event triggered');
 
     //  Grab the current value of what was written to the Realtime Database.
     var valueObject = event.data.val();
-
+    
+//     if (valueObject.previous) {
+//      return;
+//  }
     if(valueObject.Image != null) {
       valueObject.Image= "Sent you a photo!";
     }
@@ -24,8 +27,8 @@ exports.pushNotification = functions.database.ref('/News/{pushId}').onWrite( eve
   // Create a notification
     const payload = {
         notification: {
-            title:valueObject.Title,
-            body: valueObject.Description || valueObject.Image,
+            title: ` ${valueObject.Title}`,
+      body:"This is the notification send by jugaad ab kya kar mind hai zugadu dil sala chalu sone ke bhav me becna chahe aaloo",
             sound: "default"
         },
     };
@@ -39,4 +42,3 @@ exports.pushNotification = functions.database.ref('/News/{pushId}').onWrite( eve
 
     return admin.messaging().sendToTopic("pushNotifications", payload, options);
 });
-

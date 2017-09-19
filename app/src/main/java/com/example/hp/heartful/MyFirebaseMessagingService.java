@@ -22,7 +22,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     private static final String TAG = "FirebaseMessagingServce";
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        String notificationTitle = null, notificationBody = null;
+        String notificationTitle = null;
+        String notificationBody = null;
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getNotification() != null) {
             Log.d(TAG, "Message Notification Body: " + remoteMessage.getNotification().getBody());
@@ -56,7 +57,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setSound(defaultSoundUri)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationBody)
-                    .setContentIntent(pendingIntent);
+                    .setContentIntent(pendingIntent)
+                    .build();
         } else
         {
             notificationBuilder.setSmallIcon(R.mipmap.ic_launcher)
@@ -64,7 +66,8 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
                     .setSound(defaultSoundUri)
                     .setContentTitle(notificationTitle)
                     .setContentText(notificationBody)
-                    .setContentIntent(pendingIntent);
+                    .setContentIntent(pendingIntent)
+                    .build();
         }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
