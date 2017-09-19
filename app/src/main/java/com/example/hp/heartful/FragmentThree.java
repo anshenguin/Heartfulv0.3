@@ -259,7 +259,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
         }
         if (view==edit){
-            startActivity(new Intent(getActivity(),Preferences.class));
+            startActivity(new Intent(getActivity(),Preferences.class) );
         }
     }
     //
