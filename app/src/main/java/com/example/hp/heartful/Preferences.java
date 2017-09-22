@@ -1,5 +1,6 @@
 package com.example.hp.heartful;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -39,7 +40,8 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
             LoginManager.getInstance().logOut();
             mAuth.signOut();
             Toast.makeText(Preferences.this,"user has been sign out",Toast.LENGTH_LONG).show();
-           finish();
+            finish();
+            startActivity(new Intent(Preferences.this,Home.class));
 
         }
 

@@ -29,7 +29,7 @@ public class NewsPost extends AppCompatActivity {
     private ImageButton userImage;
     private EditText title,userDesc;
     private Button submitbtn;
-    private DatabaseReference mdatabase;
+private DatabaseReference mdatabase;
     private Uri imageUri=null;
     private ProgressDialog progress;
     private StorageReference newsPhotos;

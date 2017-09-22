@@ -2,11 +2,11 @@ package com.example.hp.heartful;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -20,6 +20,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -42,7 +44,15 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
@@ -52,7 +62,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 public class FragmentThree extends Fragment implements View.OnClickListener{
 
     private EditText email_Id;
-    private FloatingActionButton log_out;
     private EditText password;
     private SignInButton mgoogleSign;
     private FirebaseAuth mAuth;
@@ -60,6 +69,8 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private GoogleApiClient mGoogleApiClient;
     private EditText User_Name;
     private Button Sign_Up;
+    private FirebaseUser firebaseUser;
+    private DatabaseReference forUsers;
     private TextView login_Text;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ProgressDialog progress;
@@ -67,6 +78,11 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private static String TAG="FragmentThree";
     private LoginButton mFbLogin;
     private ImageView edit;
+    private String profilePicLink;
+    private String profileName;
+    private TextView userName;
+    private CircleImageView profilePic;
+    private DatabaseReference userInfo;
     private CallbackManager callbackManager;
     View view;
     View view_pro;
@@ -80,9 +96,13 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         view = inflater.inflate(R.layout.sign_up_page,container, false);
         view_pro = inflater.inflate(R.layout.profile_layout,container, false);
         fbProgress= new ProgressDialog(getActivity());
+        userInfo=FirebaseDatabase.getInstance().getReference().child("Users");
+        profilePic=(CircleImageView) view_pro.findViewById(R.id.profile_pic);
+        userName=(TextView)view_pro.findViewById(R.id.user_name);
         edit=(ImageView)view_pro.findViewById(R.id.edit);
         fbProgress.setMessage("Connecting to Facebook Account, Please wait...");
         mAuth=FirebaseAuth.getInstance();
+        forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(getActivity());
         callbackManager= CallbackManager.Factory.create();
@@ -95,13 +115,18 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         Sign_Up=(Button)view.findViewById(R.id.sign_up);
         login_Text=(TextView)view.findViewById(R.id.login_text);
         Sign_Up.setOnClickListener(this);
-        log_out=(FloatingActionButton) view_pro.findViewById(R.id.log_out);
-        log_out.setOnClickListener(this);
         edit.setOnClickListener(this);
         mgoogleSign=(SignInButton)view.findViewById(R.id.google_login);
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(R.id.fb_login);
 
+        Glide
+                .with(getActivity())
+                .load(profilePicLink)
+                .dontAnimate()
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .into(profilePic);
+        userName.setText(profileName);
 
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
@@ -177,12 +202,12 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
         if(mAuth.getCurrentUser()==null) {
             Log.v("Sign up run hoga", String.valueOf(mAuth.getCurrentUser()));
-            Log.v("main hu","sign up view");
+            Log.v("main hu"," sign up view");
             return view;
         }
         else {
             Log.v("profile run hoga",String.valueOf(mAuth.getCurrentUser()));
-            Log.v("main hu","profile view");
+            Log.v("main hu"," profile view");
             return view_pro;
         }
     }
@@ -243,14 +268,9 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
     @Override
     public void onClick(View view) {
-        if (view==log_out){
-            LoginManager.getInstance().logOut();
-            mAuth.signOut();
-            reLoad();
-            Toast.makeText(getActivity(),"user has been sign out",Toast.LENGTH_LONG).show();
-        }
         if(view==Sign_Up){
             // user will register here
+
             registerUser();
         }
         if(view==login_Text){
@@ -331,6 +351,39 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //   userProfile();
+                            firebaseUser=mAuth.getCurrentUser();
+                            String personName = firebaseUser.getDisplayName();
+                            Uri personPhoto = firebaseUser.getPhotoUrl();
+                            DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+//                            userData.child("userName").setValue(personName);
+//                            userData.child("profilePicLink").setValue(personPhoto.toString());
+                            Users user =new Users(personName,personPhoto.toString());
+                            userData.setValue(user);
+                            Log.i(TAG, "Display Name: " + personName);
+                            Log.i(TAG, "given  Name: " + personName);
+                            Log.i(TAG, "uri: " + personPhoto);
+                            Log.v(TAG, "signInWithCredential:success");
+                            forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Users user = dataSnapshot.getValue(Users.class);
+                                    profilePicLink=user.getProfilePicLink();
+                                    profileName=user.getUserName();
+                                    Glide
+                                            .with(getActivity())
+                                            .load(profilePicLink)
+                                            .dontAnimate()
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                            .into(profilePic);
+                                    userName.setText(profileName);
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
 
                             Log.v(TAG, "signInWithCredential:success");
                             reLoad();
@@ -338,8 +391,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
                         } else {
                             // If sign in fails, display a message to the user.
+                            Log.v("Facebookcheking","Dekhte hai ");
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
                             Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            LoginManager.getInstance().logOut();
                             fbProgress.dismiss();
 
                         }
@@ -360,17 +415,48 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //      userProfile();
+                            firebaseUser=mAuth.getCurrentUser();
+                            String personName = firebaseUser.getDisplayName();
+                            Uri personPhoto = firebaseUser.getPhotoUrl();
+                            DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+//                            userData.child("userName").setValue(personName);
+//                            userData.child("profilePicLink").setValue(personPhoto.toString());
+                            Users user =new Users(personName,personPhoto.toString());
+                            userData.setValue(user);
+                            Log.i(TAG, "Display Name: " + personName);
+                            Log.i(TAG, "given  Name: " + personName);
+                            Log.i(TAG, "uri: " + personPhoto);
                             Log.v(TAG, "signInWithCredential:success");
-                            reLoad();
+                            forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    Users user = dataSnapshot.getValue(Users.class);
+                                    profilePicLink=user.getProfilePicLink();
+                                    profileName=user.getUserName();
+                                    Glide
+                                            .with(getActivity())
+                                            .load(profilePicLink)
+                                            .dontAnimate()
+                                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                                            .into(profilePic);
+                                    userName.setText(profileName);
+                                }
 
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
+                            reLoad();
                             progress.dismiss();
 
 
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Log.v("googlecheking","Dekhte hai ");
                             Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
-                            LoginManager.getInstance().logOut();
                             progress.dismiss();
 
                         }
