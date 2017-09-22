@@ -23,11 +23,19 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
     private Button sign_In;
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
+//    private FirebaseUser firebaseUser;
+//    private DatabaseReference forUsers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        Bundle userInfo;
+//        userInfo =this.getIntent().getExtras().getBundle("Information");
+//        String userName=userInfo.getString("UserName");
+//        String userPic=userInfo.getString("Profile pic");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         firebaseAuth=FirebaseAuth.getInstance();
+//        firebaseUser=firebaseAuth.getCurrentUser();
+//        forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid());
         progressDialog=new ProgressDialog(this);
         email_Id=(EditText)findViewById(R.id.email_id);
         password=(EditText)findViewById(R.id.password);
