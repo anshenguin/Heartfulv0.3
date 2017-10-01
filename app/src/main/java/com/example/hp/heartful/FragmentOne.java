@@ -1,6 +1,5 @@
 package com.example.hp.heartful;
 
-import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
@@ -9,16 +8,12 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.transition.Slide;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -29,8 +24,6 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import java.util.ArrayList;
-
 /**
  * Created by HP INDIA on 08-Apr-17.
  */
@@ -38,7 +31,7 @@ import java.util.ArrayList;
 public  class FragmentOne extends Fragment  {
     public FragmentOne() {}
     private DatabaseReference mDatabase;
-    private ArrayList<OrgInfo>orgInfoArrayList;
+//    private ArrayList<OrgInfo>orgInfoArrayList;
 //    private OrgInfoAdapter adapter;
     private RecyclerView recyclerView;
 
@@ -50,6 +43,7 @@ public  class FragmentOne extends Fragment  {
         final View rootView = inflater.inflate(R.layout.tab_one, container, false);
         super.onCreate(savedInstanceState);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
+        mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setReverseLayout(true);
@@ -99,7 +93,7 @@ public  class FragmentOne extends Fragment  {
 //        tv.requestFocus();
 //        orgInfoArrayList= new ArrayList<>();
 ////        mDatabase= FirebaseDatabase.getInstance().getReference().child("Info");
-////        mDatabase.keepSynced(true);
+////
 //        orgInfoArrayList.add(new OrgInfo("AASRA", "do you wish you could help yourself well now you can lol", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Sada Suhaagan Raho", "test info", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("NGO with a really big name", "but an average info length", R.drawable.heart));
@@ -108,17 +102,16 @@ public  class FragmentOne extends Fragment  {
 //        orgInfoArrayList.add(new OrgInfo("chhota naam", "but info itni bdi ki chhote devices mein info view ke baahar chle jaae and last mein teen chhote dots dikhein haha", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Jaago Graahak Jaago", "Apne Adhikaar ko Jaano, Apne Hakk ko Pehchano. Jaago, Graahak Jaago!", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Satyamev Jayate", "Saccha hai pyaar tera!", R.drawable.heart));
-//        Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
-////
+        Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
 ////      adapter= new OrgInfoAdapter(getActivity(),orgInfoArrayList);
 //// Create an ArrayAdapter using the string array and a default spinner layout
 //
-//        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
-//                R.array.category_array, android.R.layout.simple_spinner_item);
-//// Specify the layout to use when the list of choices appears
-//        spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//// Apply the adapter to the spinner
-//        spinner.setAdapter(spinadapter);
+        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
+                R.array.category_array, android.R.layout.simple_spinner_item);
+// Specify the layout to use when the list of choices appears
+        spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the spinner
+        spinner.setAdapter(spinadapter);
 //
 //       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
 //        final ListView listView = (ListView) rootView.findViewById(R.id.ngo_list);

@@ -11,6 +11,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,8 +24,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.messaging.FirebaseMessaging;
 
 
@@ -36,31 +40,49 @@ public class FragmentTwo extends Fragment {
     public FragmentTwo(){}
   ImageButton button;
     ImageView imageView;
+    boolean canPost;
+    private DatabaseReference forUsers;
     private RecyclerView mNewsLists;
     private DatabaseReference mDatabase;
 //    private ProgressDialog progressDialog;
-    FirebaseAuth firebaseAuth;
-
+     private FirebaseAuth firebaseAuth;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
         final   View view =inflater.inflate(R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
+        firebaseAuth=FirebaseAuth.getInstance();
         imageView = (ImageView) view.findViewById(R.id.news_images);
         button=(FloatingActionButton) view.findViewById(R.id.button);
-        firebaseAuth=FirebaseAuth.getInstance();
+        if(firebaseAuth.getCurrentUser()!=null) {
+            forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid());
+            forUsers.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Users user = dataSnapshot.getValue(Users.class);
+                    canPost = user.isCanPost();
+                    Log.v("can u post", String.valueOf(canPost));
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(firebaseAuth.getCurrentUser()!=null){
+                if(canPost){
                 startActivity(new Intent(getActivity(),NewsPost.class));
 
             }
             else {
-                    Toast.makeText(getActivity(),"Make sure Your are logged in for posting your own news", Toast.LENGTH_LONG).show();
+                    Toast.makeText(getActivity(),"If NGO ,login to post news", Toast.LENGTH_LONG).show();
                 }
             }
+
         });
         mDatabase= FirebaseDatabase.getInstance().getReference().child("News");
         mDatabase.keepSynced(true);
