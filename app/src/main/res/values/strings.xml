@@ -5,6 +5,8 @@
     <string name="tab_two">News</string>
     <string name="tab_three">Profile</string>
     <string name="com_facebook_loginview_log_in_button">" "</string>
+    <string name="error">Error finding image</string>
+    <string name="saved_message">Image Saved at %1$s</string>
     <string name="fb_login_protocol_scheme">fb127567627787131</string>
     <string-array name="category_array">
         <item>All</item>

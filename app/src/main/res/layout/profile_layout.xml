@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
+    android:background="#EEE"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -9,8 +11,9 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -20,14 +23,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:id="@+id/linearone"
-                android:background="@color/colorPrimary"
+                android:background="#E0E0E0"
                 >
 
 
                 <de.hdodenhof.circleimageview.CircleImageView
 
-                    android:id="@+id/imageView1"
-                    android:src="@drawable/heart"
+                    android:id="@+id/profile_pic"
+                    android:src="@drawable/profilepic"
                     android:layout_gravity="center_horizontal"
                     android:layout_width="120dp"
                     android:layout_marginTop="16dp"
@@ -37,11 +40,11 @@
                 </de.hdodenhof.circleimageview.CircleImageView>
 
                 <TextView
-                    android:id="@+id/User_name"
+                    android:id="@+id/user_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal"
-                    android:text="Loading Name"
+                    android:text=" "
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
                     android:textSize="24sp" />
@@ -51,7 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="16dp"
-                    android:text="Loading Info"
+                    android:text=" "
                     android:textSize="14sp"
                     android:layout_marginBottom="16dp"
                     android:textStyle="italic" />
@@ -62,25 +65,20 @@
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:layout_gravity="end"
-                android:layout_margin="16dp"
+                android:layout_marginTop="16dp"
                 android:id="@+id/edit"
                 android:padding="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="4dp"
                 android:layout_marginRight="4dp"
-                android:layout_marginTop="22dp"
                 android:layout_weight="0.3"
                 app:srcCompat="@drawable/ic_edit_black_24dp"
                 />
 
         </FrameLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
@@ -90,58 +88,21 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="32dp"
+                        android:layout_margin="16dp"
                         android:textSize="24sp"
-                        android:textColor="#79319e"
-                        android:text="Recent Activity"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginLeft="32dp"
-                        android:layout_marginBottom="8dp"
-                        android:text="-Started Following AASRA"/>
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="32dp"
-                        android:text="-Commented on CHARITY LIVESTREAM UPDATE"/>
+                        android:layout_gravity="center_horizontal"
+                        android:textColor="#757675"
+                        android:text="Recent"
+                        android:textStyle="bold"
+                        android:textAllCaps="true"/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:layout_marginLeft="32dp"
-                        android:text="-Became the owner of 'Test NGO' "/>
 
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="32dp"
-                        android:textSize="24sp"
-                        android:textColor="#79319e"
-                        android:text="Organisations Followed"/>
-
-                    <ListView
+                    <android.support.v7.widget.RecyclerView
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
+                        android:layout_height="wrap_content">
 
-                    </ListView>
-
+                    </android.support.v7.widget.RecyclerView>
                 </LinearLayout>
 
-            </android.support.v4.widget.NestedScrollView>
-        </LinearLayout>
     </LinearLayout>
-
-    <android.support.design.widget.FloatingActionButton
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:id="@+id/log_out"
-        android:elevation="4dp"
-        android:clickable="true"
-        app:layout_anchor="@id/lineartwo"
-        app:layout_anchorGravity="top|right" />
-</android.support.design.widget.CoordinatorLayout>
+</ScrollView>

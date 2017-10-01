@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="130dp"
-        android:background="#3FBDF4"
+        android:background="#5FAAF2"
         android:padding="8dp"
         android:orientation="horizontal"
         android:clipToPadding="false"
@@ -70,7 +70,7 @@
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:clipToPadding="false"
-        android:background="#22B6F6">
+        android:background="#4D9DEA">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
