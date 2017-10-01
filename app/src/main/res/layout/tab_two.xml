@@ -44,7 +44,7 @@
         android:elevation="6dp"
         fab:fab_colorNormal="@color/colorAccent"
         android:clickable="true"
-    app:fabSize="normal"
+      app:fabSize="normal"
         android:src="@drawable/ic_add_black_24dp"
         app:srcCompat="@drawable/ic_add_black_24dp"
     android:scaleType="center"

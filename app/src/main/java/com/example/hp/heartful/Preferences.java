@@ -50,7 +50,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
         mAuth= FirebaseAuth.getInstance();
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
         firebaseUser=mAuth.getCurrentUser();
-        progress.setMessage("Updating Profile Picture, please wait...");
+        progress.setMessage("Updating profile picture, please wait...");
         mstorage= FirebaseStorage.getInstance().getReference();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Preferences");

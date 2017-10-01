@@ -131,7 +131,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                     profilePicLink = user.getProfilePicLink();
                     profileName = user.getUserName();
                     Glide
-                            .with(getActivity())
+                            .with(getApplicationContext())
                             .load(profilePicLink)
                             .dontAnimate()
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
