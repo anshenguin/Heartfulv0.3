@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -39,6 +40,7 @@ public class FragmentTwo extends Fragment {
   com.melnykov.fab.FloatingActionButton button;
     ImageView imageView;
     boolean canPost;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference forUsers;
     private RecyclerView mNewsLists;
     private DatabaseReference mDatabase;
@@ -54,22 +56,33 @@ public class FragmentTwo extends Fragment {
         imageView = (ImageView) view.findViewById(R.id.news_images);
         button=(com.melnykov.fab.FloatingActionButton) view.findViewById(R.id.button);
         firebaseAuth=FirebaseAuth.getInstance();
-        if(firebaseAuth.getCurrentUser()!=null) {
-            forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid());
-            forUsers.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    Users user = dataSnapshot.getValue(Users.class);
-                    canPost = user.isCanPost();
-                    Log.v("can u post", String.valueOf(canPost));
+        mAuthStateListener= new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser()!=null) {
+                    Log.v("can u post2", String.valueOf(canPost));
+                    forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid());
+                    forUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Users user = dataSnapshot.getValue(Users.class);
+                            canPost = user.isCanPost();
+                            Log.v("can u post", String.valueOf(canPost));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
                 }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
 
-                }
-            });
-        }
+            }
+
+        };
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -78,6 +91,7 @@ public class FragmentTwo extends Fragment {
 
             }
             else {
+                    Log.v("canPost", String.valueOf(canPost));
                     Toast.makeText(getActivity(),"If NGO ,login to post news", Toast.LENGTH_LONG).show();
                 }
             }
@@ -132,7 +146,12 @@ public class FragmentTwo extends Fragment {
         button.attachToRecyclerView(mNewsLists);
         return view;
           }
+    @Override
+    public void onStart() {
+        super.onStart();
 
+        firebaseAuth.addAuthStateListener(mAuthStateListener);
+    }
 
 
     public static class NewsViewHolder extends RecyclerView.ViewHolder {
@@ -141,6 +160,7 @@ public class FragmentTwo extends Fragment {
             super(itemView);
             mView=itemView;
         }
+
 
         public void setTitle(String title) {
             TextView post_title=(TextView)mView.findViewById(R.id.news_title);

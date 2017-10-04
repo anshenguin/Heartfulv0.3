@@ -1,7 +1,9 @@
 package com.example.hp.heartful;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -50,6 +52,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -85,6 +88,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private String profileName;
     private TextView userName;
     private CircleImageView profilePic;
+//    private Boolean isValueExists;
     private CallbackManager callbackManager;
     View view;
     View view_pro;
@@ -120,13 +124,13 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         mgoogleSign=(SignInButton)view.findViewById(R.id.google_login);
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(R.id.fb_login);
-
         if(mAuth.getCurrentUser()!=null) {
             mAuth=FirebaseAuth.getInstance();
             firebaseUser=mAuth.getCurrentUser();
             forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v("chal","ondatachange");
                     Users user = dataSnapshot.getValue(Users.class);
                     profilePicLink = user.getProfilePicLink();
                     profileName = user.getUserName();
@@ -152,7 +156,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
                 justRefreshed = false;
                 if(usingSignIn)
-                shouldRefreshOnResume = true;
+                    shouldRefreshOnResume = true;
 
             }
 
@@ -250,6 +254,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 //    }
 
     private void signIn() {
+        Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
         startActivityForResult(signInIntent, RC_SIGN_IN);
     }
@@ -353,12 +358,13 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             //show user profile
                             Toast.makeText(getActivity(),"Registered successfully",Toast.LENGTH_SHORT).show();
                             firebaseUser=mAuth.getCurrentUser();
-                            boolean canPost=false;
-                            String personName = user_name;
-                            String personPhoto =  "https://firebasestorage.googleapis.com/v0/b/heartful-dc3ac.appspot.com/o/profilepic.png?alt=media&token=5b98dc2e-1e36-4eb8-86e9-54d10222120e";
                             DatabaseReference userData = forUsers.child(firebaseUser.getUid());
-                            Users user =new Users(personName,personPhoto,canPost);
-                            userData.setValue(user);
+                                boolean canPost = false;
+                                String personName = user_name;
+                                String personPhoto = "https://firebasestorage.googleapis.com/v0/b/heartful-dc3ac.appspot.com/o/profilepic.png?alt=media&token=5b98dc2e-1e36-4eb8-86e9-54d10222120e";
+                                Users user = new Users(personName, personPhoto, canPost);
+                                userData.setValue(user);
+
                             justRefreshed = false;
                             reLoad();
                             progressDialog.dismiss();
@@ -383,13 +389,43 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //   userProfile();
+                            String HEARTFUL_USER ="HeartfulUser";
                             firebaseUser=mAuth.getCurrentUser();
-                            String personName = firebaseUser.getDisplayName();
-                            boolean canPost=false;
-                            Uri personPhoto = firebaseUser.getPhotoUrl();
-                            DatabaseReference userData = forUsers.child(firebaseUser.getUid());
-                            Users user =new Users(personName,personPhoto.toString(),canPost);
-                            userData.setValue(user);
+                            final DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+                            SharedPreferences pref = getApplicationContext().getSharedPreferences(HEARTFUL_USER, Activity.MODE_PRIVATE);
+
+                            if (!pref.contains(HEARTFUL_USER)) {
+                                Log.v("chal","fb");
+                                boolean canPost = false;
+                                String personName = firebaseUser.getDisplayName();
+                                Uri personPhoto = firebaseUser.getPhotoUrl();
+                                Users user = new Users(personName, personPhoto.toString(), canPost);
+                                userData.setValue(user);
+                                pref.edit().putBoolean(HEARTFUL_USER, true).commit();
+                            }
+
+                            Query query = userData.orderByKey().equalTo("canPost");
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()){}
+                                    else{
+
+                                        boolean canPost = false;
+                                        String personName = firebaseUser.getDisplayName();
+                                        Uri personPhoto = firebaseUser.getPhotoUrl();
+                                        Users user = new Users(personName, personPhoto.toString(), canPost);
+                                        userData.setValue(user);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+
                             Log.v(TAG, "signInWithCredential:success");
                             justRefreshed = false;
                             reLoad();
@@ -397,7 +433,8 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(getActivity(), "Authentication failed.",Toast.LENGTH_SHORT).show();
+                            Log.w(TAG, "signInWithCredential:failure", task.getException());
+                            Toast.makeText(getActivity(), "Authentication failed,"+task.getException(),Toast.LENGTH_LONG    ).show();
                             LoginManager.getInstance().logOut();
                             fbProgress.dismiss();
 
@@ -420,15 +457,51 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             //      userProfile();
+//                            isValueExists=false;
+                            String HEARTFUL_USER ="GoogleUser";
                             firebaseUser=mAuth.getCurrentUser();
-                            boolean canPost=false;
-                            String personName = firebaseUser.getDisplayName();
-                            Uri personPhoto = firebaseUser.getPhotoUrl();
-                            DatabaseReference userData = forUsers.child(firebaseUser.getUid());
-//                            userData.child("userName").setValue(personName);
-//                            userData.child("profilePicLink").setValue(personPhoto.toString());
-                            Users user =new Users(personName,personPhoto.toString(),canPost);
-                            userData.setValue(user);
+                            final DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+                            SharedPreferences pref = getApplicationContext().getSharedPreferences(HEARTFUL_USER, Activity.MODE_PRIVATE);
+
+                            if (!pref.contains(HEARTFUL_USER)) {
+                                Log.v("chal","google");
+                                boolean canPost = false;
+                                String personName = firebaseUser.getDisplayName();
+                                Uri personPhoto = firebaseUser.getPhotoUrl();
+                                Users user = new Users(personName, personPhoto.toString(), canPost);
+                                userData.setValue(user);
+                                pref.edit().putBoolean(HEARTFUL_USER, true).commit();
+                            }
+
+                            Query query = userData.orderByKey().equalTo("canPost");
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot dataSnapshot) {
+                                    if (dataSnapshot.exists()){}
+                                    else{
+
+                                boolean canPost = false;
+                                String personName = firebaseUser.getDisplayName();
+                                Uri personPhoto = firebaseUser.getPhotoUrl();
+                                Users user = new Users(personName, personPhoto.toString(), canPost);
+                                userData.setValue(user);
+                                    }
+
+                                }
+
+                                @Override
+                                public void onCancelled(DatabaseError databaseError) {
+
+                                }
+                            });
+//                            if (!isValueExists) {
+//                                Log.v("Query","doosre login pe");
+//                                boolean canPost = false;
+//                                String personName = firebaseUser.getDisplayName();
+//                                Uri personPhoto = firebaseUser.getPhotoUrl();
+//                                Users user = new Users(personName, personPhoto.toString(), canPost);
+//                                userData.setValue(user);
+//                            }
                             Log.v(TAG, "signInWithCredential:success");
                             justRefreshed = false;
                             reLoad();
