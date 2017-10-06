@@ -11,6 +11,9 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.bumptech.glide.load.resource.drawable.GlideDrawable;
+import com.bumptech.glide.request.RequestListener;
+import com.bumptech.glide.request.target.Target;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,7 +38,7 @@ public class SingleNewsDetail extends AppCompatActivity {
         mNewsTitle=(TextView)findViewById(R.id.news_title);
         post_key=getIntent().getExtras().getString("news_id");
         mDatabase= FirebaseDatabase.getInstance().getReference().child("News");
-        initCollapsingToolbar();
+//        initCollapsingToolbar();
         mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -45,12 +48,33 @@ public class SingleNewsDetail extends AppCompatActivity {
                 loadImage=post_image;
                 mNewsTitle.setText(post_title);
                 mNewsDesc.setText(post_desc);
+//                supportPostponeEnterTransition();
+
                 Glide
                         .with(SingleNewsDetail.this)
                         .load(post_image)
-                        .override(450,450)
+
+                        .override(1000,1000)
+
+                        .dontAnimate()
+
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mNewsImage);
+//                        .listener(new RequestListener<String, GlideDrawable>() {
+//                            @Override
+//                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
+//                                supportStartPostponedEnterTransition();
+//                                return false;
+//                            }
+//
+//                            @Override
+//                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
+//                                supportStartPostponedEnterTransition();
+//                                return false;
+//                            }
+//                        })
+                        .into(mNewsImage)
+
+                ;
 
             }
 
@@ -61,38 +85,7 @@ public class SingleNewsDetail extends AppCompatActivity {
         });
     }
 
-    private void initCollapsingToolbar() {
-        final CollapsingToolbarLayout collapsingToolbar =
-                (CollapsingToolbarLayout) findViewById(R.id.collapsing_toolbar);
-        collapsingToolbar.setTitle(" ");
-        AppBarLayout appBarLayout = (AppBarLayout) findViewById(R.id.appbar);
-        appBarLayout.setExpanded(true);
 
-        // hiding & showing the txtPostTitle when toolbar expanded & collapsed
-        appBarLayout.addOnOffsetChangedListener(new AppBarLayout.OnOffsetChangedListener() {
-            boolean isShow = false;
-            int scrollRange = -1;
-
-            @Override
-            public void onOffsetChanged(AppBarLayout appBarLayout, int verticalOffset) {
-                if (scrollRange == -1) {
-                    scrollRange = appBarLayout.getTotalScrollRange();
-                }
-                if (scrollRange + verticalOffset == 0) {
-                    collapsingToolbar.setTitle("Ngo News");
-                    isShow = true;
-                } else if (isShow) {
-                    collapsingToolbar.setTitle(" ");
-                    isShow = false;
-                }
-            }
-        });
-        Glide.with(getApplicationContext()).load(loadImage)
-                .thumbnail(0.5f)
-                .crossFade()
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .into(mNewsImage);
-    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

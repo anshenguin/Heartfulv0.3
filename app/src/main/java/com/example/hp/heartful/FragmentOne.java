@@ -73,11 +73,11 @@ public  class FragmentOne extends Fragment  {
                         Intent intent=new Intent(getActivity(),orgInsideActivity.class);
                         intent.putExtra("news_id",post_key);
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            Transition transition_two = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
-                            getActivity().getWindow().setSharedElementEnterTransition(transition_two);
-                            ImageView transitionView = (ImageView) v1.findViewById(R.id.org_logo);
+                            Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                            getActivity().getWindow().setSharedElementEnterTransition(transition_one);
+                            ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
                             Bundle b = ActivityOptionsCompat
-                                    .makeSceneTransitionAnimation(getActivity(), transitionView, "orgimg").toBundle();
+                                    .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
                             startActivity(intent, b);
                         }
                         else
