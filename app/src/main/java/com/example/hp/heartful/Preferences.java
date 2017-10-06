@@ -50,7 +50,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
         mAuth= FirebaseAuth.getInstance();
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
         firebaseUser=mAuth.getCurrentUser();
-        progress.setMessage("Updating profile picture, please wait...");
+        progress.setMessage("Updating Profile Picture, Please Wait...");
         mstorage= FirebaseStorage.getInstance().getReference();
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Edit Preferences");
@@ -69,7 +69,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
         if (v == logout) {
             LoginManager.getInstance().logOut();
             mAuth.signOut();
-            Toast.makeText(Preferences.this, "user has been sign out", Toast.LENGTH_LONG).show();
+            Toast.makeText(Preferences.this, "user has been sign out", Toast.LENGTH_SHORT).show();
             finish();
         }
         if (v == changeName) {
@@ -106,11 +106,11 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         @SuppressWarnings("VisibleForTests") final
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                       final DatabaseReference imagePost= forUsers.child(firebaseUser.getUid());
+                        final DatabaseReference imagePost= forUsers.child(firebaseUser.getUid());
                         forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                            imagePost.child("profilePicLink").setValue(downloadUrl.toString());
+                                imagePost.child("profilePicLink").setValue(downloadUrl.toString());
                                 progress.dismiss();
                             }
 
