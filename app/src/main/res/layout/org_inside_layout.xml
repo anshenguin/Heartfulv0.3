@@ -224,7 +224,6 @@
         app:fabSize="normal"
         android:clickable="true"
         app:srcCompat="@drawable/ic_person_add_black_24dp"
-        android:src="@drawable/ic_person_add_black_24dp"
         android:background="@color/colorAccent"
         android:layout_alignParentEnd="true"
         android:layout_alignParentBottom="true"
