@@ -68,6 +68,7 @@ public class UpdateName extends AppCompatActivity {
                     Log.v("New name",changedName);
                  DatabaseReference name=forUsers.child(firebaseUser.getUid());
                     name.child("userName").setValue(changedName);
+                    Log.v("name ",mAuth.getCurrentUser().getDisplayName());
                     finish();
 
                 }

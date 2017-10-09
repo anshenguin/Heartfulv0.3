@@ -151,6 +151,7 @@ public  class FragmentOne extends Fragment  {
        recyclerView.setAdapter(firebaseRecyclerAdapter);
         return rootView;
     }
+    
 
     public static class OrgInfoViewHolder extends RecyclerView.ViewHolder {
         View mView;

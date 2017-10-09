@@ -7,7 +7,6 @@ package com.example.hp.heartful;
 public class Users {
     public String userName;
     public String profilePicLink;
-
     public boolean canPost;
     public Users() {
     }
