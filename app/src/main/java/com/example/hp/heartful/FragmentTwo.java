@@ -37,12 +37,13 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 public class FragmentTwo extends Fragment {
     public FragmentTwo(){}
-  com.melnykov.fab.FloatingActionButton button;
+  android.support.design.widget.FloatingActionButton button;
     ImageView imageView;
     boolean canPost;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference forUsers;
     private RecyclerView mNewsLists;
+    private View view;
     private DatabaseReference mDatabase;
 //    private ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
@@ -51,10 +52,11 @@ public class FragmentTwo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
-        final   View view =inflater.inflate(R.layout.tab_two, container, false);
+        view =inflater.inflate(R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
         imageView = (ImageView) view.findViewById(R.id.news_images);
-        button=(com.melnykov.fab.FloatingActionButton) view.findViewById(R.id.button);
+        button=(android.support.design.widget.FloatingActionButton) view.findViewById(R.id.button);
+        button.bringToFront();
         firebaseAuth=FirebaseAuth.getInstance();
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
@@ -143,7 +145,6 @@ public class FragmentTwo extends Fragment {
             }
         };
         mNewsLists.setAdapter(firebaseRecyclerAdapter);
-        button.attachToRecyclerView(mNewsLists);
         return view;
           }
     @Override
@@ -188,11 +189,7 @@ public class FragmentTwo extends Fragment {
         }
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        button.hide();
-    }
+
 }
 
 
