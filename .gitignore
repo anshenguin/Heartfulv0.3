@@ -47,3 +47,4 @@ Temporary Items
 .apdisk
 build/intermediates/dex-cache/cache.xml
 build/generated/mockable-android-25.jar
+*.bin
