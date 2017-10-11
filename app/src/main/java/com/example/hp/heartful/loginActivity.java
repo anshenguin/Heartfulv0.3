@@ -5,7 +5,9 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -29,12 +31,17 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
 //    private DatabaseReference forUsers;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_login);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Login to your Account");
 //        Bundle userInfo;
 //        userInfo =this.getIntent().getExtras().getBundle("Information");
 //        String userName=userInfo.getString("UserName");
 //        String userPic=userInfo.getString("Profile pic");
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
+
         firebaseAuth=FirebaseAuth.getInstance();
 //        firebaseUser=firebaseAuth.getCurrentUser();
 //        forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid());
@@ -96,5 +103,13 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
     }
 
 
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
 }
