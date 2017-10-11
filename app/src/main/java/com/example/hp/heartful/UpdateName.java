@@ -41,7 +41,7 @@ public class UpdateName extends AppCompatActivity {
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Users user = dataSnapshot.getValue(Users.class);
                     enterName.setText(user.getUserName());
-                    enterName.setSelectAllOnFocus(true);
+                    enterName.selectAll();
                 }
 
                 @Override
@@ -68,7 +68,7 @@ public class UpdateName extends AppCompatActivity {
                     Log.v("New name",changedName);
                  DatabaseReference name=forUsers.child(firebaseUser.getUid());
                     name.child("userName").setValue(changedName);
-                    Log.v("name ",mAuth.getCurrentUser().getDisplayName());
+//                    Log.v("name ",mAuth.getCurrentUser().getDisplayName());
                     finish();
 
                 }

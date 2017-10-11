@@ -4,16 +4,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:isScrollContainer="true"
     android:layout_height="match_parent"
     tools:context="com.example.hp.heartful.UpdateName">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/linear_layout"
-        android:orientation="vertical">
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
         android:layout_width="match_parent"
@@ -32,11 +29,9 @@
         android:inputType="textPersonName"
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        android:maxLines="1"/>
-    </LinearLayout>
+        android:maxLines="1"
+        android:layout_below="@+id/appbar"
+        android:layout_centerHorizontal="true" />
 
         <RelativeLayout
             android:layout_width="match_parent"
