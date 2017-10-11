@@ -5,8 +5,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -40,6 +43,11 @@ public class NewsPost extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news_post);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setTitle("Post News");
      //   FirebaseDatabase.getInstance().setPersistenceEnabled(true);
         mstorage=FirebaseStorage.getInstance();
         mdatabase= FirebaseDatabase.getInstance().getReference().child("News");
@@ -71,7 +79,7 @@ public class NewsPost extends AppCompatActivity {
     private void userPost(){
         final String postTitle=title.getText().toString();
         final String postDes= userDesc.getText().toString();
-        if (!TextUtils.isEmpty(postTitle)&&!TextUtils.isEmpty(postDes)&&imageUri!=null){
+        if (!TextUtils.isEmpty(postTitle)&&!TextUtils.isEmpty(postDes)/*&&imageUri!=null*/){
             progress.show();
            StorageReference filePath=newsPhotos.child(imageUri.getLastPathSegment());
             filePath.putFile(imageUri).addOnSuccessListener(this,new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -119,5 +127,13 @@ public class NewsPost extends AppCompatActivity {
             }
         }
 
+    }
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                this.finish();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
