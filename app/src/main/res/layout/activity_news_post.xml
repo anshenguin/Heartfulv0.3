@@ -30,15 +30,18 @@ android:fillViewport="true">
         android:layout_height="wrap_content"
         android:orientation="vertical"
         tools:context="com.example.hp.heartful.NewsPost">
-        <ImageButton
+        <ImageView
             android:layout_width="match_parent"
             android:id="@+id/user_image"
             android:layout_height="wrap_content"
+            android:scaleType="fitStart"
+            android:adjustViewBounds="true"
+
             android:src="@mipmap/add_btn"/>
         <android.support.design.widget.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             >
 
         <EditText

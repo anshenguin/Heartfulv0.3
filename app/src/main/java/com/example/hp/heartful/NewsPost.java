@@ -13,6 +13,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -29,7 +30,7 @@ import java.util.Date;
 
 public class NewsPost extends AppCompatActivity {
 
-    private ImageButton userImage;
+    private ImageView userImage;
     private EditText title,userDesc;
     private Button submitbtn;
     private DatabaseReference mdatabase;
@@ -56,7 +57,7 @@ public class NewsPost extends AppCompatActivity {
         title=(EditText)findViewById(R.id.title);
         userDesc=(EditText)findViewById(R.id.user_des);
         progress=new ProgressDialog(this);
-        userImage=(ImageButton)findViewById(R.id.user_image);
+        userImage=(ImageView)findViewById(R.id.user_image);
         userImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
