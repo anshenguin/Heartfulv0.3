@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -89,6 +90,9 @@ public class FragmentTwo extends Fragment {
             @Override
             public void onClick(View v) {
                 if(canPost){
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                        presentActivity(v);
+                        else
                 startActivity(new Intent(getActivity(),NewsPost.class));
 
             }
@@ -187,6 +191,19 @@ public class FragmentTwo extends Fragment {
                     .into(post_image);
 
         }
+    }
+
+    public void presentActivity(View view) {
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), view, "transition");
+        int revealX = (int) (view.getX() + view.getWidth() / 2);
+        int revealY = (int) (view.getY() + view.getHeight() / 2);
+
+        Intent intent = new Intent(getActivity(), NewsPost.class);
+        intent.putExtra(NewsPost.EXTRA_CIRCULAR_REVEAL_X, revealX);
+        intent.putExtra(NewsPost.EXTRA_CIRCULAR_REVEAL_Y, revealY);
+
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
 

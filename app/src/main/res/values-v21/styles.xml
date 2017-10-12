@@ -11,10 +11,17 @@
         <item name="colorPrimaryDark">#00aff0</item>
         <item name="colorAccent">#FF9C0A</item>
     <item name="android:windowContentTransitions">true</item>
+        <!--<item name="android:windowTranslucentNavigation">true</item>-->
+        <!--<item name="android:windowTranslucentStatus">true</item>-->
     </style>
     <style name="SplashTheme.Theme" parent="@style/AppTheme">
         <item name="colorPrimaryDark">#ffffff</item>
     <item name="android:windowBackground">@drawable/splashscreen</item>
     </style>
+    <style name="AppTheme.Transparent" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
 
+    </style>
 </resources>
