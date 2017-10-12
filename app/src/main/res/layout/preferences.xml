@@ -29,6 +29,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:paddingLeft="16dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:id="@+id/change_name"
             android:orientation="horizontal">
 
@@ -36,7 +38,6 @@
                 android:layout_width="28dp"
                 android:layout_gravity="center"
                 android:layout_height="28dp"
-
                 app:srcCompat="@drawable/ic_person_black_24dp"
                 />
             <TextView
@@ -57,6 +58,8 @@
             android:background="#d3d3d3"/>
         <LinearLayout
             android:layout_width="match_parent"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:layout_height="60dp"
             android:paddingLeft="16dp"
             android:orientation="horizontal">
@@ -87,6 +90,8 @@
             android:layout_width="match_parent"
             android:id="@+id/change_pic"
             android:layout_height="60dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:paddingLeft="16dp"
             android:orientation="horizontal">
 
@@ -116,6 +121,8 @@
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:paddingLeft="16dp"
+            android:clickable="true"
+            android:foreground="?attr/selectableItemBackground"
             android:id="@+id/signout"
             android:orientation="horizontal">
 
@@ -123,7 +130,6 @@
                 android:layout_width="28dp"
                 android:layout_gravity="center"
                 android:layout_height="28dp"
-
                 app:srcCompat="@drawable/ic_power_settings_new_black_24dp"
                 />
             <TextView
