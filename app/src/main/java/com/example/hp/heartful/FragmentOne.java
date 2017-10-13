@@ -8,6 +8,7 @@ import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -33,6 +34,7 @@ public  class FragmentOne extends Fragment  {
     private DatabaseReference mDatabase;
 //    private ArrayList<OrgInfo>orgInfoArrayList;
 //    private OrgInfoAdapter adapter;
+    private SearchView searchview;
     private RecyclerView recyclerView;
 
 
@@ -42,6 +44,8 @@ public  class FragmentOne extends Fragment  {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_one, container, false);
         super.onCreate(savedInstanceState);
+        searchview = (SearchView) rootView.findViewById(R.id.search_item);
+        searchview.setMaxWidth(Integer.MAX_VALUE);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
