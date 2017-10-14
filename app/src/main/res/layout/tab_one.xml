@@ -49,23 +49,11 @@
                     android:layout_weight="0"
                     android:layout_gravity="center"
                     android:layout_marginRight="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_height="wrap_content">
 
 
                 </android.support.v7.widget.SearchView>
-                <!--<EditText-->
-                    <!--android:layout_width="27dp"-->
-                    <!--android:layout_height="32dp"-->
-                    <!--android:layout_marginLeft="8dp"-->
-                    <!--android:layout_marginRight="8dp"-->
-                    <!--android:layout_marginTop="16dp"-->
-                    <!--android:layout_weight="0.7"-->
-                    <!--android:background="@drawable/text_field_design"-->
-                    <!--android:hint="Search..."-->
-                    <!--android:inputType="textPersonName"-->
-                    <!--android:maxLines="1"-->
-                    <!--android:paddingLeft="16dp"-->
-                    <!--android:paddingRight="8dp" />-->
 
             </LinearLayout>
             <View
