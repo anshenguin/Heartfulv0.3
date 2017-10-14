@@ -9,6 +9,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -310,7 +312,14 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         }
         if(mAuth.getCurrentUser()!=null) {
             if (view == edit) {
-                startActivity(new Intent(getActivity(), Preferences.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                    presentActivity(view);
+                else {
+                    Intent i = new Intent(getActivity(), Preferences.class);
+                    i.setFlags(i.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivity(i);
+                }
+
             }
         }
     }
@@ -562,6 +571,19 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
             Log.v("value of should refresh", String.valueOf(shouldRefreshOnResume));
             reLoad();
         }
+    }
+    public void presentActivity(View view) {
+        ActivityOptionsCompat options = ActivityOptionsCompat.
+                makeSceneTransitionAnimation(getActivity(), view, "transition");
+        int revealX = (int) (view.getX() + view.getWidth() / 2);
+        int revealY = (int) (view.getY() + view.getHeight() / 2);
+
+        Intent intent = new Intent(getActivity(), Preferences.class);
+        intent.setFlags(intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+        intent.putExtra(Preferences.EXTRA_CIRCULAR_REVEAL_X, revealX);
+        intent.putExtra(Preferences.EXTRA_CIRCULAR_REVEAL_Y, revealY);
+
+        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
 
 }

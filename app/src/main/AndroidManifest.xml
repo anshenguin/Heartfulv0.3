@@ -89,7 +89,9 @@
             android:theme="@style/Base.Theme.AppCompat" />
         <activity android:name=".SingleNewsDetail" />
         <activity android:name=".BrowserActivity" />
-        <activity android:name=".Preferences" />
+        <activity android:name=".Preferences"
+            android:theme="@style/AppTheme.Transparent"/>
+        />
         <activity android:name=".WebViewContents" />
         <activity android:name=".UpdateName"></activity>
     </application>

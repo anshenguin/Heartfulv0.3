@@ -2,12 +2,14 @@ package com.example.hp.heartful;
 
 import android.content.Context;
 import android.content.Intent;
+import android.icu.text.SearchIterator;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
 import android.view.LayoutInflater;
@@ -23,6 +25,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+
+import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by HP INDIA on 08-Apr-17.
@@ -33,16 +38,19 @@ public  class FragmentOne extends Fragment  {
     private DatabaseReference mDatabase;
 //    private ArrayList<OrgInfo>orgInfoArrayList;
 //    private OrgInfoAdapter adapter;
+    private SearchView searchview;
     private RecyclerView recyclerView;
-
-
+    private DatabaseReference Searchbase;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_one, container, false);
         super.onCreate(savedInstanceState);
+        searchview = (SearchView) rootView.findViewById(R.id.search_item);
+        searchview.setMaxWidth(Integer.MAX_VALUE);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
+        Searchbase= FirebaseDatabase.getInstance().getReference();
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -112,7 +120,53 @@ public  class FragmentOne extends Fragment  {
         spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(spinadapter);
-//
+
+        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+
+                Query Q = Searchbase.child("NgoList").orderByChild("mOrgname").startAt(newText.toUpperCase()
+                ).endAt("~");
+                FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
+                        OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
+                    @Override
+                    protected void populateViewHolder(final OrgInfoViewHolder viewHolder, final OrgInfo model, int position) {
+                        final String post_key=getRef(position).getKey();
+                        viewHolder.setmOrginfo(model.getmOrginfo());
+                        viewHolder.setmOrgname(model.getmOrgname());
+                        viewHolder.setmCategory(model.getmCategory());
+                        viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
+                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v1) {
+                                Intent intent=new Intent(getActivity(),orgInsideActivity.class);
+                                intent.putExtra("news_id",post_key);
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                    Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                                    getActivity().getWindow().setSharedElementEnterTransition(transition_one);
+                                    ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
+                                    Bundle b = ActivityOptionsCompat
+                                            .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
+                                    startActivity(intent, b);
+                                }
+                                else
+                                    startActivity(intent);
+                            }
+                        });
+
+                    }
+                };
+                recyclerView.setAdapter(firebaseRecyclerAdapter);
+                return false;
+            }
+        });
+//                                          });
+//}
 //       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
 //        final ListView listView = (ListView) rootView.findViewById(R.id.ngo_list);
 
@@ -187,6 +241,8 @@ public  class FragmentOne extends Fragment  {
             post_title.setText(s);
         }
     }
+
+
 }
 
 
