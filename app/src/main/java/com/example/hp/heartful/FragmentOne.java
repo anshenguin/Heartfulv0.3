@@ -2,7 +2,6 @@ package com.example.hp.heartful;
 
 import android.content.Context;
 import android.content.Intent;
-import android.icu.text.SearchIterator;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityOptionsCompat;
@@ -12,6 +11,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.transition.Transition;
 import android.transition.TransitionInflater;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,8 +27,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
-import static com.facebook.FacebookSdk.getApplicationContext;
-
 /**
  * Created by HP INDIA on 08-Apr-17.
  */
@@ -40,7 +38,6 @@ public  class FragmentOne extends Fragment  {
 //    private OrgInfoAdapter adapter;
     private SearchView searchview;
     private RecyclerView recyclerView;
-    private DatabaseReference Searchbase;
 
 
     @Override
@@ -50,7 +47,7 @@ public  class FragmentOne extends Fragment  {
         searchview = (SearchView) rootView.findViewById(R.id.search_item);
         searchview.setMaxWidth(Integer.MAX_VALUE);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
-        Searchbase= FirebaseDatabase.getInstance().getReference();
+
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -130,8 +127,9 @@ public  class FragmentOne extends Fragment  {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                Query Q = Searchbase.child("NgoList").orderByChild("mOrgname").startAt(newText.toUpperCase()
-                ).endAt("~");
+                Query Q = mDatabase.orderByChild("mOrginfo").startAt(newText).endAt(newText+"\uf8ff");
+                Log.v("SearchText",newText);
+                Log.v("search", String.valueOf(Q));
                 FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
                         OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
                     @Override
