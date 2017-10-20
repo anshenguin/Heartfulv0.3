@@ -9,6 +9,12 @@
         <item name="windowActionBar">true</item>
         <item name="windowNoTitle">true</item>
     </style>
+    <style name="TabLayoutTextStyle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+
+    </style>
     <style name="SplashTheme.Theme" parent="@style/AppTheme">
         <item name="colorPrimaryDark">#ffffff</item>
     <item name="android:windowBackground">@drawable/splashscreen</item>

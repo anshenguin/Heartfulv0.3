@@ -38,6 +38,7 @@ public  class FragmentOne extends Fragment  {
 //    private OrgInfoAdapter adapter;
     private SearchView searchview;
     private RecyclerView recyclerView;
+    private DatabaseReference searchbase;
 
 
     @Override
@@ -47,7 +48,7 @@ public  class FragmentOne extends Fragment  {
         searchview = (SearchView) rootView.findViewById(R.id.search_item);
         searchview.setMaxWidth(Integer.MAX_VALUE);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
-
+        searchbase= FirebaseDatabase.getInstance().getReference().child("NgoList").child("0");
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -127,7 +128,7 @@ public  class FragmentOne extends Fragment  {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                Query Q = mDatabase.orderByChild("mOrginfo").startAt(newText).endAt(newText+"\uf8ff");
+                Query Q = searchbase.orderByChild("mOrginfo").startAt(newText).endAt(newText+"\uf8ff");
                 Log.v("SearchText",newText);
                 Log.v("search", String.valueOf(Q));
                 FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
@@ -152,8 +153,11 @@ public  class FragmentOne extends Fragment  {
                                             .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
                                     startActivity(intent, b);
                                 }
-                                else
+                                else {
+                                    Log.v("starting","");
+
                                     startActivity(intent);
+                                }
                             }
                         });
 

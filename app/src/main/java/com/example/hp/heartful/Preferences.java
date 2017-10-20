@@ -55,6 +55,8 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+//            setTheme(R.style.AppTheme_Transparent);
         setContentView(R.layout.preferences);
         final Intent intent = getIntent();
         rootLayout = findViewById(R.id.root_layout);
