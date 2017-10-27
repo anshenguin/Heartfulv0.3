@@ -48,7 +48,7 @@ public  class FragmentOne extends Fragment  {
         searchview = (SearchView) rootView.findViewById(R.id.search_item);
         searchview.setMaxWidth(Integer.MAX_VALUE);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
-        searchbase= FirebaseDatabase.getInstance().getReference().child("NgoList").child("0");
+        searchbase= FirebaseDatabase.getInstance().getReference();
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -128,7 +128,7 @@ public  class FragmentOne extends Fragment  {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                Query Q = searchbase.orderByChild("mOrginfo").startAt(newText).endAt(newText+"\uf8ff");
+                Query Q = searchbase.child("NgoList").orderByChild("searchName").startAt(newText.toLowerCase()).endAt(newText.toLowerCase()+"\uf8ff");
                 Log.v("SearchText",newText);
                 Log.v("search", String.valueOf(Q));
                 FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
