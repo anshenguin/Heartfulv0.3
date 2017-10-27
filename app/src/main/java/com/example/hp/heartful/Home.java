@@ -1,14 +1,21 @@
 package com.example.hp.heartful;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 
 public class Home extends AppCompatActivity {
+    private View prelollipop;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        prelollipop = findViewById(R.id.prelollipop);
+//
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+//            prelollipop.setVisibility(View.GONE);
         // Set the content of the activity to use the activity_main.xml layout file
         setContentView(R.layout.firstpage);
 
