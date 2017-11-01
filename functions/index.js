@@ -15,7 +15,7 @@ exports.pushNotification = functions.database.ref('/News/{pushId}').onCreate( ev
     console.log('Push notification event triggered');
 
     //  Grab the current value of what was written to the Realtime Database.
-    const valueObject = event.data;
+    var valueObject = event.data.val();
     
 //     if (valueObject.previous) {
 //      return;
@@ -24,12 +24,11 @@ exports.pushNotification = functions.database.ref('/News/{pushId}').onCreate( ev
       valueObject.Image= "Sent you a photo!";
     }
 
- const text = valueObject.val().Description;
   // Create a notification
     const payload = {
         notification: {
-            title:"NgoLink" ,
-      body:text ? (text.length <= 100 ? text : text.substring(0, 97) + '...') : '',
+            title: ` ${valueObject.Title}`,
+      body:"This is the notification send by jugaad ab kya kar mind hai zugadu dil sala chalu sone ke bhav me becna chahe aaloo",
             sound: "default"
         },
     };

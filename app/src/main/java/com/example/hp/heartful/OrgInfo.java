@@ -5,20 +5,12 @@ package com.example.hp.heartful;
  */
 public class OrgInfo {
 
+    public OrgInfo() {}
+
 
     private String mImage;
     //    /** Default translation for the word */
     private String mOrgname;
-    private String mCategory;
-    /** Miwok translation for the word */
-    private String mOrginfo;
-    public OrgInfo(){}
-    public OrgInfo(String mOrgname, String mOrginfo, String mImage,String mCategory) {
-        this.mOrginfo=mOrginfo;
-        this.mOrgname=mOrgname;
-        this.mCategory=mCategory;
-        this.mImage=mImage;
-    }
 
     public String getmCategory() {
         return mCategory;
@@ -28,7 +20,9 @@ public class OrgInfo {
         this.mCategory = mCategory;
     }
 
-
+    private String mCategory;
+    /** Miwok translation for the word */
+    private String mOrginfo;
 
     public String getmOrgname() {
         return mOrgname;
