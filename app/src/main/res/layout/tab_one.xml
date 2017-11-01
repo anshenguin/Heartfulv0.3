@@ -7,66 +7,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <android.support.design.widget.AppBarLayout
-        android:id="@+id/appbar"
-        android:fitsSystemWindows="true"
-        android:layout_width="match_parent"
-        android:layout_height="62.4dp"
-        app:elevation="0dp"
-        android:background="#e6faff"
-        >
-
-        <android.support.design.widget.CollapsingToolbarLayout
-            android:layout_width="match_parent"
-            app:layout_scrollFlags="scroll|enterAlways"
-            android:id="@+id/search_edit_frame"
-            android:layout_height="match_parent">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:orientation="vertical"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal"
-                android:weightSum="2">
-
-                <Spinner
-                    android:id="@+id/category_spinner"
-                    android:layout_width="24dp"
-                    android:layout_height="40dp"
-                    android:layout_weight="1.99"
-                    android:layout_marginLeft="4dp"
-                    android:layout_gravity="center"
-                    android:padding="4dp"
-                    android:theme="@android:style/Theme.Holo.Light" />
-
-                <android.support.v7.widget.SearchView
-                    android:layout_width="wrap_content"
-                    android:id="@+id/search_item"
-                    android:layout_weight="0"
-                    android:layout_gravity="center"
-                    android:layout_marginRight="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:layout_height="wrap_content">
-
-
-                </android.support.v7.widget.SearchView>
-
-            </LinearLayout>
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.4dp"
-                android:background="#d3d3d3"/>
-
-
-        </LinearLayout>
-        </android.support.design.widget.CollapsingToolbarLayout>
-
-
-    </android.support.design.widget.AppBarLayout>
     <LinearLayout android:layout_height="match_parent"
         android:layout_width="match_parent"
         android:orientation="vertical"
@@ -77,17 +17,82 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/ngo_list"
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:paddingBottom="4dp"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:scrollbars="none"
             android:divider="@android:color/transparent"
             android:dividerHeight="8.0sp"
-            android:layout_height="match_parent"
-            />
+            android:orientation="vertical"
+            android:paddingBottom="4dp"
+            android:scrollbars="none"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
     </LinearLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appbar"
+        android:layout_width="match_parent"
+        android:layout_height="62.4dp"
+        android:background="#e6faff"
+        android:fitsSystemWindows="true"
+        app:elevation="0dp">
+
+        <android.support.design.widget.CollapsingToolbarLayout
+            android:id="@+id/search_edit_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_scrollFlags="scroll|enterAlways">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="horizontal"
+                    android:weightSum="2">
+
+                    <Spinner
+                        android:id="@+id/category_spinner"
+                        android:layout_width="24dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="4dp"
+                        android:layout_weight="1.8"
+                        android:padding="4dp"
+                        android:theme="@android:style/Theme.Holo.Light" />
+
+                    <ImageView
+                        android:layout_marginLeft="4dp"
+                        android:layout_marginStart="4dp"
+                        android:id="@+id/searchimagebutton"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginRight="4dp"
+                        app:srcCompat="@drawable/ic_search_black_24dp"
+                        android:layout_weight="0.20">
+
+
+                    </ImageView>
+
+
+
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="0.4dp"
+                    android:background="#d3d3d3" />
+
+
+            </LinearLayout>
+        </android.support.design.widget.CollapsingToolbarLayout>
+
+
+    </android.support.design.widget.AppBarLayout>
     <!--<android.support.design.widget.FloatingActionButton-->
         <!--android:layout_width="wrap_content"-->
         <!--android:id="@+id/fab"-->

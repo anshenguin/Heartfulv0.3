@@ -16,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -39,17 +40,24 @@ public  class FragmentOne extends Fragment  {
     private SearchView searchview;
     private RecyclerView recyclerView;
     private DatabaseReference searchbase;
+    private ImageView searchimagebutton;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_one, container, false);
         super.onCreate(savedInstanceState);
-        searchview = (SearchView) rootView.findViewById(R.id.search_item);
-        searchview.setMaxWidth(Integer.MAX_VALUE);
-        mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
         searchbase= FirebaseDatabase.getInstance().getReference();
+        mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
+
         mDatabase.keepSynced(true);
+        searchimagebutton = (ImageView) rootView.findViewById(R.id.searchimagebutton);
+        searchimagebutton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getActivity(), SearchActivity.class));
+            }
+        });
         recyclerView=(RecyclerView)rootView.findViewById(R.id.ngo_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setReverseLayout(true);
@@ -118,55 +126,55 @@ public  class FragmentOne extends Fragment  {
         spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(spinadapter);
-
-        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
-
-            @Override
-            public boolean onQueryTextChange(String newText) {
-
-                Query Q = searchbase.child("NgoList").orderByChild("searchName").startAt(newText.toLowerCase()).endAt(newText.toLowerCase()+"\uf8ff");
-                Log.v("SearchText",newText);
-                Log.v("search", String.valueOf(Q));
-                FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
-                        OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
-                    @Override
-                    protected void populateViewHolder(final OrgInfoViewHolder viewHolder, final OrgInfo model, int position) {
-                        final String post_key=getRef(position).getKey();
-                        viewHolder.setmOrginfo(model.getmOrginfo());
-                        viewHolder.setmOrgname(model.getmOrgname());
-                        viewHolder.setmCategory(model.getmCategory());
-                        viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
-                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v1) {
-                                Intent intent=new Intent(getActivity(),orgInsideActivity.class);
-                                intent.putExtra("news_id",post_key);
-                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                    Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
-                                    getActivity().getWindow().setSharedElementEnterTransition(transition_one);
-                                    ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
-                                    Bundle b = ActivityOptionsCompat
-                                            .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
-                                    startActivity(intent, b);
-                                }
-                                else {
-                                    Log.v("starting","");
-
-                                    startActivity(intent);
-                                }
-                            }
-                        });
-
-                    }
-                };
-                recyclerView.setAdapter(firebaseRecyclerAdapter);
-                return false;
-            }
-        });
+//
+//        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+//            @Override
+//            public boolean onQueryTextSubmit(String query) {
+//                return false;
+//            }
+//
+//            @Override
+//            public boolean onQueryTextChange(String newText) {
+//
+//                Query Q = searchbase.child("NgoList").orderByChild("searchName").startAt(newText.toLowerCase()).endAt(newText.toLowerCase()+"\uf8ff");
+//                Log.v("SearchText",newText);
+//                Log.v("search", String.valueOf(Q));
+//                FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
+//                        OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
+//                    @Override
+//                    protected void populateViewHolder(final OrgInfoViewHolder viewHolder, final OrgInfo model, int position) {
+//                        final String post_key=getRef(position).getKey();
+//                        viewHolder.setmOrginfo(model.getmOrginfo());
+//                        viewHolder.setmOrgname(model.getmOrgname());
+//                        viewHolder.setmCategory(model.getmCategory());
+//                        viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
+//                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View v1) {
+//                                Intent intent=new Intent(getActivity(),orgInsideActivity.class);
+//                                intent.putExtra("news_id",post_key);
+//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                                    Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+//                                    getActivity().getWindow().setSharedElementEnterTransition(transition_one);
+//                                    ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
+//                                    Bundle b = ActivityOptionsCompat
+//                                            .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
+//                                    startActivity(intent, b);
+//                                }
+//                                else {
+//                                    Log.v("starting","");
+//
+//                                    startActivity(intent);
+//                                }
+//                            }
+//                        });
+//
+//                    }
+//                };
+//                recyclerView.setAdapter(firebaseRecyclerAdapter);
+//                return false;
+//            }
+//        });
 //                                          });
 //}
 //       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
