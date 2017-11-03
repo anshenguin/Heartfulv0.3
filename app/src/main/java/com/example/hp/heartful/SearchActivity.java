@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -41,6 +42,7 @@ public class SearchActivity extends AppCompatActivity {
     private DatabaseReference searchbase;
     private EditText searchview;
     private RecyclerView recyclerView;
+    private ImageView cleartext;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -48,6 +50,9 @@ public class SearchActivity extends AppCompatActivity {
         setContentView(R.layout.search_activity);
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         searchview = (EditText) findViewById(R.id.search_text);
+        cleartext = (ImageView) findViewById (R.id.clear_text);
+        cleartext.setVisibility(View.GONE);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -76,10 +81,22 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
+
                 String newText = searchview.getText().toString().toLowerCase(Locale.getDefault());
                 Query Q = searchbase.child("NgoList").orderByChild("searchName").startAt(newText.toLowerCase()).endAt(newText.toLowerCase()+"\uf8ff");
                 Log.v("SearchText",newText);
+                if(newText.length()>0)
+                    cleartext.setVisibility(View.VISIBLE);
+                else
+                    cleartext.setVisibility(View.GONE);
+                cleartext.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        searchview.setText("");
+                    }
+                });
                 Log.v("search", String.valueOf(Q));
+
                 FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
                         OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
                     @Override
@@ -113,6 +130,10 @@ public class SearchActivity extends AppCompatActivity {
                     }
                 };
                 recyclerView.setAdapter(firebaseRecyclerAdapter);
+                if(searchview.length()==0)
+                    recyclerView.setVisibility(View.GONE);
+                else
+                    recyclerView.setVisibility(View.VISIBLE);
                 return;
             }
         });
