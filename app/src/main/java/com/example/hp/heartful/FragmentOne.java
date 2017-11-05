@@ -15,11 +15,12 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -28,11 +29,14 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Created by HP INDIA on 08-Apr-17.
  */
 
-public  class FragmentOne extends Fragment  {
+public  class FragmentOne extends Fragment implements AdapterView.OnItemSelectedListener {
     public FragmentOne() {}
     private DatabaseReference mDatabase;
 //    private ArrayList<OrgInfo>orgInfoArrayList;
@@ -41,7 +45,7 @@ public  class FragmentOne extends Fragment  {
     private RecyclerView recyclerView;
     private DatabaseReference searchbase;
     private ImageView searchimagebutton;
-
+    int check = 0;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -117,15 +121,30 @@ public  class FragmentOne extends Fragment  {
 //        orgInfoArrayList.add(new OrgInfo("Jaago Graahak Jaago", "Apne Adhikaar ko Jaano, Apne Hakk ko Pehchano. Jaago, Graahak Jaago!", R.drawable.heart));
 //        orgInfoArrayList.add(new OrgInfo("Satyamev Jayate", "Saccha hai pyaar tera!", R.drawable.heart));
         Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
+        // Spinner Drop down elements
+        List<String> categories = new ArrayList<String>();
+        categories.add("All");
+        categories.add("Education");
+        categories.add("Physical Health");
+        categories.add("Mental Health");
+        categories.add("Poverty");
+        categories.add("Children");
+        categories.add("Women");
+        categories.add("Clothes");
+        categories.add("Shelter");
 ////      adapter= new OrgInfoAdapter(getActivity(),orgInfoArrayList);
 //// Create an ArrayAdapter using the string array and a default spinner layout
 //
-        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
-                R.array.category_array, android.R.layout.simple_spinner_item);
+//        ArrayAdapter<CharSequence> spinadapter = ArrayAdapter.createFromResource(getActivity(),
+//                R.array.category_array, android.R.layout.simple_spinner_item);
 // Specify the layout to use when the list of choices appears
+        ArrayAdapter<String> spinadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
+
         spinadapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the spinner
         spinner.setAdapter(spinadapter);
+        spinner.setOnItemSelectedListener(this);
+
 //
 //        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
 //            @Override
@@ -208,14 +227,70 @@ public  class FragmentOne extends Fragment  {
 //            }
 //        });
 
-
-
-
-
        recyclerView.setAdapter(firebaseRecyclerAdapter);
         return rootView;
     }
-    
+
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+// On selecting a spinner item
+        String item = parent.getItemAtPosition(position).toString();
+        // Showing selected spinner item
+        if(++check > 1) {
+            Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
+            setAccordingToselected(item);
+        }
+
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
+    public void setAccordingToselected(String item) {
+        String all = "All";
+        if (item != all) {
+            Query Q = mDatabase.orderByChild("mCategory").equalTo(item);
+            FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder>(
+                    OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
+                @Override
+                protected void populateViewHolder(final OrgInfoViewHolder viewHolder, final OrgInfo model, int position) {
+                    final String post_key = getRef(position).getKey();
+                    viewHolder.setmOrginfo(model.getmOrginfo());
+                    viewHolder.setmOrgname(model.getmOrgname());
+                    viewHolder.setmCategory(model.getmCategory());
+                    viewHolder.setmImage(getActivity().getApplicationContext(), model.getmImage());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v1) {
+                            Intent intent = new Intent(getActivity(), orgInsideActivity.class);
+                            intent.putExtra("news_id", post_key);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                                getActivity().getWindow().setSharedElementEnterTransition(transition_one);
+                                ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
+                                Bundle b = ActivityOptionsCompat
+                                        .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
+                                startActivity(intent, b);
+                            } else {
+                                Log.v("starting", "");
+
+                                startActivity(intent);
+                            }
+                        }
+                    });
+
+                }
+            };
+            recyclerView.setAdapter(firebaseRecyclerAdapter);
+        }
+        else
+        {
+            getActivity().finish();
+           startActivity(new Intent(getActivity(),Home.class));
+
+        }
+    }
 
     public static class OrgInfoViewHolder extends RecyclerView.ViewHolder {
         View mView;
@@ -252,8 +327,10 @@ public  class FragmentOne extends Fragment  {
         }
     }
 
+    }
 
-}
+
+
 
 
 
