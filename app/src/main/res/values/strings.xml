@@ -8,18 +8,6 @@
     <string name="error">Error finding image</string>
     <string name="saved_message">Image Saved at %1$s</string>
     <string name="fb_login_protocol_scheme">fb127567627787131</string>
-    <string-array name="category_array">
-        <item>All</item>
-        <item>Education</item>
-        <item>Physical Health</item>
-        <item>Mental Health</item>
-        <item>Poverty</item>
-        <item>Children</item>
-        <item>Women</item>
-        <item>Clothes</item>
-        <item>Shelter</item>
-    </string-array>
-
-    <!-- TODO: Remove or change this placeholder text -->
+    <string name="spinner_title">All </string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
