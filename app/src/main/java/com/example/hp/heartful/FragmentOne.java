@@ -286,8 +286,43 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
         }
         else
         {
-            getActivity().finish();
-           startActivity(new Intent(getActivity(),Home.class));
+            FirebaseRecyclerAdapter<OrgInfo,OrgInfoViewHolder>firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder>(
+                    OrgInfo.class,
+                    R.layout.home_list_item,
+                    OrgInfoViewHolder.class,
+                    mDatabase
+
+            ) {
+                @Override
+                protected void populateViewHolder(OrgInfoViewHolder viewHolder, OrgInfo model, int position) {
+                    final String post_key=getRef(position).getKey();
+                    viewHolder.setmOrginfo(model.getmOrginfo());
+                    viewHolder.setmOrgname(model.getmOrgname());
+                    viewHolder.setmCategory(model.getmCategory());
+                    viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
+                    viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v1) {
+                            Intent intent=new Intent(getActivity(),orgInsideActivity.class);
+                            intent.putExtra("news_id",post_key);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
+                                getActivity().getWindow().setSharedElementEnterTransition(transition_one);
+                                ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
+                                Bundle b = ActivityOptionsCompat
+                                        .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
+                                startActivity(intent, b);
+                            }
+                            else
+                                startActivity(intent);
+                        }
+                    });
+                }
+
+            };
+
+            recyclerView.setAdapter(firebaseRecyclerAdapter);
+
 
         }
     }
