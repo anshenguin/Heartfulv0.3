@@ -236,10 +236,10 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
 // On selecting a spinner item
         String item = parent.getItemAtPosition(position).toString();
         // Showing selected spinner item
-        if(++check > 1) {
-            Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
+//        if(++check > 1) {
+//            Toast.makeText(parent.getContext(), "Selected: " + item, Toast.LENGTH_SHORT).show();
             setAccordingToselected(item);
-        }
+//        }
 
     }
 
