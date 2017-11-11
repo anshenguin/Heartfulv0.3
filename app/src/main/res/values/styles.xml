@@ -16,7 +16,7 @@
 
     </style>
     <style name="SplashTheme.Theme" parent="@style/AppTheme">
-        <item name="colorPrimaryDark">#ffffff</item>
+        <item name="colorPrimaryDark">#00aff0</item>
     <item name="android:windowBackground">@drawable/splashscreen</item>
     </style>
 
