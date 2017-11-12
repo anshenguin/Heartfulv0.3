@@ -13,7 +13,7 @@
         android:resizeableActivity="true"
         android:supportsPictureInPicture="true"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/heart_final_logo"
+        android:icon="@mipmap/ic_heart_final_logo"
         android:label="Heartful"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -28,7 +28,7 @@
         -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
-            android:resource="@mipmap/heart_final_logo" />
+            android:resource="@mipmap/ic_heart_final_logo" />
         <!--
              Set color used with incoming notification messages. This is used when no color is set for the incoming
              notification message. See README(https://goo.gl/6BKBk7) for more.
