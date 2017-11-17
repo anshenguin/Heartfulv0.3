@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#00aff0</color>
     <color name="colorAccent">#FF9C0C</color>
     <color name="colorforcard">#f0feff</color>
+    <color name="following">#008000</color>
 </resources>
