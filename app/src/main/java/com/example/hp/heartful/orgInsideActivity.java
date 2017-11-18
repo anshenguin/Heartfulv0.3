@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -34,9 +35,10 @@ public class orgInsideActivity extends AppCompatActivity{
     private TextView mNgoName,mNgoInfo;
     private  DatabaseReference mDatabase;
     private  DatabaseReference data;
+    private DatabaseReference databaseReference;
     private String loadImage;
     private FirebaseAuth mAuth;
-    private boolean doesFollowing=true;
+    private boolean doesFollowing;
     private FloatingActionButton following;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +93,44 @@ public class orgInsideActivity extends AppCompatActivity{
 
             }
         });
-        final DatabaseReference databaseReference = data.child(mAuth.getCurrentUser().getUid());
+        if(mAuth.getCurrentUser()!= null)
+        databaseReference = data.child(mAuth.getCurrentUser().getUid());
+        databaseReference.child("following").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("Datasnapshot","works");
+                Log.v("Datasnapshot", String.valueOf(dataSnapshot.getChildrenCount()));
+                if(dataSnapshot.getChildrenCount()==0)
+                {
+                    following.setImageResource(R.drawable.ic_person_add_black_24dp);
+                    following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                    doesFollowing = true;
+                }
+                else {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Log.v("Datasnapshot", snapshot.getKey());
+                        Log.v("Datasnapshot", post_key);
+                        if (snapshot.getKey().equals(post_key)) {
+                            Log.v("Datasnapshot", " if statement works");
+                            doesFollowing = false;
+                            following.setImageResource(R.drawable.ic_check_black_24dp);
+                            following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
+                            break;
+                        } else {
+                            Log.v("Datasnapshot", " else statement works");
+                            following.setImageResource(R.drawable.ic_person_add_black_24dp);
+                            following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                            doesFollowing = true;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,8 +140,8 @@ public class orgInsideActivity extends AppCompatActivity{
                     if (doesFollowing) {
                          follow = databaseReference.child("following");
                          follow.child(post_key).setValue(true);
-                    following.setRippleColor(getResources().getColor(R.color.following));
-                    following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
+                        following.setImageResource(R.drawable.ic_check_black_24dp);
+                        following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
                     Toast.makeText(orgInsideActivity.this, "You're following this NGO", Toast.LENGTH_SHORT).show();
                     doesFollowing = false;
                         Bundle bundle = new Bundle();
@@ -112,10 +151,11 @@ public class orgInsideActivity extends AppCompatActivity{
 //                following.setBackgroundColor(getResources().getColor(R.color.following));
                 }
                 else {
-                        following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                        Toast.makeText(orgInsideActivity.this, "You're Unfollowing this NGO", Toast.LENGTH_SHORT).show();
                         follow = databaseReference.child("following");
                         follow.child(post_key).removeValue();
+                        following.setImageResource(R.drawable.ic_person_add_black_24dp);
+                        following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                        Toast.makeText(orgInsideActivity.this, "You're Unfollowing this NGO", Toast.LENGTH_SHORT).show();
                         doesFollowing = true;
                     }
                 }

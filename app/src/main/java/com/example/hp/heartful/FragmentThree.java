@@ -95,8 +95,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private ProgressDialog progressDialog;
 
 
-    @RequiresApi(api = Build.VERSION_CODES.CUPCAKE)
-
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.sign_up_page,container, false);
