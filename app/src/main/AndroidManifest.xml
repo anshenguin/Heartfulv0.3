@@ -14,7 +14,7 @@
         android:supportsPictureInPicture="true"
         android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_heart_final_logo"
-        android:label="Heartful"
+        android:label="NgoLink"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <service android:name=".MyFirebaseMessagingService">

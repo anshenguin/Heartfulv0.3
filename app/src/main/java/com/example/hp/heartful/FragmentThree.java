@@ -65,7 +65,6 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by HP INDIA on 08-Apr-17.
  */
 public class FragmentThree extends Fragment implements View.OnClickListener{
-
     private boolean shouldRefreshOnResume = false;
     private boolean justRefreshed = false;
     private boolean usingSignIn = false;
@@ -90,7 +89,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private String profileName;
     private TextView userName;
     private CircleImageView profilePic;
-//    private Boolean isValueExists;
     private CallbackManager callbackManager;
     View view;
     View view_pro;

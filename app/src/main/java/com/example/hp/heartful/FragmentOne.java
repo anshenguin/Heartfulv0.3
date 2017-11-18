@@ -20,7 +20,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
@@ -54,7 +53,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
         searchbase= FirebaseDatabase.getInstance().getReference();
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
 
-        mDatabase.keepSynced(true);
+            mDatabase.keepSynced(true);
         searchimagebutton = (ImageView) rootView.findViewById(R.id.searchimagebutton);
         searchimagebutton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -105,21 +104,6 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
             }
 
         };
-//        View tv = rootView.findViewById(R.id.search_item);
-//        tv.setFocusable(false);                                         //EDIT TEXT WALE KO HIGHLIGHT NA KRANE KE LIYE CODE
-//        tv.setFocusableInTouchMode(true);
-//        tv.requestFocus();
-//        orgInfoArrayList= new ArrayList<>();
-////        mDatabase= FirebaseDatabase.getInstance().getReference().child("Info");
-////
-//        orgInfoArrayList.add(new OrgInfo("AASRA", "do you wish you could help yourself well now you can lol", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("Sada Suhaagan Raho", "test info", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("NGO with a really big name", "but an average info length", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("WHO", "are you?", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("aaaaaaaaaaabbbbbbbbbbbccccccccccccc", "aaaaaaaaaaaaabbbbbbbbbbbbbbbbbbbccccccccccccaaaaaaaaaaaacccccccccc", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("chhota naam", "but info itni bdi ki chhote devices mein info view ke baahar chle jaae and last mein teen chhote dots dikhein haha", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("Jaago Graahak Jaago", "Apne Adhikaar ko Jaano, Apne Hakk ko Pehchano. Jaago, Graahak Jaago!", R.drawable.heart));
-//        orgInfoArrayList.add(new OrgInfo("Satyamev Jayate", "Saccha hai pyaar tera!", R.drawable.heart));
         Spinner spinner = (Spinner) rootView.findViewById(R.id.category_spinner);
         // Spinner Drop down elements
         List<String> categories = new ArrayList<String>();
@@ -144,89 +128,6 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
 // Apply the adapter to the spinner
         spinner.setAdapter(spinadapter);
         spinner.setOnItemSelectedListener(this);
-
-//
-//        searchview.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-//            @Override
-//            public boolean onQueryTextSubmit(String query) {
-//                return false;
-//            }
-//
-//            @Override
-//            public boolean onQueryTextChange(String newText) {
-//
-//                Query Q = searchbase.child("NgoList").orderByChild("searchName").startAt(newText.toLowerCase()).endAt(newText.toLowerCase()+"\uf8ff");
-//                Log.v("SearchText",newText);
-//                Log.v("search", String.valueOf(Q));
-//                FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo , OrgInfoViewHolder>(
-//                        OrgInfo.class, R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
-//                    @Override
-//                    protected void populateViewHolder(final OrgInfoViewHolder viewHolder, final OrgInfo model, int position) {
-//                        final String post_key=getRef(position).getKey();
-//                        viewHolder.setmOrginfo(model.getmOrginfo());
-//                        viewHolder.setmOrgname(model.getmOrgname());
-//                        viewHolder.setmCategory(model.getmCategory());
-//                        viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
-//                        viewHolder.mView.setOnClickListener(new View.OnClickListener() {
-//                            @Override
-//                            public void onClick(View v1) {
-//                                Intent intent=new Intent(getActivity(),orgInsideActivity.class);
-//                                intent.putExtra("news_id",post_key);
-//                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-//                                    Transition transition_one = TransitionInflater.from(getActivity()).inflateTransition(R.transition.transition_two);
-//                                    getActivity().getWindow().setSharedElementEnterTransition(transition_one);
-//                                    ImageView transitionViewOne = (ImageView) v1.findViewById(R.id.org_logo);
-//                                    Bundle b = ActivityOptionsCompat
-//                                            .makeSceneTransitionAnimation(getActivity(), transitionViewOne, "orgimg").toBundle();
-//                                    startActivity(intent, b);
-//                                }
-//                                else {
-//                                    Log.v("starting","");
-//
-//                                    startActivity(intent);
-//                                }
-//                            }
-//                        });
-//
-//                    }
-//                };
-//                recyclerView.setAdapter(firebaseRecyclerAdapter);
-//                return false;
-//            }
-//        });
-//                                          });
-//}
-//       final   EditText searchItem= (EditText)rootView. findViewById(R.id.search_item);
-//        final ListView listView = (ListView) rootView.findViewById(R.id.ngo_list);
-
-        // Make the {@link ListView} use the {@link WordAdapter} we created above, so that the
-        // {@link ListView} will display list items for each {@link Word} in the list.
-//        listView.setAdapter(adapter);
-
-
-        // Capture Text in EditText
-//        searchItem.addTextChangedListener(new TextWatcher() {
-//
-//            @Override
-//            public void afterTextChanged(Editable arg0) {
-//                // TODO Auto-generated method stub
-//                String text = searchItem.getText().toString().toLowerCase(Locale.getDefault());
-//                adapter.filter(text);
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence arg0, int arg1,
-//                                          int arg2, int arg3) {
-//                // TODO Auto-generated method stub
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence arg0, int arg1, int arg2,
-//                                      int arg3) {
-//                // TODO Auto-generated method stub
-//            }
-//        });
-
        recyclerView.setAdapter(firebaseRecyclerAdapter);
         return rootView;
     }
