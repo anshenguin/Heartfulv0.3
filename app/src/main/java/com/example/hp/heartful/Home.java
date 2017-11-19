@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 
 public class Home extends AppCompatActivity {
@@ -35,6 +36,7 @@ public class Home extends AppCompatActivity {
         //   2. Update the view pager when a tab is selected
         //   3. Set the tab layout's tab names with the view pager's adapter's titles
         //      by calling onPageTitle()
+
         tabLayout.setupWithViewPager(viewPager);
 
     }
