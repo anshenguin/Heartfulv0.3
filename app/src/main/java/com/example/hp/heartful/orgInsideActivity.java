@@ -93,44 +93,43 @@ public class orgInsideActivity extends AppCompatActivity{
 
             }
         });
-        if(mAuth.getCurrentUser()!= null)
-        databaseReference = data.child(mAuth.getCurrentUser().getUid());
-        databaseReference.child("following").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("Datasnapshot","works");
-                Log.v("Datasnapshot", String.valueOf(dataSnapshot.getChildrenCount()));
-                if(dataSnapshot.getChildrenCount()==0)
-                {
-                    following.setImageResource(R.drawable.ic_person_add_black_24dp);
-                    following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                    doesFollowing = true;
-                }
-                else {
-                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                        Log.v("Datasnapshot", snapshot.getKey());
-                        Log.v("Datasnapshot", post_key);
-                        if (snapshot.getKey().equals(post_key)) {
-                            Log.v("Datasnapshot", " if statement works");
-                            doesFollowing = false;
-                            following.setImageResource(R.drawable.ic_check_black_24dp);
-                            following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
-                            break;
-                        } else {
-                            Log.v("Datasnapshot", " else statement works");
-                            following.setImageResource(R.drawable.ic_person_add_black_24dp);
-                            following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
-                            doesFollowing = true;
+        if(mAuth.getCurrentUser()!= null) {
+            databaseReference = data.child(mAuth.getCurrentUser().getUid());
+            databaseReference.child("following").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    Log.v("Datasnapshot", "works");
+                    Log.v("Datasnapshot", String.valueOf(dataSnapshot.getChildrenCount()));
+                    if (dataSnapshot.getChildrenCount() == 0) {
+                        following.setImageResource(R.drawable.ic_person_add_black_24dp);
+                        following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                        doesFollowing = true;
+                    } else {
+                        for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                            Log.v("Datasnapshot", snapshot.getKey());
+                            Log.v("Datasnapshot", post_key);
+                            if (snapshot.getKey().equals(post_key)) {
+                                Log.v("Datasnapshot", " if statement works");
+                                doesFollowing = false;
+                                following.setImageResource(R.drawable.ic_check_black_24dp);
+                                following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
+                                break;
+                            } else {
+                                Log.v("Datasnapshot", " else statement works");
+                                following.setImageResource(R.drawable.ic_person_add_black_24dp);
+                                following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
+                                doesFollowing = true;
+                            }
                         }
                     }
                 }
-            }
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
 
-            }
-        });
+                }
+            });
+        }
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
