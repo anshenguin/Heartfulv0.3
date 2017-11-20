@@ -372,6 +372,9 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
                             justRefreshed = false;
 //                            reLoad();
+                            Intent intent = new Intent(getActivity(), Home.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            startActivity(intent);
                             progressDialog.dismiss();
                         }else {
                             Toast.makeText(getActivity(),"could not register, pls try again Error is"+ task.getException(),Toast.LENGTH_LONG).show();
@@ -434,7 +437,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             Log.v(TAG, "signInWithCredential:success");
                             justRefreshed = false;
 //                            reLoad();
+                            Intent intent = new Intent(getActivity(), Home.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             fbProgress.dismiss();
+                            startActivity(intent);
 
                         } else {
                             // If sign in fails, display a message to the user.
@@ -510,7 +516,12 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             Log.v(TAG, "signInWithCredential:success");
                             justRefreshed = false;
 //                            reLoad();
+
                             progress.dismiss();
+                            Intent intent = new Intent(getActivity(), Home.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                            fbProgress.dismiss();
+                            startActivity(intent);
 
 
                         } else {
