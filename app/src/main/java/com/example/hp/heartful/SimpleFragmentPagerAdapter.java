@@ -15,9 +15,9 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
-    private FirebaseAuth mAuth;
-    private FirebaseAuth.AuthStateListener mAuthStateListener;
-    private boolean isLoggedIn;
+        private FirebaseAuth mAuth;
+        private FirebaseAuth.AuthStateListener mAuthStateListener;
+        private boolean isLoggedIn;
     private Context mContext;
     public SimpleFragmentPagerAdapter(Context context , FragmentManager fm) {
         super(fm);
@@ -47,40 +47,22 @@ public class SimpleFragmentPagerAdapter extends FragmentPagerAdapter {
         } else {
             mAuth = FirebaseAuth.getInstance();
             if (mAuth.getCurrentUser() == null) {
-                Log.v("Running", "Sign up page");
-                isLoggedIn = false;
-            } else {
-                Log.v("Running", "Sign in page");
-                isLoggedIn = true;
-            }
-
-            mAuthStateListener = new FirebaseAuth.AuthStateListener() {
-                @Override
-                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                    if (mAuth.getCurrentUser() == null) {
-                        isLoggedIn = false;
-                        Log.v("Running", "Sign up page AUTH STATE");
-                    } else {
-
-                        isLoggedIn = true;
-                        Log.v("Running", "Sign in page AUTH STATE");
-
-                    }
-                    Log.v("main","");
-                }
-
-
-            };
-
-            Log.v("Running", "tab three");
-            mAuth.addAuthStateListener(mAuthStateListener);
-
-            if (!isLoggedIn) {
                 return new FragmentThree();
             } else {
                 return new FragmentThreeProfile();
+
             }
+
+
+
+//            mAuth.addAuthStateListener(mAuthStateListener);
+
         }
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
     }
 
     @Override

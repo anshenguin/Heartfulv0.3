@@ -108,7 +108,11 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
             LoginManager.getInstance().logOut();
             mAuth.signOut();
             Toast.makeText(Preferences.this, "user has been sign out", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(Preferences.this, Home.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             finish();
+            startActivity(intent);
+//            finish();
         }
         if (v == changeName) {
             startActivity(new Intent(Preferences.this, UpdateName.class));

@@ -2,6 +2,7 @@ package com.example.hp.heartful;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -78,7 +79,10 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
                         if (task.isSuccessful()){
                             // start user profile activity
                             progressDialog.dismiss();
+                            Intent intent = new Intent(loginActivity.this, Home.class);
+                            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             finish();
+                            startActivity(intent);
                         }
                         else {
                             Toast.makeText(loginActivity.this,"could not register, pls try again Error is"+ task.getException(),Toast.LENGTH_SHORT).show();
