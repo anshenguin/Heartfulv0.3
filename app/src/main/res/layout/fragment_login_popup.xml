@@ -35,7 +35,7 @@
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_gravity="center_horizontal"
-                android:src="@drawable/heart"/>
+                android:src="@drawable/splash"/>
 
     <TextView
         android:layout_marginLeft="8dp"

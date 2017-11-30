@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
@@ -41,6 +43,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
     private DatabaseReference forUsers;
     private String profilePicLink;
     private ImageView edit;
+    private ArrayList<String>key= new ArrayList<>();
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -67,6 +70,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(profilePic);
                     userName.setText(profileName);
+
                 }
 
                 @Override
@@ -75,6 +79,18 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                 }
             });
         }
+        forUsers.child(firebaseUser.getUid()).child("following").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                key.add(String.valueOf(dataSnapshot.getValue()));
+                Log.v("fragment", String.valueOf(key));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
         return view_pro;
     }
 
