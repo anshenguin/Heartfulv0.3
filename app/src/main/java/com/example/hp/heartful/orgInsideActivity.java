@@ -2,9 +2,9 @@ package com.example.hp.heartful;
 
 import android.content.Intent;
 import android.content.res.ColorStateList;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -138,15 +138,15 @@ public class orgInsideActivity extends AppCompatActivity{
                 if (mAuth.getCurrentUser() != null) {
                     if (doesFollowing) {
                          follow = databaseReference.child("following");
-                         follow.child(post_key).setValue(true);
+                         follow.child(post_key).setValue(post_key);
                         following.setImageResource(R.drawable.ic_check_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
                     Toast.makeText(orgInsideActivity.this, "You're following this NGO", Toast.LENGTH_SHORT).show();
                     doesFollowing = false;
-                        Bundle bundle = new Bundle();
-                        bundle.putString("edttext", post_key);
-                        FragmentThree fragobj = new FragmentThree();
-                        fragobj.setArguments(bundle);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("edttext", post_key);
+//                        FragmentThree fragobj = new FragmentThree();
+//                        fragobj.setArguments(bundle);
 //                following.setBackgroundColor(getResources().getColor(R.color.following));
                 }
                 else {
@@ -216,10 +216,13 @@ public class orgInsideActivity extends AppCompatActivity{
     }
 
    private void openWebView(String url) {
-        Intent intent = new Intent(orgInsideActivity.this, WebViewContents.class);
-        intent.putExtra("url", url);
-        finish();
-        startActivity(intent);
+//        Intent intent = new Intent(orgInsideActivity.this, WebViewContents.class);
+//        intent.putExtra("url", url);
+//        finish();
+//        startActivity(intent);
+       Intent i = new Intent(Intent.ACTION_VIEW);
+       i.setData(Uri.parse(url));
+       startActivity(i);
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
