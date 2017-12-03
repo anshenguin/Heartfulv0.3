@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -35,7 +36,25 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Created by HP INDIA on 19-Nov-17.
  */
 
+
 public class FragmentThreeProfile extends Fragment implements View.OnClickListener {
+    public static class CustomGridLayoutManager extends LinearLayoutManager {
+        private boolean isScrollEnabled = true;
+
+        public CustomGridLayoutManager(Context context) {
+            super(context);
+        }
+
+        public void setScrollEnabled(boolean flag) {
+            this.isScrollEnabled = flag;
+        }
+
+        @Override
+        public boolean canScrollVertically() {
+            //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
+            return isScrollEnabled && super.canScrollVertically();
+        }
+    }
     View view_pro;
     private CircleImageView profilePic;
     private FirebaseAuth mAuth;
@@ -62,7 +81,8 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         mDatabase=FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid()).child("RecentActivities");
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)view_pro.findViewById(R.id.user_activity);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        CustomGridLayoutManager linearLayoutManager = new CustomGridLayoutManager(getActivity());
+        linearLayoutManager.setScrollEnabled(false);
 //        linearLayoutManager.setReverseLayout(true);
 //        linearLayoutManager.setStackFromEnd(true);
         //mNewsLists.setHasFixedSize(true);
@@ -70,6 +90,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
         recyclerView.setLayoutManager(linearLayoutManager);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         Log.v("FragmentThree", String.valueOf(mDatabase));
         if(firebaseUser!=null) {
             forUsers.child(firebaseUser.getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
