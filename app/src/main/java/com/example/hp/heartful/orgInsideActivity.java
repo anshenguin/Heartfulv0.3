@@ -39,6 +39,8 @@ public class orgInsideActivity extends AppCompatActivity{
     private String loadImage;
     private FirebaseAuth mAuth;
     private boolean doesFollowing;
+    String post_title;
+    String post_image;
     private FloatingActionButton following;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,9 +62,9 @@ public class orgInsideActivity extends AppCompatActivity{
         mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String post_title= (String) dataSnapshot.child("mOrgname").getValue();
+                 post_title= (String) dataSnapshot.child("mOrgname").getValue();
                 String post_desc=(String)dataSnapshot.child("mOrginfo").getValue();
-                String post_image=(String)dataSnapshot.child("mImage").getValue();
+                 post_image=(String)dataSnapshot.child("mImage").getValue();
                 String contact=(String)dataSnapshot.child("mContact").getValue();
                 String donate=(String)dataSnapshot.child("mDonate").getValue();
                 String volunteer=(String)dataSnapshot.child("mVolunteer").getValue();
@@ -95,7 +97,7 @@ public class orgInsideActivity extends AppCompatActivity{
         });
         if(mAuth.getCurrentUser()!= null) {
             databaseReference = data.child(mAuth.getCurrentUser().getUid());
-            databaseReference.child("following").addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child("RecentActivities").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.v("Datasnapshot", "works");
@@ -137,8 +139,9 @@ public class orgInsideActivity extends AppCompatActivity{
                 DatabaseReference follow;
                 if (mAuth.getCurrentUser() != null) {
                     if (doesFollowing) {
-                         follow = databaseReference.child("following");
-                         follow.child(post_key).setValue(post_key);
+                         follow = databaseReference.child("RecentActivities").child(post_key);
+                         follow.child("mText").setValue("You've  followed "+ post_title);
+                        follow.child("mImageLink").setValue(post_image);
                         following.setImageResource(R.drawable.ic_check_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
                     Toast.makeText(orgInsideActivity.this, "You're following this NGO", Toast.LENGTH_SHORT).show();
@@ -150,7 +153,7 @@ public class orgInsideActivity extends AppCompatActivity{
 //                following.setBackgroundColor(getResources().getColor(R.color.following));
                 }
                 else {
-                        follow = databaseReference.child("following");
+                        follow = databaseReference.child("RecentActivities");
                         follow.child(post_key).removeValue();
                         following.setImageResource(R.drawable.ic_person_add_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));

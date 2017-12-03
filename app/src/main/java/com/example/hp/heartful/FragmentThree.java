@@ -5,12 +5,8 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.RequiresApi;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.text.TextUtils;
@@ -24,8 +20,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -363,7 +357,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             //show user profile
                             Toast.makeText(getActivity(),"Registered successfully",Toast.LENGTH_SHORT).show();
                             firebaseUser=mAuth.getCurrentUser();
-                            DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+                            DatabaseReference userData = forUsers.child(firebaseUser.getUid()).child("userInfo");
                                 boolean canPost = false;
                                 String personName = user_name;
                                 String personPhoto = "https://firebasestorage.googleapis.com/v0/b/heartful-dc3ac.appspot.com/o/profilepic.png?alt=media&token=5b98dc2e-1e36-4eb8-86e9-54d10222120e";
@@ -399,7 +393,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             //   userProfile();
                             String HEARTFUL_USER ="HeartfulUser";
                             firebaseUser=mAuth.getCurrentUser();
-                            final DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+                            final DatabaseReference userData = forUsers.child(firebaseUser.getUid()).child("userInfo");
                             SharedPreferences pref = getApplicationContext().getSharedPreferences(HEARTFUL_USER, Activity.MODE_PRIVATE);
 
                             if (!pref.contains(HEARTFUL_USER)) {
@@ -471,7 +465,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 //                            isValueExists=false;
                             String HEARTFUL_USER ="GoogleUser";
                             firebaseUser=mAuth.getCurrentUser();
-                            final DatabaseReference userData = forUsers.child(firebaseUser.getUid());
+                            final DatabaseReference userData = forUsers.child(firebaseUser.getUid()).child("userInfo");
                             SharedPreferences pref = getApplicationContext().getSharedPreferences(HEARTFUL_USER, Activity.MODE_PRIVATE);
 
                             if (!pref.contains(HEARTFUL_USER)) {

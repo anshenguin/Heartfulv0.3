@@ -42,7 +42,6 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
 //    private OrgInfoAdapter adapter;
     private SearchView searchview;
     private RecyclerView recyclerView;
-    private DatabaseReference searchbase;
     private ImageView searchimagebutton;
     int check = 0;
 
@@ -50,9 +49,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(R.layout.tab_one, container, false);
         super.onCreate(savedInstanceState);
-        searchbase= FirebaseDatabase.getInstance().getReference();
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
-
             mDatabase.keepSynced(true);
         searchimagebutton = (ImageView) rootView.findViewById(R.id.searchimagebutton);
         searchimagebutton.setOnClickListener(new View.OnClickListener() {
@@ -229,7 +226,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
     }
 
     public static class OrgInfoViewHolder extends RecyclerView.ViewHolder {
-        View mView;
+            View mView;
         public OrgInfoViewHolder(View itemView) {
             super(itemView);
             mView=itemView;
