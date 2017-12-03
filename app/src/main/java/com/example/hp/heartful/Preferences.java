@@ -44,7 +44,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
 
     private int revealX;
     private int revealY;
-    private LinearLayout logout,changeName,changePic;
+    private LinearLayout logout,changeName,changePic,changeDes;
     private final static int GALLERY_REQUEST=1;
     private Uri imageUri=null;
     private ProgressDialog progress;
@@ -94,10 +94,12 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
         getSupportActionBar().setTitle("Edit Preferences");
         changeName=(LinearLayout)findViewById(R.id.change_name);
         changePic=(LinearLayout)findViewById(R.id.change_pic);
+        changeDes=(LinearLayout)findViewById(R.id.change_desc);
         logout = (LinearLayout) findViewById(R.id.signout);
         logout.setOnClickListener(this);
         changePic.setOnClickListener(this);
         changeName.setOnClickListener(this);
+        changeDes.setOnClickListener(this);
 
 
     }
@@ -119,6 +121,9 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
         }
         if (v == changePic){
             selectImage();
+        }
+        if(v== changeDes){
+        Toast.makeText(Preferences.this,"Why are u changing such a good desc.",Toast.LENGTH_SHORT).show();
         }
     }
     private void selectImage() {
@@ -148,8 +153,8 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                         @SuppressWarnings("VisibleForTests") final
                         Uri downloadUrl = taskSnapshot.getDownloadUrl();
-                        final DatabaseReference imagePost= forUsers.child(firebaseUser.getUid());
-                        forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+                        final DatabaseReference imagePost= forUsers.child(firebaseUser.getUid()).child("userInfo");
+                        forUsers.child(firebaseUser.getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 imagePost.child("profilePicLink").setValue(downloadUrl.toString());
