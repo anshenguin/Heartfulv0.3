@@ -64,7 +64,7 @@ public class FragmentTwo extends Fragment {
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null) {
                     Log.v("can u post2", String.valueOf(canPost));
-                    forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid());
+                     forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid());
                     forUsers.addListenerForSingleValueEvent(new ValueEventListener() {
 
                         @Override

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +26,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -36,7 +38,26 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  */
 
 public class FragmentThreeProfile extends Fragment implements View.OnClickListener {
+
+    public static class CustomGridLayoutManager extends LinearLayoutManager {
+        private boolean isScrollEnabled = true;
+
+        public CustomGridLayoutManager(Context context) {
+            super(context);
+        }
+
+        public void setScrollEnabled(boolean flag) {
+            this.isScrollEnabled = flag;
+        }
+
+        @Override
+        public boolean canScrollVertically() {
+            //Similarly you can customize "canScrollHorizontally()" for managing horizontal scroll
+            return isScrollEnabled && super.canScrollVertically();
+        }
+    }
     View view_pro;
+    boolean isNgo;
     private CircleImageView profilePic;
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
@@ -62,14 +83,15 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         mDatabase=FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid()).child("RecentActivities");
         mDatabase.keepSynced(true);
         recyclerView=(RecyclerView)view_pro.findViewById(R.id.user_activity);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-//        linearLayoutManager.setReverseLayout(true);
-//        linearLayoutManager.setStackFromEnd(true);
-        //mNewsLists.setHasFixedSize(true);
+        CustomGridLayoutManager linearLayoutManager = new CustomGridLayoutManager(getActivity());
+        linearLayoutManager.setScrollEnabled(false);
+//        linearLayoutManager.setReverseLayout(true
+        linearLayoutManager.setStackFromEnd(true);
         recyclerView.setItemViewCacheSize(20);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
         recyclerView.setLayoutManager(linearLayoutManager);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         Log.v("FragmentThree", String.valueOf(mDatabase));
         if(firebaseUser!=null) {
             forUsers.child(firebaseUser.getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
@@ -102,13 +124,41 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                         mDatabase) {
             @Override
             protected void populateViewHolder(RecentActivityHolder viewHolder, RecentActivity model, int position) {
+                final String post_key=getRef(position).getKey();
                 viewHolder.setText(model.getmText());
                 viewHolder.setImage(getActivity().getApplicationContext(),model.getmImageLink());
+                viewHolder.mView.setOnClickListener(new View.OnClickListener() {
+                     @Override
+                     public void onClick(View v) {
+                         Log.v("KyA button click pe","YES");
+                         Query query =  mDatabase.child(post_key).orderByKey().equalTo("isNgo");
+                         query.addListenerForSingleValueEvent(new ValueEventListener() {
+                             @Override
+                             public void onDataChange(DataSnapshot dataSnapshot) {
+                                 if (dataSnapshot.exists()){
+                                     Intent intent = new Intent(getActivity(), orgInsideActivity.class);
+                                     intent.putExtra("news_id", post_key);
+                                     startActivity(intent);
+                                 }
+                                 else {
 
+                                     Intent intent = new Intent(getActivity(), SingleNewsDetail.class);
+                                     intent.putExtra("news_id", post_key);
+                                     startActivity(intent);
+                                 }
+                             }
+
+                             @Override
+                             public void onCancelled(DatabaseError databaseError) {
+
+                             }
+                         });
+
+                     }
+                 });
 
             }
         };
-        firebaseRecyclerAdapter.notifyDataSetChanged();
        recyclerView.setAdapter(firebaseRecyclerAdapter);
         return view_pro;
     }

@@ -7,13 +7,20 @@ package com.example.hp.heartful;
 public class RecentActivity {
     private String mText;
     private String mImageLink;
+    private boolean isNgo;
     public RecentActivity(){}
 
 
-    public RecentActivity(String mText, String mImageLink) {
+    public RecentActivity(String mText, String mImageLink, boolean isNgo) {
         this.mText = mText;
         this.mImageLink = mImageLink;
+        this.isNgo=isNgo;
     }
+
+    public boolean isNgo() {
+        return isNgo;
+    }
+
     public String getmText() {
         return mText;
     }

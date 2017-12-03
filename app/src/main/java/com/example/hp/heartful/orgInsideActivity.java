@@ -142,6 +142,7 @@ public class orgInsideActivity extends AppCompatActivity{
                          follow = databaseReference.child("RecentActivities").child(post_key);
                          follow.child("mText").setValue("You've  followed "+ post_title);
                         follow.child("mImageLink").setValue(post_image);
+                        follow.child("isNgo").setValue(true);
                         following.setImageResource(R.drawable.ic_check_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
                     Toast.makeText(orgInsideActivity.this, "You're following this NGO", Toast.LENGTH_SHORT).show();

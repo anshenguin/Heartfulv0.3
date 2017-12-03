@@ -1,10 +1,9 @@
 package com.example.hp.heartful;
 
-import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.Bundle;
+import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
@@ -29,16 +28,13 @@ import com.google.firebase.database.ValueEventListener;
  public class SingleNewsDetail extends AppCompatActivity {
     private String post_key;
     private ImageView mNewsImage;
-//    public static final int DEFAULT_MSG_LENGTH_LIMIT = 100;
     private TextView mNewsTitle,mNewsDesc;
     private    FirebaseAuth mAuth;
      private String profilePicLink;
      private String profileName;
      private   String post_title;
      private   String post_image;
-
      private DatabaseReference comments;
-    private ProgressDialog progressDialog;
     private EditText commentedText;
     private String commentTaken;
     private String loadImage;
@@ -51,8 +47,6 @@ import com.google.firebase.database.ValueEventListener;
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         mAuth=FirebaseAuth.getInstance();
-        progressDialog=new ProgressDialog(this);
-        progressDialog.setMessage("commenting");
         recyclerView=(RecyclerView)findViewById(R.id.comment_section);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mNewsImage=(ImageView)findViewById(R.id.news_images);
@@ -60,7 +54,7 @@ import com.google.firebase.database.ValueEventListener;
         mNewsDesc=(TextView)findViewById(R.id.news_description);
         mNewsTitle=(TextView)findViewById(R.id.news_title);
         post_key=getIntent().getExtras().getString("news_id");
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        FragmentThreeProfile.CustomGridLayoutManager linearLayoutManager = new FragmentThreeProfile.CustomGridLayoutManager(this);
 //        linearLayoutManager.setReverseLayout(true);
 //        linearLayoutManager.setStackFromEnd(true);
         //mNewsLists.setHasFixedSize(true);
@@ -68,6 +62,7 @@ import com.google.firebase.database.ValueEventListener;
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
         recyclerView.setLayoutManager(linearLayoutManager);
+        ViewCompat.setNestedScrollingEnabled(recyclerView, false);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("News");
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("News").child(post_key);
         final DatabaseReference forUsers = FirebaseDatabase.getInstance().getReference().child("Users");
@@ -90,29 +85,6 @@ import com.google.firebase.database.ValueEventListener;
             });
         }
 
-//        initCollapsingToolbar();
-//        commentedText.addTextChangedListener(new TextWatcher() {
-//            @Override
-//            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-//
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
-//                if (charSequence.toString().trim().length() > 0) {
-//                    sendCommentsBtn.setEnabled(true);
-//
-//                } else {
-//                    sendCommentsBtn.setEnabled(false);
-//                }
-//            }
-//
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//
-//            }
-//        });
-//        commentedText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(DEFAULT_MSG_LENGTH_LIMIT)});
      findViewById(R.id.send_comments).setOnClickListener(new View.OnClickListener() {
          @Override
          public void onClick(View v) {
@@ -128,28 +100,14 @@ import com.google.firebase.database.ValueEventListener;
                    Log.v("Comments", commentTaken);
              commentedText.setText(" ");
              mAuth = FirebaseAuth.getInstance();
-                   DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").push();
+                   DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").child(post_key);
                    forUserActivity.child("mText").setValue("You've  commented On "+ post_title);
                    forUserActivity.child("mImageLink").setValue(post_image);
-
              if (mAuth.getCurrentUser() != null) {
                  DatabaseReference whileComment = databaseReference.child("comments").push();
                  whileComment.child("comments").setValue(commentTaken);
                  whileComment.child("userName").setValue(profileName);
                  whileComment.child("profilePicLink").setValue(profilePicLink);
-//                    DatabaseReference fromPath=FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-//                    DatabaseReference toPath=FirebaseDatabase.getInstance().getReference().child("comments").push().child("userName");
-//                    copyRecord(fromPath,toPath);
-//                    DatabaseReference fromPath=FirebaseDatabase.getInstance().getReference().child("Users").child(mAuth.getCurrentUser().getUid());
-//                    DatabaseReference toPath=FirebaseDatabase.getInstance().getReference().child("Comments").child(mAuth.getCurrentUser().getUid());
-//                    copyRecord(fromPath,toPath);
-//                    progressDialog.dismiss();
-//                    progressDialog.show();
-//                    comments=FirebaseDatabase.getInstance().getReference().child("Comments").child(mAuth.getCurrentUser().getUid());
-//                    String personName = mAuth.getCurrentUser().getDisplayName();
-//                    Uri personPhoto = mAuth.getCurrentUser().getPhotoUrl();
-//                    postComments postComments = new postComments(personName, personPhoto.toString(), commentTaken);
-//                    comments.setValue(postComments);
              } else
                  Toast.makeText(SingleNewsDetail.this, "Please logged in for Comments", Toast.LENGTH_SHORT).show();
          }
@@ -176,20 +134,7 @@ import com.google.firebase.database.ValueEventListener;
                         .dontAnimate()
 
                         .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                        .listener(new RequestListener<String, GlideDrawable>() {
-//                            @Override
-//                            public boolean onException(Exception e, String model, Target<GlideDrawable> target, boolean isFirstResource) {
-//                                supportStartPostponedEnterTransition();
-//                                return false;
-//                            }
-//
-//                            @Override
-//                            public boolean onResourceReady(GlideDrawable resource, String model, Target<GlideDrawable> target, boolean isFromMemoryCache, boolean isFirstResource) {
-//                                supportStartPostponedEnterTransition();
-//                                return false;
-//                            }
-//                        })
-                        .into(mNewsImage)
+                      .into(mNewsImage)
 
                 ;
 
@@ -247,52 +192,6 @@ import com.google.firebase.database.ValueEventListener;
                     .into(post_image);
         }
     }
-//     public void copyRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
-//        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                postComments postComments= dataSnapshot.getValue(postComments.class);
-//                toPath.setValue(postComments.getUserName(), new DatabaseReference.CompletionListener() {
-//                    @Override
-//                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//    }
-//    public void copyRecord(DatabaseReference fromPath, final DatabaseReference toPath) {
-//        fromPath.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                toPath.child("comments").setValue(commentTaken, new DatabaseReference.CompletionListener() {
-//                    @Override
-//                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//
-//                    }
-//                });
-//                toPath.setValue(dataSnapshot.getValue(), new DatabaseReference.CompletionListener() {
-//                    @Override
-//                    public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
-//
-//                    }
-//                });
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
-//    }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

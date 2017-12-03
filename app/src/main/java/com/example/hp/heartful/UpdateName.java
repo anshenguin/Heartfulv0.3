@@ -36,7 +36,7 @@ public class UpdateName extends AppCompatActivity {
         mAuth= FirebaseAuth.getInstance();
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
         firebaseUser=mAuth.getCurrentUser();
-            forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            forUsers.child(firebaseUser.getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Users user = dataSnapshot.getValue(Users.class);
@@ -66,7 +66,7 @@ public class UpdateName extends AppCompatActivity {
                         return;// to stop the function from executation.
                     }
                     Log.v("New name",changedName);
-                 DatabaseReference name=forUsers.child(firebaseUser.getUid());
+                 DatabaseReference name=forUsers.child(firebaseUser.getUid()).child("userInfo");
                     name.child("userName").setValue(changedName);
 //                    Log.v("name ",mAuth.getCurrentUser().getDisplayName());
                     finish();

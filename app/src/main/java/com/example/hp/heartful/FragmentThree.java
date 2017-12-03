@@ -116,32 +116,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         mgoogleSign=(SignInButton)view.findViewById(R.id.google_login);
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(R.id.fb_login);
-//        if(mAuth.getCurrentUser()!=null) {
-//            mAuth=FirebaseAuth.getInstance();
-//            firebaseUser=mAuth.getCurrentUser();
-//            forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                    Log.v("chal","ondatachange");
-//                    Users user = dataSnapshot.getValue(Users.class);
-//                    profilePicLink = user.getProfilePicLink();
-//                    profileName = user.getUserName();
-//                    Glide
-//                            .with(getApplicationContext())
-//                            .load(profilePicLink)
-//                            .dontAnimate()
-//                            .diskCacheStrategy(DiskCacheStrategy.ALL)
-//                            .into(profilePic);
-//                    userName.setText(profileName);
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//
-//                }
-//            });
-//        }
-
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
@@ -218,16 +192,8 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         }
         //                }
 
-//        if(mAuth.getCurrentUser()==null) {
-//            Log.v("Sign up run hoga", String.valueOf(mAuth.getCurrentUser()));
-//            Log.v("main hu"," sign up view");
             return view;
-//        }
-//        else {
-//            Log.v("profile run hoga",String.valueOf(mAuth.getCurrentUser()));
-//            Log.v("main hu"," profile view");
-//            return view_pro;
-//        }
+
     }
 
 
@@ -238,12 +204,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
         mAuth.addAuthStateListener(mAuthStateListener);
     }
-//    @Override
-//    public void onDestroy() {
-//        super.onDestroy();
-//        mGoogleApiClient.stopAutoManage(getActivity());
-//        mGoogleApiClient.disconnect();
-//    }
+
 
     private void signIn() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient);
@@ -300,18 +261,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 
 
         }
-//        if(mAuth.getCurrentUser()!=null) {
-//            if (view == edit) {
-//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-//                    presentActivity(view);
-//                else {
-//                    Intent i = new Intent(getActivity(), Preferences.class);
-//                    i.setFlags(i.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//                    startActivity(i);
-//                }
-//
-//            }
-//        }
+
     }
     //
     private void login(){
@@ -529,22 +479,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                     }
                 });
     }
-//    public void reLoad(){
-//
-//        if(!justRefreshed) {
-//            FragmentThree fragment = (FragmentThree)
-//                    getFragmentManager().getFragments().get(2);
-//            getFragmentManager().beginTransaction()
-//                    .detach(fragment)
-//                    .attach(fragment)
-//                    .commit();
-//            shouldRefreshOnResume = false;
-//        }
-//
-//        justRefreshed = true;
-//        Log.v("reload done", "value of should refresh"+String.valueOf(shouldRefreshOnResume));
-//
-//    }
+
 
     @Override
     public void onStop() {
@@ -573,18 +508,5 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
 //            reLoad();
         }
     }
-//    public void presentActivity(View view) {
-//        ActivityOptionsCompat options = ActivityOptionsCompat.
-//                makeSceneTransitionAnimation(getActivity(), view, "transition");
-//        int revealX = (int) (view.getX() + view.getWidth() / 2);
-//        int revealY = (int) (view.getY() + view.getHeight() / 2);
-//
-//        Intent intent = new Intent(getActivity(), Preferences.class);
-//        intent.setFlags(intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-//        intent.putExtra(Preferences.EXTRA_CIRCULAR_REVEAL_X, revealX);
-//        intent.putExtra(Preferences.EXTRA_CIRCULAR_REVEAL_Y, revealY);
-//
-//        ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
-//    }
 
 }
