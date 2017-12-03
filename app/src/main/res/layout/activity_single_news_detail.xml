@@ -5,8 +5,6 @@
     android:id="@+id/main_content"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:focusableInTouchMode="true"
-
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context="com.example.hp.heartful.SingleNewsDetail"
@@ -118,6 +116,7 @@
             </LinearLayout>
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/comment_section"
+                android:nestedScrollingEnabled="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
