@@ -1,11 +1,14 @@
 package com.example.hp.heartful;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,6 +18,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -22,8 +26,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
@@ -43,7 +45,9 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
     private DatabaseReference forUsers;
     private String profilePicLink;
     private ImageView edit;
-    private ArrayList<String>key= new ArrayList<>();
+    private DatabaseReference mDatabase;
+    private RecyclerView recyclerView;
+
 
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
@@ -55,8 +59,20 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         mAuth= FirebaseAuth.getInstance();
         edit.setOnClickListener(this);
         firebaseUser=mAuth.getCurrentUser();
+        mDatabase=FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid()).child("RecentActivities");
+        mDatabase.keepSynced(true);
+        recyclerView=(RecyclerView)view_pro.findViewById(R.id.user_activity);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+//        linearLayoutManager.setReverseLayout(true);
+//        linearLayoutManager.setStackFromEnd(true);
+        //mNewsLists.setHasFixedSize(true);
+        recyclerView.setItemViewCacheSize(20);
+        recyclerView.setDrawingCacheEnabled(true);
+        recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        Log.v("FragmentThree", String.valueOf(mDatabase));
         if(firebaseUser!=null) {
-            forUsers.child(firebaseUser.getUid()).addValueEventListener(new ValueEventListener() {
+            forUsers.child(firebaseUser.getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.v("chal", "ondatachange");
@@ -79,21 +95,48 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                 }
             });
         }
-        forUsers.child(firebaseUser.getUid()).child("following").addValueEventListener(new ValueEventListener() {
+        FirebaseRecyclerAdapter<RecentActivity,RecentActivityHolder>firebaseRecyclerAdapter= new FirebaseRecyclerAdapter<RecentActivity, RecentActivityHolder>
+                (RecentActivity.class,
+                        R.layout.profile_list_item,
+                        RecentActivityHolder.class,
+                        mDatabase) {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                key.add(String.valueOf(dataSnapshot.getValue()));
-                Log.v("fragment", String.valueOf(key));
-            }
+            protected void populateViewHolder(RecentActivityHolder viewHolder, RecentActivity model, int position) {
+                viewHolder.setText(model.getmText());
+                viewHolder.setImage(getActivity().getApplicationContext(),model.getmImageLink());
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
 
             }
-        });
+        };
+        firebaseRecyclerAdapter.notifyDataSetChanged();
+       recyclerView.setAdapter(firebaseRecyclerAdapter);
         return view_pro;
     }
 
+    public static class RecentActivityHolder extends RecyclerView.ViewHolder {
+        View mView;
+        public RecentActivityHolder(View itemView) {
+            super(itemView);
+            mView=itemView;
+        }
+
+        public void setText(String text) {
+            TextView post_title=(TextView)mView.findViewById(R.id.actionPerformedText);
+            post_title.setText(text);
+            Log.v("Fragment", String.valueOf(text));
+
+        }
+
+        public void setImage(Context applicationContext, String imageLink) {
+            final ImageView post_image=(ImageView) mView.findViewById(R.id.actionPerformedImage);
+            Glide
+                    .with(applicationContext)
+                    .load(imageLink)
+                    .dontAnimate()
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .into(post_image);
+        }
+    }
     @Override
     public void onClick(View view) {
         if(mAuth.getCurrentUser()!=null) {
@@ -122,4 +165,6 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
 
         ActivityCompat.startActivity(getActivity(), intent, options.toBundle());
     }
+
+
 }

@@ -34,6 +34,8 @@ import com.google.firebase.database.ValueEventListener;
     private    FirebaseAuth mAuth;
      private String profilePicLink;
      private String profileName;
+     private   String post_title;
+     private   String post_image;
 
      private DatabaseReference comments;
     private ProgressDialog progressDialog;
@@ -71,7 +73,7 @@ import com.google.firebase.database.ValueEventListener;
         final DatabaseReference forUsers = FirebaseDatabase.getInstance().getReference().child("Users");
         if(mAuth.getCurrentUser()!=null) {
 
-            forUsers.child(mAuth.getCurrentUser().getUid()).addValueEventListener(new ValueEventListener() {
+            forUsers.child(mAuth.getCurrentUser().getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.v("chal","ondatachange");
@@ -126,6 +128,9 @@ import com.google.firebase.database.ValueEventListener;
                    Log.v("Comments", commentTaken);
              commentedText.setText(" ");
              mAuth = FirebaseAuth.getInstance();
+                   DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").push();
+                   forUserActivity.child("mText").setValue("You've  commented On "+ post_title);
+                   forUserActivity.child("mImageLink").setValue(post_image);
 
              if (mAuth.getCurrentUser() != null) {
                  DatabaseReference whileComment = databaseReference.child("comments").push();
@@ -154,9 +159,9 @@ import com.google.firebase.database.ValueEventListener;
         mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                String post_title= (String) dataSnapshot.child("Title").getValue();
+                 post_title= (String) dataSnapshot.child("Title").getValue();
                 String post_desc=(String)dataSnapshot.child("Description").getValue();
-                String post_image=(String)dataSnapshot.child("Image").getValue();
+                 post_image=(String)dataSnapshot.child("Image").getValue();
                 loadImage=post_image;
                 mNewsTitle.setText(post_title);
                 mNewsDesc.setText(post_desc);
