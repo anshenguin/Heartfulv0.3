@@ -152,6 +152,7 @@ public class orgInsideActivity extends AppCompatActivity{
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 int numRecent = (int) dataSnapshot.getChildrenCount();
                                 Log.v("num", String.valueOf(numRecent));
+
                             }
 
                             @Override
@@ -185,14 +186,17 @@ public class orgInsideActivity extends AppCompatActivity{
 ////                        });
                         follow = databaseReference.child("RecentActivities");
                         databaseReference.child("Following").child(post_key).removeValue();
-                        follow.orderByChild(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                        follow.orderByChild("postkey").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for(DataSnapshot child : dataSnapshot.getChildren()){
-                                    Log.v("shot", String.valueOf(dataSnapshot));
-                                    Log.v("shot 2", String.valueOf(child));
-                                    if(child.getValue()!=null)
-                                        child.child(post_key).getRef().removeValue();
+                                    Log.v("shot", String.valueOf(child.getRef()));
+                                    Log.v("shot new mast", String.valueOf(child.child("postkey").getValue())+"and "+post_key);
+                                    Log.v("shot 2", String.valueOf( child.child("postkey").getValue()));
+                                    if(child.child("postkey").getValue().equals(post_key)) {
+                                        Log.v("shot mast postkey",post_key);
+                                        child.getRef().removeValue();
+                                    }
                                 }
 
 //                                Log.v("child", String.valueOf(follow.orderByChild(post_key)));
