@@ -126,29 +126,45 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
             @Override
             protected void populateViewHolder(RecentActivityHolder viewHolder, RecentActivity model, int position) {
                 final String push_id = getRef(position).getKey();
-                final String post_key=getRef(position).child(push_id).getKey();
+                Log.v("msg pushid", String.valueOf(getRef(position)));
+//                String post_key = mDatabase.child(push_id).g
+//                Log.v("msg postkey", String.valueOf(mDatabase.child(push_id).getKey()));
                 viewHolder.setText(model.getmText());
                 viewHolder.setImage(getActivity().getApplicationContext(),model.getmImageLink());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
                          Log.v("KyA button click pe","YES");
-                         Query query =  mDatabase.orderByChild(post_key).orderByKey().equalTo("isNgo");
+                         Query query =  mDatabase.child(push_id);
                          query.addListenerForSingleValueEvent(new ValueEventListener() {
                              @Override
                              public void onDataChange(DataSnapshot dataSnapshot) {
-                                 if (dataSnapshot.exists()){
-                                     Intent intent = new Intent(getActivity(), orgInsideActivity.class);
-                                     intent.putExtra("news_id", post_key);
-                                     startActivity(intent);
-                                 }
-                                 else {
+                                 Log.v("actual", String.valueOf(dataSnapshot));
+                                     if (dataSnapshot.child("isNgo").exists()) {
+                                         Intent intent = new Intent(getActivity(), orgInsideActivity.class);
 
-                                     Intent intent = new Intent(getActivity(), SingleNewsDetail.class);
-                                     intent.putExtra("news_id", post_key);
-                                     startActivity(intent);
+                                         intent.putExtra("news_id", String.valueOf(dataSnapshot.child("postkey").getValue()));
+                                         startActivity(intent);
+                                     } else {
+
+                                         Intent intent = new Intent(getActivity(), SingleNewsDetail.class);
+                                         intent.putExtra("news_id", String.valueOf(dataSnapshot.child("postkey").getValue()));
+                                         startActivity(intent);
+                                     }
                                  }
-                             }
+//                                 Log.v("msg", String.valueOf(dataSnapshot.getValue()));
+//                                 if (dataSnapshot.exists()){
+//                                     Intent intent = new Intent(getActivity(), orgInsideActivity.class);
+//                                     intent.putExtra("news_id", post_key);
+//                                     startActivity(intent);
+//                                 }
+//                                 else {
+//
+//                                     Intent intent = new Intent(getActivity(), SingleNewsDetail.class);
+//                                     intent.putExtra("news_id", post_key);
+//                                     startActivity(intent);
+//                                 }
+
 
                              @Override
                              public void onCancelled(DatabaseError databaseError) {

@@ -104,11 +104,11 @@ import com.google.firebase.database.ValueEventListener;
 
              if (mAuth.getCurrentUser() != null) {
 
-                 DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").push().child(post_key);
+                 DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").push();
 //                 DatabaseReference forNum = forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities");
                  forUserActivity.child("mText").setValue("You've  commented On "+ post_title);
                  forUserActivity.child("mImageLink").setValue(post_image);
-
+                 forUserActivity.child("postkey").setValue(post_key);
                  DatabaseReference whileComment = databaseReference.child("comments").push();
                  whileComment.child("comments").setValue(commentTaken);
                  whileComment.child("userName").setValue(profileName);

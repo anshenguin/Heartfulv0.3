@@ -141,10 +141,11 @@ public class orgInsideActivity extends AppCompatActivity{
                 if (mAuth.getCurrentUser() != null) {
                     if (doesFollowing) {
                         databaseReference.child("Following").child(post_key).setValue("true");
-                         follow = databaseReference.child("RecentActivities").push().child(post_key);
+                         follow = databaseReference.child("RecentActivities").push();
                          follow.child("mText").setValue("You've  followed "+ post_title);
                         follow.child("mImageLink").setValue(post_image);
                         follow.child("isNgo").setValue(true);
+                        follow.child("postkey").setValue(post_key);
                         DatabaseReference forNum = databaseReference.child("RecentActivities");
                         forNum.addValueEventListener(new ValueEventListener() {
                             @Override
@@ -188,7 +189,9 @@ public class orgInsideActivity extends AppCompatActivity{
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
                                 for(DataSnapshot child : dataSnapshot.getChildren()){
-                                    if(child.child(post_key).getValue()!=null)
+                                    Log.v("shot", String.valueOf(dataSnapshot));
+                                    Log.v("shot 2", String.valueOf(child));
+                                    if(child.getValue()!=null)
                                         child.child(post_key).getRef().removeValue();
                                 }
 
