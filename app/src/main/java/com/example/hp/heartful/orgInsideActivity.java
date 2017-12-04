@@ -54,6 +54,7 @@ public class orgInsideActivity extends AppCompatActivity{
         following=(FloatingActionButton)findViewById(R.id.following);
         mNgoLogo=(ImageView)findViewById(R.id.backdrop);
         mNgoInfo=(TextView)findViewById(R.id.orgInfo);
+
         mNgoName=(TextView)findViewById(R.id.orgName);
 //        initCollapsingToolbar();
         Log.v("follow", String.valueOf(doesFollowing));
@@ -95,7 +96,10 @@ public class orgInsideActivity extends AppCompatActivity{
 
             }
         });
+
         if(mAuth.getCurrentUser()!= null) {
+//            final DatabaseReference forNum = data.child(mAuth.getCurrentUser().getUid()).child("RecentActivities");
+
             databaseReference = data.child(mAuth.getCurrentUser().getUid());
             databaseReference.child("Following").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
@@ -146,13 +150,16 @@ public class orgInsideActivity extends AppCompatActivity{
                         follow.child("mImageLink").setValue(post_image);
                         follow.child("isNgo").setValue(true);
                         follow.child("postkey").setValue(post_key);
-                        DatabaseReference forNum = databaseReference.child("RecentActivities");
-                        forNum.addValueEventListener(new ValueEventListener() {
+                        databaseReference.child("RecentActivities").addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(DataSnapshot dataSnapshot) {
-                                int numRecent = (int) dataSnapshot.getChildrenCount();
-                                Log.v("num", String.valueOf(numRecent));
+                                if(dataSnapshot.getChildrenCount()>=6){
+                                    for (DataSnapshot p : dataSnapshot.getChildren()) {
+                                        p.getRef().removeValue();
+                                        return;
+                                    }
 
+                                }
                             }
 
                             @Override
@@ -160,6 +167,7 @@ public class orgInsideActivity extends AppCompatActivity{
 
                             }
                         });
+
                         following.setImageResource(R.drawable.ic_check_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
                     Toast.makeText(orgInsideActivity.this, "You're following this NGO", Toast.LENGTH_SHORT).show();
@@ -193,6 +201,7 @@ public class orgInsideActivity extends AppCompatActivity{
                                     Log.v("shot", String.valueOf(child.getRef()));
                                     Log.v("shot new mast", String.valueOf(child.child("postkey").getValue())+"and "+post_key);
                                     Log.v("shot 2", String.valueOf( child.child("postkey").getValue()));
+//TODO: The app unexpectedly crashes here sometimes :|
                                     if(child.child("postkey").getValue().equals(post_key)) {
                                         Log.v("shot mast postkey",post_key);
                                         child.getRef().removeValue();
