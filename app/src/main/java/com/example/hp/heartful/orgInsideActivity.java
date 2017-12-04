@@ -97,7 +97,7 @@ public class orgInsideActivity extends AppCompatActivity{
         });
         if(mAuth.getCurrentUser()!= null) {
             databaseReference = data.child(mAuth.getCurrentUser().getUid());
-            databaseReference.child("RecentActivities").addListenerForSingleValueEvent(new ValueEventListener() {
+            databaseReference.child("Following").addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Log.v("Datasnapshot", "works");
@@ -132,17 +132,32 @@ public class orgInsideActivity extends AppCompatActivity{
                 }
             });
         }
+
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.v("Chal rha ","hai");
-                DatabaseReference follow;
+                final DatabaseReference follow;
                 if (mAuth.getCurrentUser() != null) {
                     if (doesFollowing) {
-                         follow = databaseReference.child("RecentActivities").child(post_key);
+                        databaseReference.child("Following").child(post_key).setValue("true");
+                         follow = databaseReference.child("RecentActivities").push().child(post_key);
                          follow.child("mText").setValue("You've  followed "+ post_title);
                         follow.child("mImageLink").setValue(post_image);
                         follow.child("isNgo").setValue(true);
+                        DatabaseReference forNum = databaseReference.child("RecentActivities");
+                        forNum.addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                int numRecent = (int) dataSnapshot.getChildrenCount();
+                                Log.v("num", String.valueOf(numRecent));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                         following.setImageResource(R.drawable.ic_check_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
                     Toast.makeText(orgInsideActivity.this, "You're following this NGO", Toast.LENGTH_SHORT).show();
@@ -154,8 +169,39 @@ public class orgInsideActivity extends AppCompatActivity{
 //                following.setBackgroundColor(getResources().getColor(R.color.following));
                 }
                 else {
+//                        DatabaseReference forNum = databaseReference.child("RecentActivities");
+////                        forNum.addValueEventListener(new ValueEventListener() {
+////                            @Override
+////                            public void onDataChange(DataSnapshot dataSnapshot) {
+////                                int numRecent = (int) dataSnapshot.getChildrenCount();
+////                                Log.v("num", String.valueOf(numRecent));
+////                            }
+////
+////                            @Override
+////                            public void onCancelled(DatabaseError databaseError) {
+////
+////                            }
+////                        });
                         follow = databaseReference.child("RecentActivities");
-                        follow.child(post_key).removeValue();
+                        databaseReference.child("Following").child(post_key).removeValue();
+                        follow.orderByChild(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                for(DataSnapshot child : dataSnapshot.getChildren()){
+                                    if(child.child(post_key).getValue()!=null)
+                                        child.child(post_key).getRef().removeValue();
+                                }
+
+//                                Log.v("child", String.valueOf(follow.orderByChild(post_key)));
+//                                if(dataSnapshot.child(post_key).getKey().equals(post_key))
+//                                Log.v("child", String.valueOf(dataSnapshot.child(post_key).getRef()));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
                         following.setImageResource(R.drawable.ic_person_add_black_24dp);
                         following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.colorAccent)));
                         Toast.makeText(orgInsideActivity.this, "You're Unfollowing this NGO", Toast.LENGTH_SHORT).show();

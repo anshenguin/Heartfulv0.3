@@ -85,6 +85,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         recyclerView=(RecyclerView)view_pro.findViewById(R.id.user_activity);
         CustomGridLayoutManager linearLayoutManager = new CustomGridLayoutManager(getActivity());
         linearLayoutManager.setScrollEnabled(false);
+        linearLayoutManager.setReverseLayout(true);
 //        linearLayoutManager.setReverseLayout(true
         linearLayoutManager.setStackFromEnd(true);
         recyclerView.setItemViewCacheSize(20);
@@ -124,14 +125,15 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                         mDatabase) {
             @Override
             protected void populateViewHolder(RecentActivityHolder viewHolder, RecentActivity model, int position) {
-                final String post_key=getRef(position).getKey();
+                final String push_id = getRef(position).getKey();
+                final String post_key=getRef(position).child(push_id).getKey();
                 viewHolder.setText(model.getmText());
                 viewHolder.setImage(getActivity().getApplicationContext(),model.getmImageLink());
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                      @Override
                      public void onClick(View v) {
                          Log.v("KyA button click pe","YES");
-                         Query query =  mDatabase.child(post_key).orderByKey().equalTo("isNgo");
+                         Query query =  mDatabase.orderByChild(post_key).orderByKey().equalTo("isNgo");
                          query.addListenerForSingleValueEvent(new ValueEventListener() {
                              @Override
                              public void onDataChange(DataSnapshot dataSnapshot) {
