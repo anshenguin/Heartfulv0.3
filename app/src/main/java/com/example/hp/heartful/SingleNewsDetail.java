@@ -19,6 +19,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -66,7 +67,27 @@ import com.google.firebase.database.ValueEventListener;
         mDatabase= FirebaseDatabase.getInstance().getReference().child("News");
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("News").child(post_key);
         final DatabaseReference forUsers = FirebaseDatabase.getInstance().getReference().child("Users");
+
         if(mAuth.getCurrentUser()!=null) {
+
+//            final DatabaseReference forNum = databaseReference.child("RecentActivities");
+//            forNum.addValueEventListener(new ValueEventListener() {
+//                @Override
+//                public void onDataChange(DataSnapshot dataSnapshot) {
+//                    int numRecent = (int) dataSnapshot.getChildrenCount();
+//                    Log.v("num", String.valueOf(numRecent));
+//                    if(numRecent==6){
+//                        forNum.limitToFirst(1).getRef().removeValue();
+//                        return;
+//                    }
+//
+//                }
+//
+//                @Override
+//                public void onCancelled(DatabaseError databaseError) {
+//
+//                }
+//            });
 
             forUsers.child(mAuth.getCurrentUser().getUid()).child("userInfo").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -92,7 +113,7 @@ import com.google.firebase.database.ValueEventListener;
              if (TextUtils.isEmpty(commentTaken)) {
                  // email is empty
                  Toast.makeText(SingleNewsDetail.this, "please type something", Toast.LENGTH_SHORT).show();
-                 return;// to stop the function from executation.
+                 return;// to stop the function from execution.
              }
 
            else
@@ -100,14 +121,51 @@ import com.google.firebase.database.ValueEventListener;
                    Log.v("Comments", commentTaken);
              commentedText.setText(" ");
              mAuth = FirebaseAuth.getInstance();
-                   DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").child(post_key);
-                   forUserActivity.child("mText").setValue("You've  commented On "+ post_title);
-                   forUserActivity.child("mImageLink").setValue(post_image);
+
              if (mAuth.getCurrentUser() != null) {
+
+                 DatabaseReference forUserActivity=forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").push();
+//                 DatabaseReference forNum = forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities");
+                 forUsers.child(mAuth.getCurrentUser().getUid()).child("RecentActivities").addListenerForSingleValueEvent(new ValueEventListener() {
+                     @Override
+                     public void onDataChange(DataSnapshot dataSnapshot) {
+                         if(dataSnapshot.getChildrenCount()==5){
+                             for (DataSnapshot p : dataSnapshot.getChildren()) {
+                                 p.getRef().removeValue();
+                                 return;
+                             }
+
+                         }
+                     }
+
+                     @Override
+                     public void onCancelled(DatabaseError databaseError) {
+
+                     }
+                 });
+                 forUserActivity.child("mText").setValue("You've  commented On "+ post_title);
+                 forUserActivity.child("mImageLink").setValue(post_image);
+                 forUserActivity.child("postkey").setValue(post_key);
+
                  DatabaseReference whileComment = databaseReference.child("comments").push();
+
                  whileComment.child("comments").setValue(commentTaken);
                  whileComment.child("userName").setValue(profileName);
                  whileComment.child("profilePicLink").setValue(profilePicLink);
+
+//                 forNum.addListenerForSingleValueEvent(new ValueEventListener() {
+//                     @Override
+//                     public void onDataChange(DataSnapshot dataSnapshot) {
+//                         int numRecent = (int) dataSnapshot.getChildrenCount();
+//                         Log.v("num", String.valueOf(numRecent));
+//                     }
+//
+//                     @Override
+//                     public void onCancelled(DatabaseError databaseError) {
+//
+//                     }
+//                 });
+
              } else
                  Toast.makeText(SingleNewsDetail.this, "Please logged in for Comments", Toast.LENGTH_SHORT).show();
          }

@@ -8,7 +8,7 @@ public class RecentActivity {
     private String mText;
     private String mImageLink;
     private boolean isNgo;
-    public RecentActivity(){}
+        public RecentActivity(){}
 
 
     public RecentActivity(String mText, String mImageLink, boolean isNgo) {
