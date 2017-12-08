@@ -38,6 +38,7 @@ public class News {
         return Description;
     }
 
+
     public void setDescription(String description) {
         Description = description;
     }

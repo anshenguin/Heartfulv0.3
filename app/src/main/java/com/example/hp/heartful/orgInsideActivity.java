@@ -41,6 +41,7 @@ public class orgInsideActivity extends AppCompatActivity{
     private boolean doesFollowing;
     String post_title;
     String post_image;
+    String NGOId;
     private FloatingActionButton following;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -143,8 +144,23 @@ public class orgInsideActivity extends AppCompatActivity{
                 Log.v("Chal rha ","hai");
                 final DatabaseReference follow;
                 if (mAuth.getCurrentUser() != null) {
+
                     if (doesFollowing) {
-                        databaseReference.child("Following").child(post_key).setValue("true");
+                        mDatabase.child(post_key).addValueEventListener(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                Log.v("pehla","NGOId");
+                                NGOId = dataSnapshot.child("NGOId").getValue().toString();
+                                databaseReference.child("Following").child(post_key).setValue(NGOId);
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+                        Log.v("pehla","setvalue");
+
                          follow = databaseReference.child("RecentActivities").push();
                          follow.child("mText").setValue("You've  followed "+ post_title);
                         follow.child("mImageLink").setValue(post_image);
