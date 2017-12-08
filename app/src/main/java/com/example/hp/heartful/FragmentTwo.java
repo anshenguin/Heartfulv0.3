@@ -41,6 +41,10 @@ public class FragmentTwo extends Fragment {
   android.support.design.widget.FloatingActionButton button;
     ImageView imageView;
     boolean canPost;
+    private int i = 0;
+    private int size = 0;
+    private String NGOId;
+    private boolean shouldPopulate = false;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference forUsers;
     private RecyclerView mNewsLists;
@@ -64,7 +68,7 @@ public class FragmentTwo extends Fragment {
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
                 if(firebaseAuth.getCurrentUser()!=null) {
                     Log.v("can u post2", String.valueOf(canPost));
-                     forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid());
+                     forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("userInfo");
                     forUsers.addListenerForSingleValueEvent(new ValueEventListener() {
 
                         @Override
@@ -121,12 +125,73 @@ public class FragmentTwo extends Fragment {
                 NewsViewHolder.class,
                 mDatabase) {
             @Override
-            protected void populateViewHolder(NewsViewHolder viewHolder, News model, int position) {
-                final String post_key=getRef(position).getKey();
-                viewHolder.setDateAndTime(model.getDateAndTime());
-                viewHolder.setTitle(model.getTitle());
-                viewHolder.setDesc(model.getDescription());
-                viewHolder.setImage(getActivity().getApplicationContext(),model.getImage());
+            protected void populateViewHolder(final NewsViewHolder viewHolder, final News model, int position) {
+                final String post_key = getRef(position).getKey();
+                if(firebaseAuth.getCurrentUser()==null) {
+                    Log.v("if kitni baar","main chala");
+                    viewHolder.setDateAndTime(model.getDateAndTime());
+                    viewHolder.setTitle(model.getTitle());
+                    viewHolder.setDesc(model.getDescription());
+                    viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
+                }
+
+                else{
+                    mDatabase.child(post_key).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.child("NGOId").exists())
+                            NGOId = dataSnapshot.child("NGOId").getValue().toString();
+                            else
+                                NGOId = String.valueOf(-1);
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+
+
+                    DatabaseReference forFollowing= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("Following");
+                    forFollowing.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+
+//                            size = (int) dataSnapshot.getChildrenCount();
+                            Log.v("if before for p",NGOId);
+                            for (DataSnapshot p : dataSnapshot.getChildren()){
+                                Log.v("values", String.valueOf(p.getValue()));
+                                if(p.getValue().toString().equals(NGOId)) {
+                                    shouldPopulate = true;
+                                }
+                            }
+
+                            if(shouldPopulate){
+                                Log.v("if should populate true",NGOId);
+                                viewHolder.setDateAndTime(model.getDateAndTime());
+                                viewHolder.setTitle(model.getTitle());
+                                viewHolder.setDesc(model.getDescription());
+                                viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
+                                viewHolder.mView.setVisibility(View.VISIBLE);
+                                shouldPopulate = false;
+                            }
+
+                            else{
+                                viewHolder.mView.setVisibility(View.GONE);
+                                //TODO: YAHAN PE RECYCLER VIEW KO RESIZE KRNA HAI STARTING SE AISA LG RHA HAi
+//                                viewHolder.mView.setLayoutParams(new RecyclerView.LayoutParams(0,0));
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+
+                    });
+
+
+                }
 
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override

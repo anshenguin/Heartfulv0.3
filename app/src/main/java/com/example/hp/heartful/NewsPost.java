@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -23,8 +24,13 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -33,6 +39,8 @@ import com.theartofdev.edmodo.cropper.CropImageView;
 
 import java.text.DateFormat;
 import java.util.Date;
+
+import static android.R.attr.x;
 
 public class NewsPost extends AppCompatActivity {
     public static final String EXTRA_CIRCULAR_REVEAL_X = "EXTRA_CIRCULAR_REVEAL_X";
@@ -48,6 +56,7 @@ public class NewsPost extends AppCompatActivity {
     private DatabaseReference mdatabase;
     private Uri imageUri=null;
     private ProgressDialog progress;
+    private String ngoId;
     private StorageReference newsPhotos;
     private FirebaseStorage mstorage;
     private   String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
@@ -118,6 +127,22 @@ public class NewsPost extends AppCompatActivity {
     private void userPost(){
         final String postTitle=title.getText().toString();
         final String postDes= userDesc.getText().toString();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(FirebaseAuth.getInstance().getCurrentUser().getUid()).child("userInfo")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("chal raha hai","ondatachange");
+                ngoId = String.valueOf(dataSnapshot.child("NGOId").getValue());
+//                            Log.v("value", String.valueOf(dataSnapshot.child("NGOId").getValue()));
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+
+        });
         if (!TextUtils.isEmpty(postTitle)&&!TextUtils.isEmpty(postDes)/*&&imageUri!=null*/){
             progress.show();
            StorageReference filePath=newsPhotos.child(imageUri.getLastPathSegment());
@@ -126,11 +151,17 @@ public class NewsPost extends AppCompatActivity {
                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                     @SuppressWarnings("VisibleForTests")
                     Uri downloadUrl = taskSnapshot.getDownloadUrl();
+
+
                     DatabaseReference newPost=mdatabase.push();
                     newPost.child("Title").setValue(postTitle);
                     newPost.child("Description").setValue(postDes);
                     newPost.child("DateAndTime").setValue(currentDateTimeString);
                     newPost.child("Image").setValue(downloadUrl.toString());
+//                    Log.v("value1",ngoId);
+                    Log.v("chal raha hai","newspost set wala");
+//                    Log.v("NGOId",ngoId);
+                    newPost.child("NGOId").setValue(ngoId);
                     progress.dismiss();
                     finish();
 

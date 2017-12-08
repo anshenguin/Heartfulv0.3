@@ -27,4 +27,5 @@ public class Users {
     public boolean isCanPost() {
         return canPost;
     }
+
 }
