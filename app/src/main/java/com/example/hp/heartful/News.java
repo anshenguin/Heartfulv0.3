@@ -5,7 +5,7 @@ package com.example.hp.heartful;
  */
 
 public class News {
-    private String Title,Description,Image,DateAndTime;
+        private String Title,Description,Image,DateAndTime;
 
     public  News(){
     }
