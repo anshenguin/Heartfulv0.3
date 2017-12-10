@@ -7,10 +7,20 @@ import com.google.firebase.database.FirebaseDatabase;
  */
 
 public class ForCache extends android.app.Application  {
+    private static ForCache mInstance;
     @Override
     public void onCreate() {
         super.onCreate();
-    /* Enable disk persistence  */
+  /* Enable disk persistence  */
         FirebaseDatabase.getInstance().setPersistenceEnabled(true);
+        mInstance = this;
+    }
+
+    public static synchronized ForCache getInstance() {
+        return mInstance;
+    }
+
+    public void setConnectivityListener(ConnectivityReceiver.ConnectivityReceiverListener listener) {
+        ConnectivityReceiver.connectivityReceiverListener = listener;
     }
 }

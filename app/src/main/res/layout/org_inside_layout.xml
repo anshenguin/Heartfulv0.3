@@ -177,9 +177,10 @@
 
                     <TextView
                         android:layout_width="wrap_content"
+                        android:id="@+id/vision"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
-                        android:text="MISSION"
+                        android:text="VISION"
                         android:layout_marginBottom="16dp"
                         android:textSize="18sp"
                         android:textStyle="bold"/>
@@ -187,6 +188,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_marginBottom="16dp"
+                        android:id="@+id/vision_text"
                         android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:text="TEST AAA AAA XYXASDE EDTRGT tHIS This Abcde Hello World"
@@ -195,6 +197,7 @@
 
                     <TextView
                         android:layout_width="wrap_content"
+                        android:id="@+id/mission"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_horizontal"
                         android:text="MISSION"
@@ -204,6 +207,7 @@
 
                     <TextView
                         android:layout_width="match_parent"
+                        android:id="@+id/mission_text"
                         android:gravity="center_horizontal"
                         android:layout_height="wrap_content"
                         android:text="TEST AAA AAA XYXASDE EDTRGT tHIS This Abcde Hello World"
