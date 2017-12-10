@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,14 +50,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-import de.hdodenhof.circleimageview.CircleImageView;
-
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * Created by HP INDIA on 08-Apr-17.
  */
-public class FragmentThree extends Fragment implements View.OnClickListener{
+public class FragmentThree extends Fragment implements View.OnClickListener ,ConnectivityReceiver.ConnectivityReceiverListener{
     private boolean shouldRefreshOnResume = false;
     private boolean justRefreshed = false;
     private boolean usingSignIn = false;
@@ -78,13 +75,9 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     private ProgressDialog fbProgress;
     private static String TAG="FragmentThree";
     private LoginButton mFbLogin;
-    private ImageView edit;
-    private String profilePicLink;
-    private String profileName;
-    private TextView userName;
-    private CircleImageView profilePic;
     private CallbackManager callbackManager;
     View view;
+    boolean isConnected = ConnectivityReceiver.isConnected();
 //    View view_pro;
     private ProgressDialog progressDialog;
 
@@ -92,11 +85,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     @Override
     public View onCreateView(final LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.sign_up_page,container, false);
-//        view_pro = inflater.inflate(R.layout.profile_layout,container, false);
         fbProgress= new ProgressDialog(getActivity());
-//        profilePic=(CircleImageView) view_pro.findViewById(R.id.profile_pic);
-//        userName=(TextView)view_pro.findViewById(R.id.user_name);
-//        edit=(ImageView)view_pro.findViewById(R.id.edit);
         fbProgress.setMessage("Connecting to Facebook Account, Please wait...");
         mAuth=FirebaseAuth.getInstance();
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
@@ -150,46 +139,50 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         mgoogleSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                progress.show();
-                signIn();
+               if (isConnected) {
+                   progress.show();
+                   signIn();
+               }
+               else   Toast.makeText(getActivity(),"No Internet Connection, Please Connect to network first", Toast.LENGTH_LONG).show();
+
             }
         });
 
 
-        mFbLogin.setFragment(FragmentThree.this);
-        mFbLogin.setReadPermissions("public_profile", "email", "user_friends");
-        try {
-            mFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
-                @Override
-                public void onSuccess(LoginResult loginResult) {
-                    Log.v(" FragmentFacebook", "Dekhte hai chal rha hai ki nhi");
-                    fbProgress.show();
-                    handleFacebookAccessToken(loginResult.getAccessToken());
+       mFbLogin.setFragment(FragmentThree.this);
+       mFbLogin.setReadPermissions("public_profile", "email", "user_friends");
+       try {
+           mFbLogin.registerCallback(callbackManager, new FacebookCallback<LoginResult>() {
+               @Override
+               public void onSuccess(LoginResult loginResult) {
+                   Log.v(" FragmentFacebook", "Dekhte hai chal rha hai ki nhi");
+                   fbProgress.show();
+                   handleFacebookAccessToken(loginResult.getAccessToken());
 
-                    // App code
-                    //userProfile();
+                   // App code
+                   //userProfile();
 
-                }
+               }
 
-                @Override
-                public void onCancel() {
-                    Log.v("FragmentThree 2", "Dekhte hai chal rha hai ki nhi");
-                    // App code
-                    Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
-                }
+               @Override
+               public void onCancel() {
+                   Log.v("FragmentThree 2", "Dekhte hai chal rha hai ki nhi");
+                   // App code
+                   Toast.makeText(getApplicationContext(), "error", Toast.LENGTH_SHORT).show();
+               }
 
-                @Override
-                public void onError(FacebookException exception) {
-                    Log.v("FragmentThree 3", "Dekhte hai chal rha hai ki nhi");
-                    Log.v("Exception", String.valueOf(exception));
-                    // App code
-                }
-            });
-        }
-        catch (Exception e){
-            Log.v("FACEBOOK", "Error in the loginButton facebook");
-            e.printStackTrace();
-        }
+               @Override
+               public void onError(FacebookException exception) {
+                   Log.v("FragmentThree 3", "Dekhte hai chal rha hai ki nhi");
+                   Log.v("Exception", String.valueOf(exception));
+                   // App code
+               }
+           });
+       } catch (Exception e) {
+           Log.v("FACEBOOK", "Error in the loginButton facebook");
+           e.printStackTrace();
+       }
+
         //                }
 
             return view;
@@ -215,6 +208,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
         callbackManager.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN) {
             GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
@@ -250,15 +244,18 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     public void onClick(View view) {
         if(view==Sign_Up){
             // user will register here
-
+   if (isConnected)
             registerUser();
+            else   Toast.makeText(getActivity(),"No Internet Connection, Please Connect to network first", Toast.LENGTH_LONG).show();
         }
-        if(view==login_Text){
+        if(view==login_Text) {
             //    login user
-            usingSignIn = true;
-            login();
+            if (isConnected) {
+                usingSignIn = true;
+                login();
 //            shouldRefreshOnResume=true;
-
+            }
+            else   Toast.makeText(getActivity(),"No Internet Connection, Please Connect to network first", Toast.LENGTH_LONG).show();
 
         }
 
@@ -309,9 +306,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             firebaseUser=mAuth.getCurrentUser();
                             DatabaseReference userData = forUsers.child(firebaseUser.getUid()).child("userInfo");
                                 boolean canPost = false;
+                            String userDesc ="Yesterday is history, tomorrow's a mystery, today is a gift, that's why we call it 'present'";
                                 String personName = user_name;
                                 String personPhoto = "https://firebasestorage.googleapis.com/v0/b/heartful-dc3ac.appspot.com/o/profilepic.png?alt=media&token=5b98dc2e-1e36-4eb8-86e9-54d10222120e";
-                                Users user = new Users(personName, personPhoto, canPost);
+                                Users user = new Users(personName, personPhoto, canPost,userDesc);
                                 userData.setValue(user);
 
                             justRefreshed = false;
@@ -351,7 +349,8 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                                 boolean canPost = false;
                                 String personName = firebaseUser.getDisplayName();
                                 Uri personPhoto = firebaseUser.getPhotoUrl();
-                                Users user = new Users(personName, personPhoto.toString(), canPost);
+                                String userDesc ="Yesterday is history, tomorrow's a mystery, today is a gift, that's why we call it 'present'";
+                                Users user = new Users(personName, personPhoto.toString(), canPost,userDesc);
                                 userData.setValue(user);
                                 pref.edit().putBoolean(HEARTFUL_USER, true).commit();
                             }
@@ -364,9 +363,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                                     else{
 
                                         boolean canPost = false;
+                                        String userDesc ="Yesterday is history, tomorrow's a mystery, today is a gift, that's why we call it 'present'";
                                         String personName = firebaseUser.getDisplayName();
                                         Uri personPhoto = firebaseUser.getPhotoUrl();
-                                        Users user = new Users(personName, personPhoto.toString(), canPost);
+                                        Users user = new Users(personName, personPhoto.toString(), canPost,userDesc);
                                         userData.setValue(user);
                                     }
 
@@ -421,9 +421,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                             if (!pref.contains(HEARTFUL_USER)) {
                                 Log.v("chal","google");
                                 boolean canPost = false;
+                                String userDesc ="Yesterday is history, tomorrow's a mystery, today is a gift, that's why we call it 'present'";
                                 String personName = firebaseUser.getDisplayName();
                                 Uri personPhoto = firebaseUser.getPhotoUrl();
-                                Users user = new Users(personName, personPhoto.toString(), canPost);
+                                Users user = new Users(personName, personPhoto.toString(), canPost,userDesc);
                                 userData.setValue(user);
                                 pref.edit().putBoolean(HEARTFUL_USER, true).commit();
                             }
@@ -436,9 +437,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
                                     else{
 
                                 boolean canPost = false;
-                                String personName = firebaseUser.getDisplayName();
+                                        String userDesc ="Yesterday is history, tomorrow's a mystery, today is a gift, that's why we call it 'present'";
+                                        String personName = firebaseUser.getDisplayName();
                                 Uri personPhoto = firebaseUser.getPhotoUrl();
-                                Users user = new Users(personName, personPhoto.toString(), canPost);
+                                Users user = new Users(personName, personPhoto.toString(), canPost,userDesc);
                                 userData.setValue(user);
                                     }
 
@@ -498,6 +500,8 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
     @Override
     public void onResume() {
         super.onResume();
+        // register connection status listener
+        ForCache.getInstance().setConnectivityListener(this);
         // Check should we need to refresh the fragment
         Log.v("reload ing through", "onresume");
         Log.v(String.valueOf(shouldRefreshOnResume), "onresume");
@@ -509,4 +513,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener{
         }
     }
 
+    @Override
+    public void onNetworkConnectionChanged(boolean isConnected) {
+        Log.v("Network","change occur");
+        this. isConnected = isConnected ;
+
+    }
 }

@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AlphaAnimation;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
@@ -38,12 +39,11 @@ import java.util.List;
 public  class FragmentOne extends Fragment implements AdapterView.OnItemSelectedListener {
     public FragmentOne() {}
     private DatabaseReference mDatabase;
-//    private ArrayList<OrgInfo>orgInfoArrayList;
-//    private OrgInfoAdapter adapter;
     private SearchView searchview;
     private RecyclerView recyclerView;
     private ImageView searchimagebutton;
     int check = 0;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -74,6 +74,8 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                 mDatabase
 
         ) {
+            public static final long FADE_DURATION = 1000;
+
             @Override
             protected void populateViewHolder(OrgInfoViewHolder viewHolder, OrgInfo model, int position) {
                 final String post_key=getRef(position).getKey();
@@ -81,6 +83,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                 viewHolder.setmOrgname(model.getmOrgname());
                 viewHolder.setmCategory(model.getmCategory());
                 viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
+                setFadeAnimation(viewHolder.itemView);
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v1) {
@@ -98,6 +101,12 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                             startActivity(intent);
                     }
                 });
+            }
+
+            private void setFadeAnimation(View itemView) {
+                AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
+                anim.setDuration(FADE_DURATION);
+                itemView.startAnimation(anim);
             }
 
         };

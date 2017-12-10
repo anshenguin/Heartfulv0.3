@@ -1,16 +1,21 @@
 package com.example.hp.heartful;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,11 +42,16 @@ public class orgInsideActivity extends AppCompatActivity{
     private  DatabaseReference data;
     private DatabaseReference databaseReference;
     private String loadImage;
+    boolean canPost;
+    private DatabaseReference forUsers;
     private FirebaseAuth mAuth;
     private boolean doesFollowing;
     String post_title;
     String post_image;
+    private TextView mission,vision;
     String NGOId;
+    private FirebaseAuth.AuthStateListener mAuthStateListener;
+    String m_Text;
     private FloatingActionButton following;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,11 +61,12 @@ public class orgInsideActivity extends AppCompatActivity{
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         mAuth=FirebaseAuth.getInstance();
+        mission=(TextView)findViewById(R.id.mission_text);
+        vision=(TextView)findViewById(R.id.vision_text);
         post_key=getIntent().getExtras().getString("news_id");
         following=(FloatingActionButton)findViewById(R.id.following);
         mNgoLogo=(ImageView)findViewById(R.id.backdrop);
         mNgoInfo=(TextView)findViewById(R.id.orgInfo);
-
         mNgoName=(TextView)findViewById(R.id.orgName);
 //        initCollapsingToolbar();
         Log.v("follow", String.valueOf(doesFollowing));
@@ -70,12 +81,17 @@ public class orgInsideActivity extends AppCompatActivity{
                 String contact=(String)dataSnapshot.child("mContact").getValue();
                 String donate=(String)dataSnapshot.child("mDonate").getValue();
                 String volunteer=(String)dataSnapshot.child("mVolunteer").getValue();
+                String mission_text=(String )dataSnapshot.child("mMission").getValue();
+                String vision_text=(String)dataSnapshot.child("mVision").getValue();
                 mContact=contact;
                 mDonate=donate;
                 mVolunteer=volunteer;
                 loadImage=post_image;
                 mNgoName.setText(post_title);
                 mNgoInfo.setText(post_desc);
+                mission.setText(mission_text);
+                vision.setText(vision_text);
+
                 Glide
                         .with(orgInsideActivity.this)
                         .load(post_image)
@@ -97,7 +113,28 @@ public class orgInsideActivity extends AppCompatActivity{
 
             }
         });
+        mAuthStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                if(firebaseAuth.getCurrentUser()!=null) {
+                    forUsers= FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("userInfo");
+                    forUsers.addListenerForSingleValueEvent(new ValueEventListener() {
 
+                        @Override
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            Users user = dataSnapshot.getValue(Users.class);
+                            canPost = user.isCanPost();
+                            Log.v("can u post", String.valueOf(canPost));
+                        }
+
+                        @Override
+                        public void onCancelled(DatabaseError databaseError) {
+
+                        }
+                    });
+                }
+            }
+        };
         if(mAuth.getCurrentUser()!= null) {
 //            final DatabaseReference forNum = data.child(mAuth.getCurrentUser().getUid()).child("RecentActivities");
 
@@ -241,11 +278,12 @@ public class orgInsideActivity extends AppCompatActivity{
                     }
                 }
                 else {
-                    Toast.makeText(orgInsideActivity.this, "Please SignIn to follow", Toast.LENGTH_SHORT).show();
-                    doesFollowing = true;
+                        Toast.makeText(orgInsideActivity.this, "Please SignIn to follow", Toast.LENGTH_SHORT).show();
+                        doesFollowing = true;
+                    }
                 }
 
-                }
+
         });
 //        if (!doesFollowing)
 //            following.setBackgroundTintList(ColorStateList.valueOf(getResources().getColor(R.color.following)));
@@ -295,6 +333,16 @@ public class orgInsideActivity extends AppCompatActivity{
 //                startActivity(new Intent(orgInsideActivity.this,WebViewContents.class));
             }
         });
+        findViewById(R.id.vision).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(canPost)
+                forInputs();
+                else
+                    Toast.makeText(orgInsideActivity.this,"You haven't permission to change", Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
    private void openWebView(String url) {
@@ -314,6 +362,36 @@ public class orgInsideActivity extends AppCompatActivity{
                 return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+    public void forInputs(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
+        // I'm using fragment here so I'm using getView() to provide ViewGroup
+        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
+        View viewInflated = LayoutInflater.from(orgInsideActivity.this).inflate(R.layout.ngo_inputs, null);
+        // Set up the input
+        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        builder.setView(viewInflated);
+
+        // Set up the buttons
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                m_Text = input.getText().toString();
+                Log.v("text",m_Text);
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
+
     }
 }
 

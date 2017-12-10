@@ -5,17 +5,22 @@ package com.example.hp.heartful;
  */
 
 public class Users {
+
+    public String userDesc;
     public String userName;
     public String profilePicLink;
     public boolean canPost;
     public Users() {
     }
 
-    public Users(String name, String link,boolean post) {
+    public Users(String name, String link,boolean post,String desc) {
         this.userName = name;
         this.profilePicLink = link;
         this.canPost=post;
+        this.userDesc=desc;
     }
+    public String getUserDesc() {
+        return userDesc;}
 
     public String getUserName() {
         return userName;

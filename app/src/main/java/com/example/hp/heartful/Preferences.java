@@ -2,17 +2,23 @@ package com.example.hp.heartful;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
 import android.view.ViewTreeObserver;
 import android.view.animation.AccelerateInterpolator;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -47,6 +53,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
     private LinearLayout logout,changeName,changePic,changeDes;
     private final static int GALLERY_REQUEST=1;
     private Uri imageUri=null;
+    String m_Text;
     private ProgressDialog progress;
     private StorageReference mstorage;
     private FirebaseUser firebaseUser;
@@ -123,7 +130,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
             selectImage();
         }
         if(v== changeDes){
-        Toast.makeText(Preferences.this,"Why are u changing such a good desc.",Toast.LENGTH_SHORT).show();
+            forInputs();
         }
     }
     private void selectImage() {
@@ -224,5 +231,42 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
 
             circularReveal.start();
         }
+    }
+    public void forInputs(){
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Title");
+        // I'm using fragment here so I'm using getView() to provide ViewGroup
+        // but you can provide here any other instance of ViewGroup from your Fragment / Activity
+        View viewInflated = LayoutInflater.from(Preferences.this).inflate(R.layout.ngo_inputs, null);
+        // Set up the input
+        final EditText input = (EditText) viewInflated.findViewById(R.id.input);
+        // Specify the type of input expected; this, for example, sets the input as a password, and will mask the text
+        builder.setView(viewInflated);
+
+        // Set up the buttons
+        builder.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                m_Text = input.getText().toString();
+                Log.v("text",m_Text);
+                if(TextUtils.isEmpty(m_Text)){
+                    // email is empty
+                    Toast.makeText(Preferences.this,"please Write Something",Toast.LENGTH_SHORT).show();
+                    return;// to stop the function from executation.
+                }else {
+                    final DatabaseReference desc = forUsers.child(firebaseUser.getUid()).child("userInfo");
+                    desc.child("userDesc").setValue(m_Text);
+                }
+            }
+        });
+        builder.setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+
+        builder.show();
     }
 }

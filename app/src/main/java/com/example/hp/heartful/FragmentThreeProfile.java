@@ -62,10 +62,12 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;
     private TextView userName;
+    private TextView desc;
     private String profileName;
     private DatabaseReference forUsers;
     private String profilePicLink;
     private ImageView edit;
+    private String userDes;
     private DatabaseReference mDatabase;
     private RecyclerView recyclerView;
 
@@ -75,6 +77,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         view_pro = inflater.inflate(R.layout.profile_layout,container, false);
         profilePic=(CircleImageView) view_pro.findViewById(R.id.profile_pic);
         userName=(TextView)view_pro.findViewById(R.id.user_name);
+        desc=(TextView)view_pro.findViewById(R.id.textView);
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
         edit=(ImageView)view_pro.findViewById(R.id.edit);
         mAuth= FirebaseAuth.getInstance();
@@ -102,6 +105,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                     Users user = dataSnapshot.getValue(Users.class);
                     profilePicLink = user.getProfilePicLink();
                     profileName = user.getUserName();
+                    userDes=user.getUserDesc();
                     Glide
                             .with(getApplicationContext())
                             .load(profilePicLink)
@@ -109,6 +113,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
                             .diskCacheStrategy(DiskCacheStrategy.ALL)
                             .into(profilePic);
                     userName.setText(profileName);
+                    desc.setText(userDes);
 
                 }
 
