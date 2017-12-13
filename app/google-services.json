@@ -49,6 +49,50 @@
           "status": 2
         }
       }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1029282124604:android:54731439c6d19862",
+        "android_client_info": {
+          "package_name": "com.kinitoapps.ngolink"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1029282124604-apfrmfd4uln1pd7rre6fednu5e7nbuiv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kinitoapps.ngolink",
+            "certificate_hash": "7daf1035228a38e0be6139d16460df331ac6e609"
+          }
+        },
+        {
+          "client_id": "1029282124604-ttlp475o31ei2umr56ip96kabbau7663.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJNQRwOA3ndOdi9paH1hhq20yj1kDFgeY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1029282124604-ttlp475o31ei2umr56ip96kabbau7663.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
     }
   ],
   "configuration_version": "1"

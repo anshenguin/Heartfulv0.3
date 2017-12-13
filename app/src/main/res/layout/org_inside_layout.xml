@@ -60,7 +60,7 @@
             android:transitionName="orgimg"
             android:layout_width="100dp"
             android:layout_margin="16dp"
-            android:src="@drawable/heart"
+            android:src="@drawable/home_list"
             android:scaleType="fitStart"
             android:layout_height="100dp"
             />

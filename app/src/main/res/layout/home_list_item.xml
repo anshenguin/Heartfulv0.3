@@ -33,7 +33,7 @@
             android:layout_width="100dp"
             android:layout_gravity="center_vertical"
             android:layout_height="100dp"
-            android:src="@drawable/heart"/>
+            android:src="@drawable/home_list"/>
 
         <LinearLayout
             android:id="@+id/text_container"

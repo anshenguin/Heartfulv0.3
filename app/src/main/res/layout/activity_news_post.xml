@@ -31,7 +31,7 @@ android:fillViewport="true">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        tools:context="com.example.hp.heartful.NewsPost">
+        tools:context="com.kinitoapps.ngolink.NewsPost">
         <ImageView
             android:layout_width="match_parent"
             android:id="@+id/user_image"
