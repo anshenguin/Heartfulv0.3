@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:isScrollContainer="true"
     android:layout_height="match_parent"
-    tools:context="com.example.hp.heartful.UpdateName">
+    tools:context="com.kinitoapps.ngolink.UpdateName">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

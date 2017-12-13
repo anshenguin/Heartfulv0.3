@@ -9,7 +9,7 @@
 
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context="com.example.hp.heartful.SingleNewsDetail"
+    tools:context="com.kinitoapps.ngolink.SingleNewsDetail"
     android:fitsSystemWindows="true">
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar"
