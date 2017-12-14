@@ -38,6 +38,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("Login to your Account");
         progressDialog=new ProgressDialog(this);
+        firebaseAuth= FirebaseAuth.getInstance();
         email_Id=(EditText)findViewById(com.kinitoapps.ngolink.R.id.email_id);
         password=(EditText)findViewById(com.kinitoapps.ngolink.R.id.password);
         sign_In=(Button)findViewById(com.kinitoapps.ngolink.R.id.sign_In);
@@ -76,7 +77,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
                             startActivity(intent);
                         }
                         else {
-                            Toast.makeText(loginActivity.this,"could not register, pls try again Error is"+ task.getException(),Toast.LENGTH_SHORT).show();
+                            Toast.makeText(loginActivity.this," "+ task.getException(),Toast.LENGTH_SHORT).show();
                             progressDialog.dismiss();
                         }
                     }

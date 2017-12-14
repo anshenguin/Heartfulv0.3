@@ -379,7 +379,6 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
 
                             Log.v(TAG, "signInWithCredential:success");
                             justRefreshed = false;
-//                            reLoad();
                             Intent intent = new Intent(getActivity(), Home.class);
                             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                             fbProgress.dismiss();
