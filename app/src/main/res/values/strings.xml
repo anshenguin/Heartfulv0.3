@@ -1,13 +1,13 @@
 <resources>
     <string name="app_name">NGO Link</string>
-    <string name="facebook_app_id">127567627787131</string>
+    <string name="facebook_app_id">2030875177198255</string>
     <string name="tab_one">Home</string>
     <string name="tab_two">News</string>
     <string name="tab_three">Profile</string>
     <string name="com_facebook_loginview_log_in_button">" "</string>
     <string name="error">Error finding image</string>
     <string name="saved_message">Image Saved at %1$s</string>
-    <string name="fb_login_protocol_scheme">fb127567627787131</string>
+    <string name="fb_login_protocol_scheme">fb2030875177198255</string>
     <string name="spinner_title">All </string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
