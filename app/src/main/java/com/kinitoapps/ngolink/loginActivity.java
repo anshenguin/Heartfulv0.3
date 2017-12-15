@@ -49,6 +49,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
     }
 
     private void user_Login(){
+        firebaseAuth= FirebaseAuth.getInstance();
         String email=email_Id.getText().toString().trim();
         String pass_word=password.getText().toString().trim();
         if(TextUtils.isEmpty(email)){
