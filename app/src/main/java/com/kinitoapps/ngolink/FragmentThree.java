@@ -198,7 +198,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
         mAuth.addAuthStateListener(mAuthStateListener);
     }
 
-
+//TODO sign in here
     private void signIn() {
         Auth.GoogleSignInApi.signOut(mGoogleApiClient);
         Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
@@ -217,9 +217,12 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
                 //progress.dismiss();
+            } else {
+                progress.dismiss();
             }
 
         }
+
 
     }
 
