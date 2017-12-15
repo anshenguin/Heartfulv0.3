@@ -1,8 +1,10 @@
 package com.kinitoapps.ngolink;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
@@ -85,19 +87,20 @@ public class orgInsideActivity extends AppCompatActivity{
                 mNgoInfo.setText(post_desc);
                 mission.setText(mission_text);
                 vision.setText(vision_text);
+                if(!isActivityDestroyed(orgInsideActivity.this)) {
+                    Glide
+                            .with(orgInsideActivity.this)
+                            .load(post_image)
+                            .override(450, 450)
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(mNgoLogo);
 
-                Glide
-                        .with(orgInsideActivity.this)
-                        .load(post_image)
-                        .override(450,450)
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mNgoLogo);
-
-                Glide.with(getApplicationContext()).load(loadImage)
-                        .thumbnail(0.5f)
-                        .crossFade()
-                        .diskCacheStrategy(DiskCacheStrategy.ALL)
-                        .into(mNgoLogo);
+                    Glide.with(getApplicationContext()).load(loadImage)
+                            .thumbnail(0.5f)
+                            .crossFade()
+                            .diskCacheStrategy(DiskCacheStrategy.ALL)
+                            .into(mNgoLogo);
+                }
 
             }
 
@@ -308,5 +311,12 @@ public class orgInsideActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    private static boolean isActivityDestroyed(Activity activity) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1
+                && activity != null && activity.isDestroyed()) {
+            return true;
+        }
+        return false;
+    }
 }
 
