@@ -370,7 +370,7 @@ public class FragmentTwo extends Fragment {
                     .load(image)
                     .override(1000,1000)
                     .dontAnimate()
-                    .placeholder(com.kinitoapps.ngolink.R.drawable.placeholder)
+                    .placeholder(R.drawable.for_single)
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(post_image);
 

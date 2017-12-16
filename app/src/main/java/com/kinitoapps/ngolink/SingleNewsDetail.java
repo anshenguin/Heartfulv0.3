@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
     private EditText commentedText;
     private String commentTaken;
     private String loadImage;
+     int noOfComments;
     private RecyclerView recyclerView;
     DatabaseReference mDatabase;
     @Override
@@ -56,6 +57,7 @@ import com.google.firebase.database.ValueEventListener;
         post_key=getIntent().getExtras().getString("news_id");
         FragmentThreeProfile.CustomGridLayoutManager linearLayoutManager = new FragmentThreeProfile.CustomGridLayoutManager(this);
         recyclerView.setItemViewCacheSize(20);
+        final TextView numberOfCmts = (TextView)findViewById( com.kinitoapps.ngolink.R.id.number_of_comments);
         recyclerView.setDrawingCacheEnabled(true);
         recyclerView.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_AUTO);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -164,7 +166,19 @@ import com.google.firebase.database.ValueEventListener;
 
             }
         });
+  mDatabase.child(post_key).child("comments").addValueEventListener(new ValueEventListener() {
+      @Override
+      public void onDataChange(DataSnapshot dataSnapshot) {
+          noOfComments= (int) dataSnapshot.getChildrenCount();
+          Log.v("numberOfComments", String.valueOf(noOfComments));
+          numberOfCmts.setText(String.valueOf(noOfComments));
+      }
 
+      @Override
+      public void onCancelled(DatabaseError databaseError) {
+
+      }
+  });
         FirebaseRecyclerAdapter<postComments,postCommentsViewHolder> firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<postComments, postCommentsViewHolder>
                 (postComments.class,
                 com.kinitoapps.ngolink.R.layout.comment_layout,
