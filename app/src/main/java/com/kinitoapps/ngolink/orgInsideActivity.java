@@ -297,10 +297,18 @@ public class orgInsideActivity extends AppCompatActivity{
     }
 
    private void openWebView(String url) {
-       Intent i = new Intent(Intent.ACTION_VIEW);
-       i.setData(Uri.parse(url));
-       startActivity(i);
-    }
+       if(!url.startsWith("http://")&& !url.startsWith("https://")){
+           url = "http://"+url;
+       }
+       Uri webpage = Uri.parse(url);
+       Intent i = new Intent(Intent.ACTION_VIEW,webpage);
+       if (i.resolveActivity(getPackageManager()) != null) {
+           startActivity(i);
+       }
+       else
+           Toast.makeText(orgInsideActivity.this,"Test",Toast.LENGTH_SHORT).show();
+
+   }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {

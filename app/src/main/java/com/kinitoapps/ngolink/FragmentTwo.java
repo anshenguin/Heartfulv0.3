@@ -44,9 +44,7 @@ public class FragmentTwo extends Fragment {
   android.support.design.widget.FloatingActionButton button;
     ImageView imageView;
     boolean canPost;
-    private String NGOId;
     View view;
-    private boolean shouldPopulate = false;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private DatabaseReference forUsers;
     private RecyclerView mNewsLists;
@@ -57,7 +55,7 @@ public class FragmentTwo extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
+//        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
         view =inflater.inflate(com.kinitoapps.ngolink.R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
         imageView = (ImageView) view.findViewById(com.kinitoapps.ngolink.R.id.news_images);
@@ -314,7 +312,7 @@ public class FragmentTwo extends Fragment {
                         }
                     }
 
-                    NGOIdClassAdapter firebaseRecyclerAdapter = new NGOIdClassAdapter(getActivity().getApplicationContext(),arrayEntries);
+                    NGOIdClassAdapter firebaseRecyclerAdapter = new NGOIdClassAdapter(getActivity(),arrayEntries);
                     mNewsLists.setAdapter(firebaseRecyclerAdapter);
 
                 }
