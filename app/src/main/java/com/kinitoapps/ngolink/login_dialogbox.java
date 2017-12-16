@@ -1,5 +1,9 @@
 package com.kinitoapps.ngolink;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.Context;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,22 +15,22 @@ import android.widget.ImageButton;
  */
 
 public class login_dialogbox extends android.support.v4.app.DialogFragment {
+    @Override
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        LayoutInflater inflater = (LayoutInflater)getContext().getSystemService (Context.LAYOUT_INFLATER_SERVICE);
+        View v = inflater.inflate(R.layout.fragment_login_popup, null);
 
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-            View rootView = inflater.inflate(com.kinitoapps.ngolink.R.layout.fragment_login_popup, container, false);
-            ImageButton dismiss = (ImageButton) rootView.findViewById(com.kinitoapps.ngolink.R.id.cross);
-            dismiss.setOnClickListener(new View.OnClickListener() {
+        // Use the Builder class for convenient dialog construction
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        builder.setView(v)
+                .setNegativeButton("CANCEL", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // User cancelled the dialog
+                    }
+                });
 
-                @Override
-                public void onClick(View v) {
-                    dismiss();
-                }
-            });
-
-            getDialog().setTitle("Simple Dialog");
-            return rootView;
-
+        // Create the AlertDialog object and return it
+        return builder.create();
     }
 
 
