@@ -147,6 +147,7 @@
                 android:layout_width="match_parent"
                 android:id="@+id/google_login"
                 android:layout_height="48dp"
+                android:text="@string/common_signin_button_text_long"
                 android:layout_gravity="center_horizontal"
                 android:layout_margin="16dp">
             </com.google.android.gms.common.SignInButton>

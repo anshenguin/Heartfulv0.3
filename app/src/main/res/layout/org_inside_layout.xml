@@ -36,6 +36,7 @@
 
     <ScrollView
         android:layout_width="match_parent"
+        android:background="@android:color/white"
         android:layout_height="match_parent"
         android:scrollbars="none"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
@@ -43,7 +44,7 @@
     <LinearLayout
         android:id="@+id/main_content"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:background="@android:color/white"
         android:fitsSystemWindows="true"
@@ -106,13 +107,13 @@
                         android:layout_gravity="center_horizontal"
                         android:layout_marginBottom="16dp"
                         android:gravity="center_horizontal"
-                        android:text="This is a test NGO. The name is being extended for testing purposes. This sentence will make the words equal 24 somehow a a a." />
-
+                        android:maxLines="4"/>
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="READ MORE"
+                        android:text="VIEW MORE"
+                        android:id="@+id/read_more"
                         android:textStyle="bold" />
                 </LinearLayout>
 
