@@ -1,5 +1,6 @@
 package com.kinitoapps.ngolink;
 
+import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.ColorStateList;
@@ -40,6 +41,7 @@ public class orgInsideActivity extends AppCompatActivity{
     private  DatabaseReference data;
     private DatabaseReference databaseReference;
     private String loadImage;
+    private TextView read_more;
     boolean canPost;
     private DatabaseReference forUsers;
     private FirebaseAuth mAuth;
@@ -61,6 +63,7 @@ public class orgInsideActivity extends AppCompatActivity{
         mAuth=FirebaseAuth.getInstance();
         mission=(TextView)findViewById(com.kinitoapps.ngolink.R.id.mission_text);
         vision=(TextView)findViewById(com.kinitoapps.ngolink.R.id.vision_text);
+        read_more = (TextView) findViewById(R.id.read_more);
         post_key=getIntent().getExtras().getString("news_id");
         following=(FloatingActionButton)findViewById(com.kinitoapps.ngolink.R.id.following);
         mNgoLogo=(ImageView)findViewById(com.kinitoapps.ngolink.R.id.backdrop);
@@ -166,6 +169,12 @@ public class orgInsideActivity extends AppCompatActivity{
             });
         }
 
+        read_more.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                cycleTextViewExpansion(mNgoInfo);
+            }
+        });
         following.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -326,5 +335,19 @@ public class orgInsideActivity extends AppCompatActivity{
         }
         return false;
     }
+
+    private void cycleTextViewExpansion(TextView tv){
+        int collapsedMaxLines = 4;
+        ObjectAnimator animation = ObjectAnimator.ofInt(tv, "maxLines",
+                tv.getMaxLines() == collapsedMaxLines? tv.getLineCount() : collapsedMaxLines);
+        if(tv.getMaxLines() == collapsedMaxLines)
+            read_more.setText("VIEW LESS");
+        else
+            read_more.setText("VIEW MORE");
+
+        animation.setDuration(200).start();
+    }
+
+
 }
 

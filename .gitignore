@@ -50,4 +50,11 @@ build/generated/mockable-android-25.jar
 .gradle/
 build/android-profile
 .idea/
+.idea/libraries/
+.gitignore
 *.bin
+*.bin
+.gradle/3.3/taskArtifacts/fileHashes.bin
+.gradle/3.3/taskArtifacts/fileHashes.bin
+app/app.iml
+.idea/misc.xml
