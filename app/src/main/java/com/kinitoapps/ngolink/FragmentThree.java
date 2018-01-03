@@ -61,7 +61,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
     private boolean usingSignIn = false;
     private EditText email_Id;
     private EditText password;
-    private SignInButton mgoogleSign;
+    private Button mgoogleSign;
     private FirebaseAuth mAuth;
     private static final int RC_SIGN_IN=1;
     private GoogleApiClient mGoogleApiClient;
@@ -73,6 +73,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
     private FirebaseAuth.AuthStateListener mAuthStateListener;
     private ProgressDialog progress;
     private ProgressDialog fbProgress;
+    private Button fb;
     private static String TAG="FragmentThree";
     private LoginButton mFbLogin;
     private CallbackManager callbackManager;
@@ -91,6 +92,7 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
         FacebookSdk.sdkInitialize(getApplicationContext());
         AppEventsLogger.activateApp(getActivity());
+        fb = (Button) view.findViewById(R.id.fb);
         callbackManager= CallbackManager.Factory.create();
         progressDialog=new ProgressDialog(getActivity());
         progress=new ProgressDialog(getActivity());
@@ -101,8 +103,9 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
         Sign_Up=(Button)view.findViewById(com.kinitoapps.ngolink.R.id.sign_up);
         login_Text=(TextView)view.findViewById(com.kinitoapps.ngolink.R.id.login_text);
         Sign_Up.setOnClickListener(this);
+        fb.setOnClickListener(this);
 //        edit.setOnClickListener(this);
-        mgoogleSign=(SignInButton)view.findViewById(com.kinitoapps.ngolink.R.id.google_login);
+        mgoogleSign=(Button)view.findViewById(com.kinitoapps.ngolink.R.id.google_login);
         login_Text.setOnClickListener(this);
         mFbLogin=(LoginButton)view.findViewById(com.kinitoapps.ngolink.R.id.fb_login);
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
@@ -250,6 +253,10 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
    if (isConnected)
             registerUser();
             else   Toast.makeText(getActivity(),"No Internet Connection, Please Connect to network first", Toast.LENGTH_LONG).show();
+        }
+
+        if (view == fb) {
+            mFbLogin.performClick();
         }
         if(view==login_Text) {
             //    login user
@@ -509,4 +516,5 @@ public class FragmentThree extends Fragment implements View.OnClickListener ,Con
         this. isConnected = isConnected ;
 
     }
+
 }

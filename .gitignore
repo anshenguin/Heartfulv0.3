@@ -56,3 +56,5 @@ build/android-profile
 *.bin
 .gradle/3.3/taskArtifacts/fileHashes.bin
 .gradle/3.3/taskArtifacts/fileHashes.bin
+app/app.iml
+.idea/misc.xml

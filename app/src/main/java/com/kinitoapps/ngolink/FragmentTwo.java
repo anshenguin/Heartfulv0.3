@@ -130,7 +130,6 @@ public class FragmentTwo extends Fragment {
                         viewHolder.setDateAndTime(model.getDateAndTime());
 
                         viewHolder.setTitle(model.getTitle());
-                        viewHolder.setDesc(model.getDescription());
                         viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
 
 
@@ -163,11 +162,10 @@ public class FragmentTwo extends Fragment {
         else{
             class NGOIdClass{
 
-                private String Title,Description,Image,DateAndTime,post_key;
+                private String Title,Image,DateAndTime,post_key;
 
-                public NGOIdClass(String title, String desc, String image, String dateandtime,String postkey){
+                public NGOIdClass(String title,String image, String dateandtime,String postkey){
                     Title = title;
-                    Description = desc;
                     Image = image;
                     DateAndTime = dateandtime;
                     post_key = postkey;
@@ -179,9 +177,6 @@ public class FragmentTwo extends Fragment {
 
                 public String getTitle() {
                     return Title;
-                }
-                public String getDescription() {
-                    return Description;
                 }
                 public String getImage() {
                     return Image;
@@ -195,7 +190,6 @@ public class FragmentTwo extends Fragment {
 
                 class ViewHolder extends RecyclerView.ViewHolder{
                     TextView Title;
-                    TextView Desc;
                     String post_key;
                     TextView DateAndTime;
                     View mView;
@@ -205,7 +199,6 @@ public class FragmentTwo extends Fragment {
                         super(itemView);
                         mView = itemView;
                         Title = (TextView)itemView.findViewById(com.kinitoapps.ngolink.R.id.news_title);
-                        Desc = (TextView)itemView.findViewById(com.kinitoapps.ngolink.R.id.news_description);
                         DateAndTime = (TextView)itemView.findViewById(com.kinitoapps.ngolink.R.id.date_time);
                         Image = (ImageView)itemView.findViewById(com.kinitoapps.ngolink.R.id.news_images);
                     }
@@ -233,8 +226,6 @@ public class FragmentTwo extends Fragment {
                     NGOIdClass singleNewsItem = mNGOIDs.get(position);
                     TextView title = holder.Title;
                     title.setText(singleNewsItem.getTitle());
-                    TextView desc = holder.Desc;
-                    desc.setText(singleNewsItem.getDescription());
                     TextView datentime = holder.DateAndTime;
                     datentime.setText(singleNewsItem.getDateAndTime());
                     ImageView img = holder.Image;
@@ -306,7 +297,7 @@ public class FragmentTwo extends Fragment {
                             for(String NGOIdInFollowing:NGOIdsInFollowing){
                                 if(p.child("NGOId").getValue().toString().equals(NGOIdInFollowing))
                                 {
-                                    arrayEntries.add(new NGOIdClass(p.child("Title").getValue().toString(),p.child("Description").getValue().toString(),p.child("Image").getValue().toString(),p.child("DateAndTime").getValue().toString(),p.getKey()));
+                                    arrayEntries.add(new NGOIdClass(p.child("Title").getValue().toString(),p.child("Image").getValue().toString(),p.child("DateAndTime").getValue().toString(),p.getKey()));
                                 }
                             }
                         }
@@ -353,10 +344,7 @@ public class FragmentTwo extends Fragment {
             post_title.setText(title);
         }
 
-        public void setDesc(String desc) {
-            TextView post_title=(TextView)mView.findViewById(com.kinitoapps.ngolink.R.id.news_description);
-            post_title.setText(desc);
-        }
+
         public void setDateAndTime(String desc) {
             TextView post_time=(TextView)mView.findViewById(com.kinitoapps.ngolink.R.id.date_time);
             post_time.setText(desc);
