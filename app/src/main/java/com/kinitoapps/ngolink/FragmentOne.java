@@ -128,7 +128,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                 Log.v("pehle thoda", "chal");
                 String latlng = dataSnapshot.child("2").getValue(String.class);
                 Log.v("Kuch", String.valueOf(dataSnapshot.getChildrenCount()));
-                for (int i=0;i<dataSnapshot.getChildrenCount();i++){
+                for (int i=0;i<dataSnapshot.getChildrenCount()-1;i++){
                     categories.add(dataSnapshot.child(""+i).getValue(String.class));
                     Log.v("category", String.valueOf(categories));
                 }
