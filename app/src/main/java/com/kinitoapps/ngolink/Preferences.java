@@ -128,7 +128,7 @@ public class Preferences extends AppCompatActivity implements View.OnClickListen
             selectImage();
         }
         if(v== changeDes){
-            forInputs();
+            startActivity(new Intent(Preferences.this, UpdateDesc.class));
         }
     }
     private void selectImage() {

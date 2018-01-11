@@ -9,6 +9,7 @@ public class Users {
     public String userDesc;
     public String userName;
     public String profilePicLink;
+    public String desc;
     public boolean canPost;
     public Users() {
     }
@@ -25,6 +26,7 @@ public class Users {
     public String getUserName() {
         return userName;
     }
+
 
     public String getProfilePicLink() {
         return profilePicLink;
