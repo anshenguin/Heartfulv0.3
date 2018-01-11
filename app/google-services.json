@@ -15,16 +15,16 @@
       },
       "oauth_client": [
         {
-          "client_id": "1029282124604-ttlp475o31ei2umr56ip96kabbau7663.apps.googleusercontent.com",
-          "client_type": 3
-        },
-        {
-          "client_id": "1029282124604-7st4cpfci0oglbm7v265rd4kkhfs37j6.apps.googleusercontent.com",
+          "client_id": "1029282124604-i6apfrb4jbpo3ks4nn9hkv2c1g2gt30l.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
             "package_name": "com.example.hp.heartful",
-            "certificate_hash": "7daf1035228a38e0be6139d16460df331ac6e609"
+            "certificate_hash": "34a1cf3b7f1309c674f35b88175e57542d97af48"
           }
+        },
+        {
+          "client_id": "1029282124604-ttlp475o31ei2umr56ip96kabbau7663.apps.googleusercontent.com",
+          "client_type": 3
         }
       ],
       "api_key": [
@@ -58,6 +58,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1029282124604-3u0ccbp74g959jcaib6qc9fsg3dqgq3d.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.kinitoapps.ngolink",
+            "certificate_hash": "34a1cf3b7f1309c674f35b88175e57542d97af48"
+          }
+        },
         {
           "client_id": "1029282124604-apfrmfd4uln1pd7rre6fednu5e7nbuiv.apps.googleusercontent.com",
           "client_type": 1,
