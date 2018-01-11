@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
@@ -66,7 +67,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
     private String profileName;
     private DatabaseReference forUsers;
     private String profilePicLink;
-    private ImageView edit;
+    private FloatingActionButton edit;
     private String userDes;
     private DatabaseReference mDatabase;
     private RecyclerView recyclerView;
@@ -79,7 +80,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         userName=(TextView)view_pro.findViewById(com.kinitoapps.ngolink.R.id.user_name);
         desc=(TextView)view_pro.findViewById(com.kinitoapps.ngolink.R.id.textView);
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");
-        edit=(ImageView)view_pro.findViewById(com.kinitoapps.ngolink.R.id.edit);
+        edit=(FloatingActionButton) view_pro.findViewById(com.kinitoapps.ngolink.R.id.edit);
         mAuth= FirebaseAuth.getInstance();
         edit.setOnClickListener(this);
         firebaseUser=mAuth.getCurrentUser();

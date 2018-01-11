@@ -106,6 +106,8 @@
         <!--android:theme="@style/Theme.AppCompat.Transparent"/>-->
 
         <activity android:name=".UpdateName"/>
+        <activity android:name=".UpdateDesc"/>
+
         <receiver
             android:name=".ConnectivityReceiver"
             android:enabled="true">
