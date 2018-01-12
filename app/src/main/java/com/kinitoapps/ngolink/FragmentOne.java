@@ -25,9 +25,12 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,6 +43,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
     public FragmentOne() {}
     private DatabaseReference mDatabase;
     private SearchView searchview;
+    private DatabaseReference mCategory;
     private RecyclerView recyclerView;
     private ImageView searchimagebutton;
     int check = 0;
@@ -49,6 +53,8 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final View rootView = inflater.inflate(com.kinitoapps.ngolink.R.layout.tab_one, container, false);
         super.onCreate(savedInstanceState);
+        mCategory=FirebaseDatabase.getInstance().getReference().child("CategoryList");
+        mCategory.keepSynced(true);
         mDatabase= FirebaseDatabase.getInstance().getReference().child("NgoList");
             mDatabase.keepSynced(true);
         searchimagebutton = (ImageView) rootView.findViewById(com.kinitoapps.ngolink.R.id.searchimagebutton);
@@ -112,16 +118,41 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
         };
         Spinner spinner = (Spinner) rootView.findViewById(com.kinitoapps.ngolink.R.id.category_spinner);
         // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
+        final List<String> categories = new ArrayList<String>();
         categories.add("All");
-        categories.add("Education");
-        categories.add("Physical Health");
-        categories.add("Mental Health");
-        categories.add("Poverty");
-        categories.add("Children");
-        categories.add("Women");
-        categories.add("Clothes");
-        categories.add("Shelter");
+        Log.v("pehle", "chal");
+        mCategory.addListenerForSingleValueEvent(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.v("pehle thoda", "chal");
+                String latlng = dataSnapshot.child("2").getValue(String.class);
+                Log.v("Kuch", String.valueOf(dataSnapshot.getChildrenCount()));
+                for (int i=0;i<dataSnapshot.getChildrenCount()-1;i++){
+                    categories.add(dataSnapshot.child(""+i).getValue(String.class));
+                    Log.v("category", String.valueOf(categories));
+                }
+//                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+//                    String latlng = ds.child("2").getValue(String.class);
+//                    Log.d("Kuch", latlng);
+//                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+        Log.v("pehle2", "chal");
+
+//        categories.add("Education");
+//        categories.add("Physical Health");
+//        categories.add("Mental Health");
+//        categories.add("Poverty");
+//        categories.add("Children");
+//        categories.add("Women");
+//        categories.add("Clothes");
+//        categories.add("Shelter");
 //// Create an ArrayAdapter using the string array and a default spinner layout
 // Specify the layout to use when the list of choices appears
         ArrayAdapter<String> spinadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
