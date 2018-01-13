@@ -79,7 +79,7 @@
             android:id="@+id/category"
             android:padding="8dp"
             android:textColor="#fff"
-            android:text="Woman Empowerment"/>
+            android:text=" "/>
     </LinearLayout>
 </LinearLayout>
 </android.support.v7.widget.CardView>

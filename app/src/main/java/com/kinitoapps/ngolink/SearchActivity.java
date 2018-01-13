@@ -92,7 +92,8 @@ public class SearchActivity extends AppCompatActivity {
                         final String post_key=getRef(position).getKey();
                         viewHolder.setmOrginfo(model.getmOrginfo());
                         viewHolder.setmOrgname(model.getmOrgname());
-                        viewHolder.setmCategory(model.getmCategory());
+                        viewHolder.setmCategory(model.getCategories().get(0));
+                        viewHolder.setmCategory(model.getCategories().get(1));
                         viewHolder.setmImage(SearchActivity.this.getApplicationContext(),model.getmImage());
                         viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                             @Override
