@@ -87,7 +87,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                 final String post_key=getRef(position).getKey();
                 viewHolder.setmOrginfo(model.getmOrginfo());
                 viewHolder.setmOrgname(model.getmOrgname());
-                viewHolder.setmCategory(model.getmCategory());
+                viewHolder.setmCategory(model.getCategories());
                 viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
                 setFadeAnimation(viewHolder.itemView);
                 viewHolder.mView.setOnClickListener(new View.OnClickListener() {
@@ -143,16 +143,8 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
 
             }
         });
-        Log.v("pehle2", "chal");
 
-//        categories.add("Education");
-//        categories.add("Physical Health");
-//        categories.add("Mental Health");
-//        categories.add("Poverty");
-//        categories.add("Children");
-//        categories.add("Women");
-//        categories.add("Clothes");
-//        categories.add("Shelter");
+
 //// Create an ArrayAdapter using the string array and a default spinner layout
 // Specify the layout to use when the list of choices appears
         ArrayAdapter<String> spinadapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
@@ -190,7 +182,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                     final String post_key = getRef(position).getKey();
                     viewHolder.setmOrginfo(model.getmOrginfo());
                     viewHolder.setmOrgname(model.getmOrgname());
-                    viewHolder.setmCategory(model.getmCategory());
+                    viewHolder.setmCategory(model.getCategories());
                     viewHolder.setmImage(getActivity().getApplicationContext(), model.getmImage());
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -230,7 +222,9 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
                     final String post_key=getRef(position).getKey();
                     viewHolder.setmOrginfo(model.getmOrginfo());
                     viewHolder.setmOrgname(model.getmOrgname());
-                    viewHolder.setmCategory(model.getmCategory());
+
+                    viewHolder.setmCategory(model.getCategories());
+//                    viewHolder.setmCategory(model.getCategories().get(0));
                     viewHolder.setmImage(getActivity().getApplicationContext(),model.getmImage());
                     viewHolder.mView.setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -289,9 +283,17 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
 
         }
 
-        public void setmCategory(String s) {
+        public void setmCategory(List<String> categories ) {
+            Log.v("number", String.valueOf(categories.size()));
+            String value= "";
+            for (int i=0;i<categories.size();i++){
+                value=value+categories.get(i)+",";
+
+            }
             TextView post_title=(TextView)mView.findViewById(com.kinitoapps.ngolink.R.id.category);
-            post_title.setText(s);
+//            post_title.setText(categories.get(1)+","+categories.get(0));
+            value = value.substring(0, value.length() - 1);
+            post_title.setText(value);
         }
     }
 
