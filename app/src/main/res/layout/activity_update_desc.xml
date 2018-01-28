@@ -27,7 +27,7 @@
             android:id="@+id/changed_name"
             android:layout_margin="16dp"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/appbar"
             android:layout_centerHorizontal="true" />
         <RelativeLayout

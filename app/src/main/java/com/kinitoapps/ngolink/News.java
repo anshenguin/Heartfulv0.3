@@ -5,17 +5,26 @@ package com.kinitoapps.ngolink;
  */
 
 public class News {
-        private String Title,Description,Image,DateAndTime;
+        private String Title,Description,Image,DateAndTime, NewsPostBy;
 
     public  News(){
     }
 
 
-    public News(String title, String description, String image, String dateAndTime) {
+    public String getNewsPostBy() {
+        return NewsPostBy;
+    }
+
+    public void setNewsPostBy(String newsPostBy) {
+        NewsPostBy = newsPostBy;
+    }
+
+    public News(String title, String description, String image, String dateAndTime, String newsPostBy) {
         this.Title = title;
         this.DateAndTime=dateAndTime;
         this.Description = description;
         this.Image = image;
+        this.NewsPostBy = newsPostBy;
 
     }
     public String getDateAndTime() {

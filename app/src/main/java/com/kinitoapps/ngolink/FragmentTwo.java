@@ -29,9 +29,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.messaging.FirebaseMessaging;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -49,6 +50,10 @@ public class FragmentTwo extends Fragment {
     private DatabaseReference forUsers;
     private RecyclerView mNewsLists;
     private DatabaseReference mDatabase;
+    private static SimpleDateFormat sDateFormat = new SimpleDateFormat("dd MMM");
+    private static final long MINUTE_MILLIS = 1000 * 60;
+    private static final long HOUR_MILLIS = 60 * MINUTE_MILLIS;
+    private static final long DAY_MILLIS = 24 * HOUR_MILLIS;
 //    private ProgressDialog progressDialog;
     FirebaseAuth firebaseAuth;
 
@@ -56,12 +61,14 @@ public class FragmentTwo extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 //        FirebaseMessaging.getInstance().subscribeToTopic("pushNotifications");
+
         view =inflater.inflate(com.kinitoapps.ngolink.R.layout.tab_two, container, false);
         super.onCreate(savedInstanceState);
         imageView = (ImageView) view.findViewById(com.kinitoapps.ngolink.R.id.news_images);
         button=(android.support.design.widget.FloatingActionButton) view.findViewById(com.kinitoapps.ngolink.R.id.button);
         button.bringToFront();
         firebaseAuth=FirebaseAuth.getInstance();
+
         mAuthStateListener= new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull final FirebaseAuth firebaseAuth) {
@@ -72,6 +79,7 @@ public class FragmentTwo extends Fragment {
 
                         @Override
                         public void onDataChange(DataSnapshot dataSnapshot) {
+                         //TODO: Kai baar iske karan app crash ho jati hai dekhna pdega kya hota hai
                             Users user = dataSnapshot.getValue(Users.class);
                             canPost = user.isCanPost();
                             Log.v("can u post", String.valueOf(canPost));
@@ -128,8 +136,9 @@ public class FragmentTwo extends Fragment {
                     final String post_key = getRef(position).getKey();
 
                         viewHolder.setDateAndTime(model.getDateAndTime());
-
+                        viewHolder.setDescription(model.getDescription());
                         viewHolder.setTitle(model.getTitle());
+                        viewHolder.setNewsPostBy(model.getNewsPostBy());
                         viewHolder.setImage(getActivity().getApplicationContext(), model.getImage());
 
 
@@ -162,21 +171,28 @@ public class FragmentTwo extends Fragment {
         else{
             class NGOIdClass{
 
-                private String Title,Image,DateAndTime,post_key;
+                private String Title,Description,Image,DateAndTime,post_key,NewsPostBY;
 
-                public NGOIdClass(String title,String image, String dateandtime,String postkey){
+                public NGOIdClass(String title, String desc, String image, String dateandtime,String postkey,String newsPostBy){
                     Title = title;
+                    Description = desc;
                     Image = image;
                     DateAndTime = dateandtime;
                     post_key = postkey;
+                    NewsPostBY = newsPostBy;
                 }
 
                 public String getDateAndTime() {
                     return DateAndTime;
                 }
 
+                public String getNewsPostBY() {return NewsPostBY;}
+
                 public String getTitle() {
                     return Title;
+                }
+                public String getDescription() {
+                    return Description;
                 }
                 public String getImage() {
                     return Image;
@@ -190,6 +206,8 @@ public class FragmentTwo extends Fragment {
 
                 class ViewHolder extends RecyclerView.ViewHolder{
                     TextView Title;
+                    TextView NewsPostBy;
+                    TextView Desc;
                     String post_key;
                     TextView DateAndTime;
                     View mView;
@@ -198,9 +216,12 @@ public class FragmentTwo extends Fragment {
                     public ViewHolder(View itemView) {
                         super(itemView);
                         mView = itemView;
+                        NewsPostBy = (TextView)itemView.findViewById(R.id.news_post_by);
                         Title = (TextView)itemView.findViewById(com.kinitoapps.ngolink.R.id.news_title);
+                        Desc = (TextView)itemView.findViewById(com.kinitoapps.ngolink.R.id.news_description);
                         DateAndTime = (TextView)itemView.findViewById(com.kinitoapps.ngolink.R.id.date_time);
                         Image = (ImageView)itemView.findViewById(com.kinitoapps.ngolink.R.id.news_images);
+
                     }
                 }
                 private List<NGOIdClass> mNGOIDs;
@@ -224,10 +245,36 @@ public class FragmentTwo extends Fragment {
                 @Override
                 public void onBindViewHolder(NGOIdClassAdapter.ViewHolder holder, int position) {
                     NGOIdClass singleNewsItem = mNGOIDs.get(position);
+                    TextView newsPostBy = holder.NewsPostBy;
+                    newsPostBy.setText("@"+singleNewsItem.getNewsPostBY());
                     TextView title = holder.Title;
                     title.setText(singleNewsItem.getTitle());
+                    long dateMillis = Long.parseLong(singleNewsItem.getDateAndTime());
+                    String date = "";
+                    long now = System.currentTimeMillis();
+
+                    // Change how the date is displayed depending on whether it was written in the last minute,
+                    // the hour, etc.
+                    if (now - dateMillis < (DAY_MILLIS)) {
+                        if (now - dateMillis < (HOUR_MILLIS)) {
+                            long minutes = Math.round((now - dateMillis) / MINUTE_MILLIS);
+                            date = String.valueOf(minutes) + " minutes ago";
+                        } else {
+                            long minutes = Math.round((now - dateMillis) / HOUR_MILLIS);
+                            date = String.valueOf(minutes) + " hours ago";
+                        }
+                    } else {
+                        Date dateDate = new Date(dateMillis);
+                        date = sDateFormat.format(dateDate);
+                    }
+
+                    // Add a dot to the date string
+                    date = "\u2022 " + date;
+                    TextView desc = holder.Desc;
+                    desc.setText(singleNewsItem.getDescription());
                     TextView datentime = holder.DateAndTime;
-                    datentime.setText(singleNewsItem.getDateAndTime());
+                    Log.v("NGOID",singleNewsItem.getDateAndTime());
+                    datentime.setText(date);
                     ImageView img = holder.Image;
                     Glide
                             .with(getActivity().getApplicationContext())
@@ -297,13 +344,13 @@ public class FragmentTwo extends Fragment {
                             for(String NGOIdInFollowing:NGOIdsInFollowing){
                                 if(p.child("NGOId").getValue().toString().equals(NGOIdInFollowing))
                                 {
-                                    arrayEntries.add(new NGOIdClass(p.child("Title").getValue().toString(),p.child("Image").getValue().toString(),p.child("DateAndTime").getValue().toString(),p.getKey()));
+                                    arrayEntries.add(new NGOIdClass(p.child("Title").getValue().toString(),p.child("Description").getValue().toString(),p.child("Image").getValue().toString(),p.child("DateAndTime").getValue().toString(),p.getKey(), (String) p.child("NewsPostBy").getValue()));
                                 }
                             }
                         }
                     }
 
-                    NGOIdClassAdapter firebaseRecyclerAdapter = new NGOIdClassAdapter(getActivity(),arrayEntries);
+                    NGOIdClassAdapter firebaseRecyclerAdapter = new NGOIdClassAdapter(getActivity().getApplicationContext(),arrayEntries);
                     mNewsLists.setAdapter(firebaseRecyclerAdapter);
 
                 }
@@ -322,7 +369,7 @@ public class FragmentTwo extends Fragment {
         }
 
         return view;
-          }
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -347,7 +394,30 @@ public class FragmentTwo extends Fragment {
 
         public void setDateAndTime(String desc) {
             TextView post_time=(TextView)mView.findViewById(com.kinitoapps.ngolink.R.id.date_time);
-            post_time.setText(desc);
+            Log.v("Trying",desc);
+            long dateMillis = Long.parseLong(desc);
+            String date = "";
+            long now = System.currentTimeMillis();
+
+            // Change how the date is displayed depending on whether it was written in the last minute,
+            // the hour, etc.
+            if (now - dateMillis < (DAY_MILLIS)) {
+                if (now - dateMillis < (HOUR_MILLIS)) {
+                    long minutes = Math.round((now - dateMillis) / MINUTE_MILLIS);
+                    date = String.valueOf(minutes) + " minutes ago";
+                } else {
+                    long minutes = Math.round((now - dateMillis) / HOUR_MILLIS);
+                    date = String.valueOf(minutes) + " hours ago";
+                }
+            } else {
+                Date dateDate = new Date(dateMillis);
+                date = sDateFormat.format(dateDate);
+            }
+
+            // Add a dot to the date string
+            date = "\u2022 " + date;
+
+            post_time.setText(date);
         }
         public void setImage(Context applicationContext, String image) {
             final ImageView post_image=(ImageView)mView.findViewById(com.kinitoapps.ngolink.R.id.news_images);
@@ -360,6 +430,16 @@ public class FragmentTwo extends Fragment {
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .into(post_image);
 
+        }
+
+        public void setDescription(String description) {
+            TextView post_time=(TextView)mView.findViewById(R.id.news_description);
+            post_time.setText(description);
+        }
+
+        public void setNewsPostBy(String newsPostBy) {
+            TextView post_time=(TextView)mView.findViewById(R.id.news_post_by);
+            post_time.setText("@ "+newsPostBy);
         }
     }
 

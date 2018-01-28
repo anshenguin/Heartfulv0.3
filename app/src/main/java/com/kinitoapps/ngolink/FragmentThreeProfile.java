@@ -212,6 +212,7 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
 
             }
         }
+
     }
 
     public void presentActivity(View view) {
