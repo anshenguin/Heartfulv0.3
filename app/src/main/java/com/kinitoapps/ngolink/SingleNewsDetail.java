@@ -249,6 +249,7 @@ public class SingleNewsDetail extends AppCompatActivity {
              Bundle bundle = new Bundle();
              bundle.putString("userName",userName);
              bundle.putString("userPro",userPro);
+             bundle.putString("uid",uid);
              i.putExtras(bundle);
              startActivity(i);
 

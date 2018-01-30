@@ -58,7 +58,6 @@ public class FragmentThreeProfile extends Fragment implements View.OnClickListen
         }
     }
     View view_pro;
-    boolean isNgo;
     private CircleImageView profilePic;
     private FirebaseAuth mAuth;
     private FirebaseUser firebaseUser;

@@ -14,16 +14,26 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="About"
+            android:text="Recent Activities"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="20sp" />
 
-        <TextView
+        <View
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Gulshan"
-            android:id="@+id/user_desc"
-            android:textSize="18sp" />
+            android:layout_height="1dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="#d3d3d3"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/user_activities_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+        </android.support.v7.widget.RecyclerView>
+
+
 
     </LinearLayout>
 
