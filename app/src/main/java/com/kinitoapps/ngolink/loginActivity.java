@@ -44,6 +44,7 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         sign_In=(Button)findViewById(com.kinitoapps.ngolink.R.id.sign_In);
         sign_Up=(TextView)findViewById(com.kinitoapps.ngolink.R.id.new_user);
         sign_In.setOnClickListener(this);
+        findViewById(R.id.forgot_password).setOnClickListener(this);
         sign_Up.setOnClickListener(this);
 
     }
@@ -95,6 +96,8 @@ public class loginActivity extends AppCompatActivity implements View.OnClickList
         if (view==sign_Up){
             finish();
         }
+        if (view==findViewById(R.id.forgot_password))
+            startActivity(new Intent(loginActivity.this,UserProfileView.class));
 
 
     }

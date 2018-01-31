@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -31,7 +30,7 @@ public class UpdateDesc extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle("Enter your name");
+        getSupportActionBar().setTitle("Enter Description");
         enterName=(EditText)findViewById(com.kinitoapps.ngolink.R.id.changed_name);
         mAuth= FirebaseAuth.getInstance();
         forUsers= FirebaseDatabase.getInstance().getReference().child("Users");

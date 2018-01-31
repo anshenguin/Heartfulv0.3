@@ -35,9 +35,6 @@ import com.google.firebase.storage.UploadTask;
 import com.theartofdev.edmodo.cropper.CropImage;
 import com.theartofdev.edmodo.cropper.CropImageView;
 
-import java.text.DateFormat;
-import java.util.Date;
-
 public class NewsPost extends AppCompatActivity {
     public static final String EXTRA_CIRCULAR_REVEAL_X = "EXTRA_CIRCULAR_REVEAL_X";
     public static final String EXTRA_CIRCULAR_REVEAL_Y = "EXTRA_CIRCULAR_REVEAL_Y";
@@ -55,7 +52,8 @@ public class NewsPost extends AppCompatActivity {
     private String ngoId;
     private StorageReference newsPhotos;
     private FirebaseStorage mstorage;
-    private   String currentDateTimeString = DateFormat.getDateTimeInstance().format(new Date());
+    private  String newsPostBy;
+    private   long currentDateTimeString = 	System.currentTimeMillis();
     private final static int GALLERY_REQUEST=1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,6 +126,7 @@ public class NewsPost extends AppCompatActivity {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.v("chal raha hai","ondatachange");
                 ngoId = String.valueOf(dataSnapshot.child("NGOId").getValue());
+                newsPostBy = String.valueOf(dataSnapshot.child("userName").getValue()) ;
 //                            Log.v("value", String.valueOf(dataSnapshot.child("NGOId").getValue()));
             }
 
@@ -151,12 +150,13 @@ public class NewsPost extends AppCompatActivity {
                     DatabaseReference newPost=mdatabase.push();
                     newPost.child("Title").setValue(postTitle);
                     newPost.child("Description").setValue(postDes);
-                    newPost.child("DateAndTime").setValue(currentDateTimeString);
+                    newPost.child("DateAndTime").setValue(String.valueOf(currentDateTimeString) );
                     newPost.child("Image").setValue(downloadUrl.toString());
 //                    Log.v("value1",ngoId);
                     Log.v("chal raha hai","newspost set wala");
 //                    Log.v("NGOId",ngoId);
                     newPost.child("NGOId").setValue(ngoId);
+                    newPost.child("NewsPostBy").setValue(newsPostBy);
                     progress.dismiss();
                     finish();
 

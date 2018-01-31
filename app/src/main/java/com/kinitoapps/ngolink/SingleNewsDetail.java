@@ -1,6 +1,7 @@
 package com.kinitoapps.ngolink;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.view.ViewCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -8,6 +9,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -25,12 +27,13 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
- public class SingleNewsDetail extends AppCompatActivity {
+public class SingleNewsDetail extends AppCompatActivity {
     private String post_key;
+    private  String commentPostKey;
     private ImageView mNewsImage;
     private TextView mNewsTitle,mNewsDesc;
     private    FirebaseAuth mAuth;
-     private String profilePicLink;
+    private String profilePicLink;
      private String profileName;
      private   String post_title;
      private   String post_image;
@@ -39,6 +42,8 @@ import com.google.firebase.database.ValueEventListener;
     private String commentTaken;
     private String loadImage;
      int noOfComments;
+     private String uid;
+     String userName , userPro;
     private RecyclerView recyclerView;
     DatabaseReference mDatabase;
     @Override
@@ -128,6 +133,7 @@ import com.google.firebase.database.ValueEventListener;
                  whileComment.child("comments").setValue(commentTaken);
                  whileComment.child("userName").setValue(profileName);
                  whileComment.child("profilePicLink").setValue(profilePicLink);
+                 whileComment.child("uid").setValue(mAuth.getCurrentUser().getUid());
 
              } else
                  Toast.makeText(SingleNewsDetail.this, "Please logged in for Comments", Toast.LENGTH_SHORT).show();
@@ -187,14 +193,75 @@ import com.google.firebase.database.ValueEventListener;
         {
 
             @Override
-            protected void populateViewHolder(postCommentsViewHolder viewHolder, postComments model, int position) {
+            protected void populateViewHolder(postCommentsViewHolder viewHolder,final postComments model, int position) {
+                 final String comment_post_key=getRef(position).getKey();
+
                 viewHolder.setComments(model.getComments());
                 viewHolder.setCommentatorName(model.getUserName());
                 viewHolder.setmImage(getApplicationContext(),model.getProfilePicLink());
+                viewHolder.mView.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        commentPostKey= comment_post_key;
+                        uid = model.getUid();
+                        userName = model.getUserName();
+                        userPro = model.getProfilePicLink();
+//                        Toast.makeText(SingleNewsDetail.this,"Long Press working", Toast.LENGTH_LONG).show();
+                        registerForContextMenu(recyclerView);
+                        return false;
+                    }
+                });
             }
         };
         recyclerView.setAdapter(firebaseRecyclerAdapter);
     }
+
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        menu.add(0, v.getId(), 0, "Delete");
+        menu.add(0, v.getId(), 0, "Report");
+        menu.add(0, v.getId(), 0, "View Profile");    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+
+         if(item.getTitle()=="Delete"){
+             mAuth=FirebaseAuth.getInstance();
+          if (mAuth.getCurrentUser()!= null){
+              if (uid.equals(mAuth.getCurrentUser().getUid()))
+                  mDatabase.child(post_key).child("comments").child(commentPostKey).removeValue();
+              else
+                  Toast.makeText(SingleNewsDetail.this, "You're not allow to delete other's comments", Toast.LENGTH_SHORT).show();
+          }
+          else {
+              Toast.makeText(SingleNewsDetail.this, "You're not Logged In", Toast.LENGTH_SHORT).show();
+          }
+
+         }
+        else if(item.getTitle()=="Report"){
+
+         }
+        else if(item.getTitle()=="View Profile"){
+             Log.v("Name",userName);
+
+             Intent i =  new Intent(SingleNewsDetail.this,UserProfileView.class);
+             Bundle bundle = new Bundle();
+             bundle.putString("userName",userName);
+             bundle.putString("userPro",userPro);
+             bundle.putString("uid",uid);
+             i.putExtras(bundle);
+             startActivity(i);
+
+         }
+        else{
+            return false;
+        }
+        return super.onContextItemSelected(item);
+    }
+
+
+
     public static class postCommentsViewHolder extends RecyclerView.ViewHolder {
         View mView;
 

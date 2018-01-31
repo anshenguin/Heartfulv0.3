@@ -175,6 +175,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
         String all = "All";
         if (item != all) {
             Query Q = mDatabase.orderByChild("mCategory").equalTo(item);
+            Log.v("what", String.valueOf(Q));
             FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder> firebaseRecyclerAdapter = new FirebaseRecyclerAdapter<OrgInfo, OrgInfoViewHolder>(
                     OrgInfo.class, com.kinitoapps.ngolink.R.layout.home_list_item, OrgInfoViewHolder.class, Q) {
                 @Override
@@ -287,7 +288,7 @@ public  class FragmentOne extends Fragment implements AdapterView.OnItemSelected
             Log.v("number", String.valueOf(categories.size()));
             String value= "";
             for (int i=0;i<categories.size();i++){
-                value=value+categories.get(i)+",";
+                value=value+categories.get(i)+", ";
 
             }
             TextView post_title=(TextView)mView.findViewById(com.kinitoapps.ngolink.R.id.category);

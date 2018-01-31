@@ -10,4 +10,5 @@
     <string name="fb_login_protocol_scheme">fb2030875177198255</string>
     <string name="spinner_title">All </string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="report">Report User</string>
 </resources>

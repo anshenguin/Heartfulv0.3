@@ -7,6 +7,7 @@
     <string name="com_facebook_loginview_log_in_button">" "</string>
     <string name="fragmenttwo_image_trans">news_image</string>
     <string name="fb_login_protocol_scheme">fb2030875177198255</string>
+    <string name="report">Report User</string>
     <string-array name="category_array">
         <item>All</item>
         <item>Education</item>
